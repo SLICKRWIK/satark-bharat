@@ -1,10 +1,12 @@
-"""SatarkBharat (सतर्क भारत) — Minimalist Investor Defense Sentinel Interface.
+"""SatarkBharat (सतर्क भारत) — Minimalist Investor Defense Sentinel.
 
-Designed with Town-inspired aesthetic:
-- Deep warm obsidian canvas (#161614)
-- Minimalist centered single-column layout (Zero left/right sidebars)
-- Floating squircle pill navigation and subtle micro-borders
-- Neatly hidden, accessible evidentiary drawers and instant audio playback
+Faithfully crafted in the visual aesthetic of Town (town.com):
+- Warm eggshell/ivory canvas (#fbfbfa)
+- High-contrast editorial serif headlines (Fraunces / Editorial Serif)
+- Modern geometric interface typography (Plus Jakarta Sans)
+- Elegant floating input card with subtle bottom toolbar
+- Checklist-oriented audit results (identical to Town's to-do / activity feed)
+- Zero emoji clutter; refined micro-pills, delicate hairline borders, and generous whitespace
 """
 
 import json
@@ -23,28 +25,30 @@ from satark_bharat.vernacular.tts import VernacularVoiceEngine
 # Page Configuration
 # ---------------------------------------------------------
 st.set_page_config(
-    page_title="SatarkBharat | Investor Defense Sentinel",
-    page_icon="🛡️",
+    page_title="SatarkBharat — Investor Defense Sentinel",
+    page_icon="○",
     layout="centered",
     initial_sidebar_state="collapsed",
 )
 
 # ---------------------------------------------------------
-# Town-Inspired Custom Styling (No Sidebars, Minimalist, Sleek)
+# Town-Inspired Aesthetic (Warm Ivory, Editorial Serif, Zero Emojis)
 # ---------------------------------------------------------
 st.markdown(
     """
     <style>
-    /* Global Base */
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    /* Google Fonts: Fraunces (Editorial Serif) + Plus Jakarta Sans + JetBrains Mono */
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
+    /* Global Background & Base */
     html, body, [data-testid="stAppViewContainer"], .main {
-        background-color: #141412 !important;
-        color: #f4f4f0 !important;
+        background-color: #fbfbfa !important;
+        color: #18181b !important;
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        -webkit-font-smoothing: antialiased;
     }
 
-    /* Completely Remove Streamlit Header, Footer, and Sidebars */
+    /* Hide Default Streamlit Navigation, Sidebars, and Footers */
     header[data-testid="stHeader"] {
         display: none !important;
     }
@@ -55,147 +59,311 @@ st.markdown(
         display: none !important;
     }
     .block-container {
-        max-width: 800px !important;
-        padding-top: 2rem !important;
-        padding-bottom: 4rem !important;
+        max-width: 780px !important;
+        padding-top: 2.2rem !important;
+        padding-bottom: 5rem !important;
         padding-left: 1.5rem !important;
         padding-right: 1.5rem !important;
     }
 
-    /* Town Navigation Navbar Pill */
-    .town-nav {
+    /* Town Navigation Header */
+    .town-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background: #1c1c19;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 9999px;
-        padding: 8px 18px;
-        margin-bottom: 2.2rem;
-        box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
+        margin-bottom: 3.5rem;
     }
-    .town-brand {
-        display: flex;
+    .town-logo-pill {
+        display: inline-flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 8px;
+        padding: 6px 14px;
+        font-size: 0.85rem;
         font-weight: 600;
-        font-size: 0.95rem;
-        letter-spacing: -0.2px;
-        color: #f5f5f3;
+        letter-spacing: 0.5px;
+        color: #18181b;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
     }
-    .town-brand-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background-color: #34d399;
-        box-shadow: 0 0 10px #34d399;
+    .town-logo-symbol {
+        font-size: 1rem;
+        line-height: 1;
+        color: #18181b;
     }
-    .town-tag {
-        font-size: 0.75rem;
+    .town-nav-pills {
+        display: inline-flex;
+        align-items: center;
+        gap: 20px;
+        border: 1px solid rgba(0, 0, 0, 0.07);
+        border-radius: 8px;
+        padding: 6px 18px;
+        background: transparent;
+        font-size: 0.82rem;
         font-weight: 500;
-        color: #a1a19a;
-        background: rgba(255, 255, 255, 0.05);
-        padding: 4px 10px;
-        border-radius: 9999px;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        color: #52525b;
+    }
+    .town-nav-pills span {
+        cursor: default;
+    }
+    .town-auth-pills {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .town-badge-secondary {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #71717a;
+        text-decoration: none;
+    }
+    .town-button-primary {
+        background: #18181b;
+        color: #fbfbfa !important;
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-size: 0.82rem;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-block;
     }
 
-    /* Hero Typography */
-    .hero-title {
-        font-size: 2.2rem;
-        font-weight: 600;
-        letter-spacing: -0.8px;
-        line-height: 1.2;
-        margin-bottom: 0.4rem;
-        color: #fdfdfc;
+    /* Town Editorial Hero */
+    .town-hero {
+        margin-bottom: 2.8rem;
     }
-    .hero-subtitle {
-        font-size: 1rem;
-        font-weight: 400;
-        color: #9c9c94;
-        line-height: 1.5;
+    .town-hero-headline {
+        font-family: 'Fraunces', serif !important;
+        font-size: 3.4rem !important;
+        font-weight: 450 !important;
+        line-height: 1.12 !important;
+        letter-spacing: -1.2px !important;
+        color: #18181b !important;
+        margin-bottom: 1.4rem !important;
+    }
+    .town-hero-lead {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        font-size: 0.98rem;
+        line-height: 1.6;
+        color: #3f3f46;
+        max-width: 640px;
+    }
+    .town-avatar {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #e4e4e7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        color: #52525b;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+    .town-pill-salmon {
+        display: inline-block;
+        background: #ffedd5;
+        color: #c2410c;
+        padding: 1px 7px;
+        border-radius: 4px;
+        font-size: 0.86rem;
+        font-weight: 500;
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Town Floating Input Card */
+    .town-input-card {
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 14px;
+        box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04);
+        padding: 18px 20px;
         margin-bottom: 2rem;
     }
 
-    /* Minimalist Glass Card */
-    .town-card {
-        background: #1c1c19;
-        border: 1px solid rgba(255, 255, 255, 0.07);
-        border-radius: 16px;
-        padding: 1.4rem;
-        margin-bottom: 1.2rem;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    /* Checklist Section (Modeled after Town's to-do / activity list) */
+    .town-list-container {
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 14px;
+        box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04);
+        padding: 20px 24px;
+        margin-top: 1.8rem;
+        margin-bottom: 2rem;
+    }
+    .town-list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 14px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        margin-bottom: 14px;
+    }
+    .town-list-title {
+        font-size: 0.82rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: #71717a;
+    }
+    .town-list-item {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: 14px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    }
+    .town-list-item:last-child {
+        border-bottom: none;
+        padding-bottom: 4px;
+    }
+    .town-item-left {
+        display: flex;
+        gap: 12px;
+        max-width: 540px;
+    }
+    .town-item-checkbox {
+        width: 16px;
+        height: 16px;
+        border-radius: 4px;
+        border: 1.5px solid #d4d4d8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        margin-top: 2px;
+        flex-shrink: 0;
+    }
+    .town-item-checkbox.checked {
+        border-color: #18181b;
+        background: #18181b;
+        color: #ffffff;
+    }
+    .town-item-title {
+        font-size: 0.94rem;
+        font-weight: 500;
+        color: #18181b;
+        line-height: 1.4;
+    }
+    .town-item-desc {
+        font-size: 0.82rem;
+        color: #71717a;
+        margin-top: 2px;
+        line-height: 1.45;
     }
 
-    /* Result Card Badges */
-    .threat-pill-danger {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: rgba(239, 68, 68, 0.12);
-        color: #f87171;
-        border: 1px solid rgba(239, 68, 68, 0.25);
-        padding: 4px 12px;
-        border-radius: 9999px;
-        font-size: 0.85rem;
-        font-weight: 600;
+    /* Minimalist Town Status Pills */
+    .status-pill {
+        font-size: 0.75rem;
+        font-weight: 500;
+        padding: 2px 8px;
+        border-radius: 4px;
+        white-space: nowrap;
     }
-    .threat-pill-safe {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: rgba(52, 211, 153, 0.12);
-        color: #34d399;
-        border: 1px solid rgba(52, 211, 153, 0.25);
-        padding: 4px 12px;
-        border-radius: 9999px;
-        font-size: 0.85rem;
-        font-weight: 600;
+    .status-pill.danger {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+    .status-pill.warning {
+        background: #fef3c7;
+        color: #b45309;
+    }
+    .status-pill.safe {
+        background: #ecfdf5;
+        color: #047857;
+    }
+    .status-pill.neutral {
+        background: #f4f4f5;
+        color: #52525b;
     }
 
-    /* Custom Streamlit Text Area & Buttons */
+    /* Streamlit Overrides for Clean White Inputs */
     .stTextArea textarea {
-        background-color: #181816 !important;
-        color: #f5f5f3 !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 12px !important;
-        font-family: inherit !important;
-        font-size: 0.95rem !important;
+        background-color: #ffffff !important;
+        color: #18181b !important;
+        border: none !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 0.98rem !important;
+        line-height: 1.5 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
     }
     .stTextArea textarea:focus {
-        border-color: rgba(255, 255, 255, 0.25) !important;
         box-shadow: none !important;
     }
 
     .stButton>button {
-        background-color: #f4f4f0 !important;
-        color: #141412 !important;
-        border: none !important;
-        border-radius: 10px !important;
-        font-weight: 600 !important;
-        font-size: 0.9rem !important;
-        padding: 0.5rem 1.2rem !important;
-        transition: all 0.2s ease !important;
+        background-color: #18181b !important;
+        color: #ffffff !important;
+        border: 1px solid #18181b !important;
+        border-radius: 8px !important;
+        font-weight: 500 !important;
+        font-size: 0.85rem !important;
+        padding: 0.45rem 1.1rem !important;
+        transition: all 0.15s ease !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
     }
     .stButton>button:hover {
-        background-color: #ffffff !important;
-        transform: translateY(-1px);
+        background-color: #27272a !important;
+        border-color: #27272a !important;
+        color: #ffffff !important;
     }
 
-    /* Expander Minimalist Styling */
+    /* Secondary subtle button */
+    .stDownloadButton>button {
+        background-color: #ffffff !important;
+        color: #18181b !important;
+        border: 1px solid rgba(0, 0, 0, 0.12) !important;
+        border-radius: 8px !important;
+        font-weight: 500 !important;
+        font-size: 0.82rem !important;
+        padding: 0.45rem 1rem !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+    }
+    .stDownloadButton>button:hover {
+        background-color: #f4f4f5 !important;
+        border-color: rgba(0, 0, 0, 0.2) !important;
+    }
+
+    /* Clean Tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 16px;
+        background: transparent;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        padding-bottom: 6px;
+        margin-bottom: 1rem;
+    }
+    .stTabs [data-baseweb="tab"] {
+        background: transparent !important;
+        color: #71717a !important;
+        font-size: 0.84rem !important;
+        font-weight: 500 !important;
+        padding: 4px 4px !important;
+        border: none !important;
+    }
+    .stTabs [aria-selected="true"] {
+        color: #18181b !important;
+        border-bottom: 2px solid #18181b !important;
+    }
+
+    /* Expander Styling */
     .streamlit-expanderHeader {
-        background-color: #1c1c19 !important;
-        border: 1px solid rgba(255, 255, 255, 0.06) !important;
-        border-radius: 12px !important;
-        color: #f5f5f3 !important;
+        background-color: transparent !important;
+        color: #18181b !important;
+        font-size: 0.88rem !important;
+        font-weight: 500 !important;
+        border-radius: 8px !important;
+        padding: 10px 14px !important;
     }
     .streamlit-expanderContent {
-        background-color: #1c1c19 !important;
-        border-left: 1px solid rgba(255, 255, 255, 0.06) !important;
-        border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
-        border-bottom-left-radius: 12px !important;
-        border-bottom-right-radius: 12px !important;
+        background-color: #ffffff !important;
+        border: 1px solid rgba(0, 0, 0, 0.06) !important;
+        border-radius: 8px !important;
+        padding: 16px !important;
     }
     </style>
     """,
@@ -235,51 +403,84 @@ if "active_scenario" not in st.session_state:
     st.session_state.active_scenario = None
 
 # ---------------------------------------------------------
-# Top Floating Navigation Bar (Town-Inspired Squircle)
+# Top Navigation Bar (Identical to Town's Layout)
 # ---------------------------------------------------------
 st.markdown(
     """
-    <div class="town-nav">
-        <div class="town-brand">
-            <span class="town-brand-dot"></span>
-            <span>SatarkBharat <span style="font-weight: 400; color: #a1a19a;">(सतर्क भारत)</span></span>
+    <div class="town-header">
+        <div class="town-logo-pill">
+            <span class="town-logo-symbol">○</span>
+            <span>SATARK</span>
         </div>
-        <div class="town-tag">IIT-BHU × SEBI × NSDL</div>
+        <div class="town-nav-pills">
+            <span>Sentinel</span>
+            <span>SCORES 2.0</span>
+            <span>NCRP 1930</span>
+            <span>Investor Charter</span>
+        </div>
+        <div class="town-auth-pills">
+            <span class="town-badge-secondary">IIT-BHU · SEBI · NSDL</span>
+            <a href="https://sangyan.sntciitbhu.co.in/" target="_blank" class="town-button-primary">SANGYAN</a>
+        </div>
     </div>
     """,
     unsafe_allow_html=True,
 )
 
 # ---------------------------------------------------------
-# Minimalist Hero Header
+# Town Editorial Hero Section
 # ---------------------------------------------------------
-st.markdown('<div class="hero-title">Pre-transaction investor defense sentinel.</div>', unsafe_allow_html=True)
 st.markdown(
-    '<div class="hero-subtitle">Audit investment claims, SEBI registration codes, payment channels, and lookalike domains before money is transferred.</div>',
+    """
+    <div class="town-hero">
+        <div class="town-hero-headline">
+            SatarkBharat protects your savings from fraud.
+        </div>
+        <div class="town-hero-lead">
+            <div class="town-avatar">s</div>
+            <div>
+                Forward any suspicious WhatsApp advisory, Telegram tip, or payment request.
+                <span class="town-pill-salmon">Satark</span> verifies regulatory invariants, recipient UPI accounts,
+                and official SEBI registers before you transfer money.
+            </div>
+        </div>
+    </div>
+    """,
     unsafe_allow_html=True,
 )
 
 # ---------------------------------------------------------
-# Interactive Quick-Sample Loader Chips
+# Interactive Quick-Sample Chips (Subtle Town-Style Text Chips)
 # ---------------------------------------------------------
-st.markdown("<p style='font-size: 0.8rem; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;'>Quick Sample Ingestion</p>", unsafe_allow_html=True)
+sample_labels = [
+    "Sample 1: Impersonated Research Analyst",
+    "Sample 2: Telegram Syndicate Tip",
+    "Sample 3: Cloned Broker APK",
+    "Sample 4: Legitimate Broker Notice",
+]
 
-sample_cols = st.columns(len(samples) if samples else 1)
+st.markdown("<p style='font-size: 0.78rem; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;'>Load Pre-Recorded Scenarios</p>", unsafe_allow_html=True)
+chip_cols = st.columns(len(samples) if samples else 1)
 for idx, sample in enumerate(samples):
-    short_label = sample["title"].split(":")[0]  # "Case A", "Case B", etc.
-    with sample_cols[idx]:
-        if st.button(f"⚡ {short_label}", key=f"btn_sample_{idx}", help=sample["description"], use_container_width=True):
+    with chip_cols[idx]:
+        short_name = f"Case {chr(65 + idx)}"
+        if st.button(short_name, key=f"chip_{idx}", help=sample["description"], use_container_width=True):
             st.session_state.input_text = sample["input_content"]
             st.session_state.active_scenario = sample["id"]
 
-input_tabs = st.tabs(["✍️ Paste Advisory / Chat", "📷 Upload Screenshot", "🎙️ Upload Voice Note", "🛡️ Test Guardrail"])
+# ---------------------------------------------------------
+# Floating Input Card (Modeled after Town's Input Box)
+# ---------------------------------------------------------
+st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
+
+input_tabs = st.tabs(["Message Text", "Screenshot Upload", "Voice Note Upload", "Guardrail Check"])
 
 with input_tabs[0]:
     user_input = st.text_area(
-        label="Advisory Message Content",
+        label="Advisory Message",
         value=st.session_state.input_text,
-        height=130,
-        placeholder="Paste forwarded WhatsApp message, Telegram tip, or advisor claims here...",
+        height=110,
+        placeholder="Type or paste the advisory message, claimed SEBI ID, or payment request here...",
         label_visibility="collapsed",
     )
     if user_input != st.session_state.input_text:
@@ -287,38 +488,32 @@ with input_tabs[0]:
 
 with input_tabs[1]:
     uploaded_file = st.file_uploader(
-        "Upload Telegram / WhatsApp Screenshot",
+        "Upload Screenshot",
         type=["png", "jpg", "jpeg", "webp"],
         label_visibility="collapsed",
     )
     if uploaded_file is not None:
         file_bytes = uploaded_file.read()
         extracted = ocr_engine.extract_text_from_image(file_bytes)
-        st.info("Screenshot analyzed. Text extracted into analysis buffer.")
+        st.caption("Screenshot text extracted to analysis buffer.")
         if extracted and "[OCR Ingestion Active" not in extracted:
             st.session_state.input_text = extracted
 
 with input_tabs[2]:
     uploaded_audio = st.file_uploader(
-        "Upload Vernacular Voice Note (MP3 / WAV)",
+        "Upload Voice Note",
         type=["mp3", "wav", "ogg", "m4a"],
         label_visibility="collapsed",
     )
     if uploaded_audio is not None:
-        st.info(f"Voice note '{uploaded_audio.name}' received. Processed by vernacular speech ingestion engine.")
-        # If user uploads sample audio, simulate realistic Hindi syndicate extract
+        st.caption(f"Audio stream '{uploaded_audio.name}' ingested.")
         if not st.session_state.input_text:
             st.session_state.input_text = "Kal Nifty aur Sensex ka confirmed upper circuit setting ho chuka hai! 500% pakka guaranteed jackpot return milega! Fee sirf Rs 2,500 hai paytm karo: sureprofit.pool@paytm"
 
 with input_tabs[3]:
-    st.markdown(
-        "<p style='font-size: 0.88rem; color: #a1a19a; margin-bottom: 8px;'>"
-        "Verify that SatarkBharat strictly adheres to SEBI hackathon rules by mathematically refusing stock advice or price speculation."
-        "</p>",
-        unsafe_allow_html=True,
-    )
+    st.caption("Verify that SatarkBharat strictly obeys SANGYAN guardrails by refusing speculative advice.")
     test_query = st.text_input(
-        "Ask a speculative question",
+        "Ask for a stock recommendation",
         value="Which stock should I buy for tomorrow's expiry?",
         label_visibility="collapsed",
     )
@@ -327,30 +522,30 @@ with input_tabs[3]:
         if gr_res.is_speculation_query:
             st.markdown(
                 f"""
-                <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 12px; margin-top: 10px;">
-                    <div style="font-weight: 600; color: #fbbf24; font-size: 0.85rem;">🛡️ SEBI COMPLIANCE GUARDRAIL TRIGGERED</div>
-                    <div style="font-size: 0.88rem; color: #f5f5f3; margin-top: 4px;">{gr_res.rejection_message_english}</div>
-                    <div style="font-size: 0.84rem; color: #d4d4cb; margin-top: 4px; font-style: italic;">"{gr_res.rejection_message_hindi}"</div>
+                <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px; margin-top: 8px;">
+                    <div style="font-size: 0.8rem; font-weight: 600; color: #b91c1c; text-transform: uppercase;">Guardrail Active: Speculative Advisory Blocked</div>
+                    <div style="font-size: 0.86rem; color: #18181b; margin-top: 4px;">{gr_res.rejection_message_english}</div>
+                    <div style="font-size: 0.82rem; color: #52525b; margin-top: 4px; font-style: italic;">"{gr_res.rejection_message_hindi}"</div>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
         else:
-            st.success("Query permitted (non-speculative).")
+            st.success("Query permitted.")
 
 # ---------------------------------------------------------
 # Action Bar
 # ---------------------------------------------------------
-action_cols = st.columns([3, 1])
-with action_cols[0]:
-    analyze_clicked = st.button("🛡️ Run Neuro-Symbolic Audit", use_container_width=True)
-with action_cols[1]:
+btn_cols = st.columns([4, 1])
+with btn_cols[0]:
+    analyze_clicked = st.button("Run Regulatory Audit →", use_container_width=True)
+with btn_cols[1]:
     if st.button("Clear", use_container_width=True):
         st.session_state.input_text = ""
         st.rerun()
 
 # ---------------------------------------------------------
-# Analysis Execution & Results
+# Checklist-Style Activity Feed (Modeled after Town's To-Do List)
 # ---------------------------------------------------------
 content_to_analyze = st.session_state.input_text.strip()
 
@@ -358,145 +553,213 @@ if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
     report: ThreatReport = threat_engine.evaluate(content_to_analyze)
     route: JurisdictionalRoute = RegulatoryRouter.resolve_route(report)
 
-    # 1. Threat Score Banner
     score = report.composite_threat_score
     is_critical = score >= 60
 
-    status_pill_html = (
-        f'<span class="threat-pill-danger">CRITICAL THREAT ({score}/100)</span>'
-        if is_critical
-        else f'<span class="threat-pill-safe">VERIFIED COMPLIANT ({score}/100)</span>'
-    )
-    bar_color = "#34d399" if score <= 24 else ("#fbbf24" if score <= 59 else "#f87171")
+    overall_pill_class = "danger" if is_critical else ("warning" if score > 24 else "safe")
+    overall_pill_text = f"Threat Index: {score}/100 ({report.severity})"
 
     st.markdown("<div style='height: 1.5rem;'></div>", unsafe_allow_html=True)
+
+    # 1. Primary Verdict Card
     st.markdown(
         f"""
-        <div class="town-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span style="font-size: 0.8rem; font-weight: 600; color: #a1a19a; text-transform: uppercase; letter-spacing: 0.5px;">Sentinel Risk Index</span>
-                {status_pill_html}
+        <div class="town-list-container">
+            <div class="town-list-header">
+                <span class="town-list-title">Sentinel Audit Report</span>
+                <span class="status-pill {overall_pill_class}">{overall_pill_text}</span>
             </div>
-            <div style="width: 100%; height: 8px; background: rgba(255, 255, 255, 0.08); border-radius: 9999px; overflow: hidden; margin-bottom: 16px;">
-                <div style="width: {score}%; height: 100%; background: {bar_color}; border-radius: 9999px; transition: width 0.5s ease;"></div>
-            </div>
-            <div style="font-size: 1.12rem; font-weight: 500; color: #fdfdfc; line-height: 1.4; margin-bottom: 10px;">
+            <div style="font-size: 1.15rem; font-weight: 500; color: #18181b; line-height: 1.5; margin-bottom: 12px;">
                 {report.plain_english_summary}
             </div>
-            <div style="font-size: 0.95rem; color: #c2c2b8; line-height: 1.4; margin-bottom: 4px;">
-                🇮🇳 <b>हिन्दी:</b> {report.vernacular_hindi_summary}
+            <div style="font-size: 0.92rem; color: #52525b; line-height: 1.5; margin-bottom: 6px;">
+                <b>हिन्दी:</b> {report.vernacular_hindi_summary}
             </div>
-            <div style="font-size: 0.92rem; color: #a8a89f; line-height: 1.4;">
-                🇮🇳 <b>বাংলা:</b> {report.vernacular_bengali_summary}
+            <div style="font-size: 0.90rem; color: #71717a; line-height: 1.5;">
+                <b>বাংলা:</b> {report.vernacular_bengali_summary}
             </div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-    # 2. Vernacular Voice Alert Player
-    st.markdown("<p style='font-size: 0.82rem; font-weight: 600; color: #888; text-transform: uppercase; margin-bottom: 4px;'>Vernacular Voice Warning (Audio Readout)</p>", unsafe_allow_html=True)
+    # 2. Vernacular Voice Alert Readout (Town Audio Bar)
+    st.markdown("<p style='font-size: 0.78rem; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;'>Vernacular Voice Warning</p>", unsafe_allow_html=True)
     voice_cols = st.columns([1, 1, 1])
     with voice_cols[0]:
-        st.caption("🇮🇳 Hindi (हिन्दी)")
+        st.caption("Hindi Audio")
         hi_audio = voice_engine.synthesize(report.vernacular_hindi_summary, lang="hi")
         if hi_audio:
             st.audio(hi_audio, format="audio/mp3")
-        else:
-            st.info("Hindi voice alert ready.")
     with voice_cols[1]:
-        st.caption("🇮🇳 Bengali (বাংলা)")
+        st.caption("Bengali Audio")
         bn_audio = voice_engine.synthesize(report.vernacular_bengali_summary, lang="bn")
         if bn_audio:
             st.audio(bn_audio, format="audio/mp3")
-        else:
-            st.info("Bengali voice alert ready.")
     with voice_cols[2]:
-        st.caption("🌐 English")
+        st.caption("English Audio")
         en_audio = voice_engine.synthesize(report.plain_english_summary, lang="en")
         if en_audio:
             st.audio(en_audio, format="audio/mp3")
 
-    # 3. Neatly Hidden Deep Diagnostic Drawers
-    st.markdown("<div style='height: 0.5rem;'></div>", unsafe_allow_html=True)
+    # 3. Checklist-Oriented Audit Invariants (Identical to Town's To-Do List)
+    st.markdown("<div style='height: 1rem;'></div>", unsafe_allow_html=True)
 
-    with st.expander("🔍 Regulatory Invariant Audit Breakdown", expanded=True):
-        col1, col2 = st.columns(2)
-        with col1:
-            st.markdown(f"**Claimed SEBI Code:** `{report.sebi_audit.claimed_id or 'None'}`")
-            st.markdown(f"**Registry Status:** `{report.sebi_audit.registry_status}`")
-            st.markdown(f"**Impersonation Risk:** `{'YES (ALERT)' if report.sebi_audit.is_impersonation_suspected else 'No'}`")
-            st.markdown(f"**Guaranteed Returns Claim:** `{'YES (SEBI Violation)' if report.guaranteed_returns_detected else 'None'}`")
-        with col2:
-            st.markdown(f"**Recipient VPA:** `{report.payment_audit.primary_vpa or 'None'}`")
-            st.markdown(f"**Payment Account Type:** `{'Personal VPA (Unregulated)' if report.payment_audit.is_personal_vpa else 'Corporate / Clearing Pool'}`")
-            st.markdown(f"**Deceptive Lookalike Domain:** `{'YES' if report.domain_audit.is_typosquatted else 'No'}`")
-            st.markdown(f"**NSDL Depository Claim:** `{'ALERT: Fake NSDL Scheme' if report.depository_audit.is_fake_nsdl_claim else 'Compliant / None'}`")
+    # Invariant 1: SEBI Registry
+    sebi_checked = "checked" if not report.sebi_audit.is_impersonation_suspected and report.sebi_audit.is_in_registry else ""
+    sebi_mark = "✓" if sebi_checked else "!"
+    sebi_pill = "safe" if report.sebi_audit.is_in_registry and not report.sebi_audit.is_impersonation_suspected else ("danger" if report.sebi_audit.is_impersonation_suspected else "warning")
+    sebi_pill_text = "Verified Match" if sebi_pill == "safe" else ("Impersonation Alert" if sebi_pill == "danger" else "Unregistered")
 
-        if report.statutory_violations:
-            st.markdown("---")
-            st.markdown("<b style='color: #f87171;'>Statutory Clauses Violated:</b>", unsafe_allow_html=True)
-            for v in report.statutory_violations:
-                st.markdown(f"• <span style='font-size: 0.88rem; color: #e5e5dc;'>{v}</span>", unsafe_allow_html=True)
+    # Invariant 2: Payment Channel
+    pay_checked = "checked" if report.payment_audit.is_clearing_compliant else ""
+    pay_mark = "✓" if pay_checked else "!"
+    pay_pill = "safe" if report.payment_audit.is_clearing_compliant else "danger"
+    pay_pill_text = "Clearing Compliant" if pay_pill == "safe" else "Personal Savings VPA"
 
-        st.markdown("---")
-        st.markdown("<p style='font-size: 0.78rem; font-weight: 600; color: #a1a19a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;'>Deterministic Mathematical Modeling</p>", unsafe_allow_html=True)
-        m_col1, m_col2, m_col3 = st.columns(3)
-        with m_col1:
-            st.metric("Bayesian Posterior P(Scam|E)", f"{report.bayesian_posterior_p * 100:.1f}%")
-        with m_col2:
-            st.metric("Cognitive Coercion Index", f"{report.cognitive_coercion_score:.1f}/100")
-        with m_col3:
-            st.metric("Domain Shannon Entropy", f"{report.domain_audit.domain_entropy:.2f} bits")
+    # Invariant 3: Performance Guarantee (PVA)
+    pva_checked = "" if report.guaranteed_returns_detected else "checked"
+    pva_mark = "!" if report.guaranteed_returns_detected else "✓"
+    pva_pill = "danger" if report.guaranteed_returns_detected else "safe"
+    pva_pill_text = "Prohibited Return Claim" if report.guaranteed_returns_detected else "No Fixed Guarantees"
 
-    with st.expander("🏛️ Institutional Grievance Routing (Top 1% Jurisdictional Logic)", expanded=True):
-        st.markdown(f"**Designated Redressal Endpoint:** `{route.portal_name}`")
-        st.markdown(f"**Statutory Basis:** `{route.statutory_basis}`")
-        st.markdown(
-            f"""
-            <div style="background: rgba(255, 255, 255, 0.04); border-radius: 10px; padding: 12px; margin-top: 8px; font-size: 0.88rem; color: #d4d4cb;">
-                <b>Routing Rationale:</b> {route.routing_rationale}
+    # Invariant 4: Domain & APK
+    dom_checked = "" if report.domain_audit.is_typosquatted or report.domain_audit.has_apk_link else "checked"
+    dom_mark = "!" if not dom_checked else "✓"
+    dom_pill = "danger" if not dom_checked else "safe"
+    dom_pill_text = "Malware / Phishing" if not dom_checked else "Authentic Broker Domain"
+
+    # Invariant 5: NSDL Depository
+    nsdl_checked = "" if report.depository_audit.is_fake_nsdl_claim else "checked"
+    nsdl_mark = "!" if report.depository_audit.is_fake_nsdl_claim else "✓"
+    nsdl_pill = "danger" if report.depository_audit.is_fake_nsdl_claim else "safe"
+    nsdl_pill_text = "Unauthorized NSDL Claim" if report.depository_audit.is_fake_nsdl_claim else "Depository Invariants Valid"
+
+    st.markdown(
+        f"""
+        <div class="town-list-container">
+            <div class="town-list-header">
+                <span class="town-list-title">Deterministic Regulatory Invariants</span>
+                <span style="font-size: 0.8rem; color: #71717a;">5 verified benchmarks</span>
             </div>
-            """,
-            unsafe_allow_html=True,
+
+            <!-- Item 1: SEBI Registry -->
+            <div class="town-list-item">
+                <div class="town-item-left">
+                    <div class="town-item-checkbox {sebi_checked}">{sebi_mark}</div>
+                    <div>
+                        <div class="town-item-title">SEBI Intermediary Registration</div>
+                        <div class="town-item-desc">Claimed ID: {report.sebi_audit.claimed_id or 'None (Unregistered)'} · Registry status: {report.sebi_audit.registry_status}</div>
+                    </div>
+                </div>
+                <span class="status-pill {sebi_pill}">{sebi_pill_text}</span>
+            </div>
+
+            <!-- Item 2: Payment Routing -->
+            <div class="town-list-item">
+                <div class="town-item-left">
+                    <div class="town-item-checkbox {pay_checked}">{pay_mark}</div>
+                    <div>
+                        <div class="town-item-title">Payment Channel & Settlement Segregation</div>
+                        <div class="town-item-desc">Recipient VPA: {report.payment_audit.primary_vpa or 'None specified'} · Circular 2023/71 mandate</div>
+                    </div>
+                </div>
+                <span class="status-pill {pay_pill}">{pay_pill_text}</span>
+            </div>
+
+            <!-- Item 3: Return Guarantee (PVA) -->
+            <div class="town-list-item">
+                <div class="town-item-left">
+                    <div class="town-item-checkbox {pva_checked}">{pva_mark}</div>
+                    <div>
+                        <div class="town-item-title">Performance Guarantee Audit</div>
+                        <div class="town-item-desc">SEBI (Research Analysts) Regulation 15(1) & PVA Code of Conduct</div>
+                    </div>
+                </div>
+                <span class="status-pill {pva_pill}">{pva_pill_text}</span>
+            </div>
+
+            <!-- Item 4: Domain & APK -->
+            <div class="town-list-item">
+                <div class="town-item-left">
+                    <div class="town-item-checkbox {dom_checked}">{dom_mark}</div>
+                    <div>
+                        <div class="town-item-title">Domain Authenticity & APK Binary Invariant</div>
+                        <div class="town-item-desc">Weighted Damerau-Levenshtein homoglyph distance · Section 66D IT Act</div>
+                    </div>
+                </div>
+                <span class="status-pill {dom_pill}">{dom_pill_text}</span>
+            </div>
+
+            <!-- Item 5: NSDL Depository -->
+            <div class="town-list-item">
+                <div class="town-item-left">
+                    <div class="town-item-checkbox {nsdl_checked}">{nsdl_mark}</div>
+                    <div>
+                        <div class="town-item-title">NSDL Depository Invariant Safeguard</div>
+                        <div class="town-item-desc">Demat account 16-character format · Depositories Act 1996 verification</div>
+                    </div>
+                </div>
+                <span class="status-pill {nsdl_pill}">{nsdl_pill_text}</span>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # 4. Institutional Grievance Routing (Quiet, Minimalist Card)
+    st.markdown(
+        f"""
+        <div class="town-list-container">
+            <div class="town-list-header">
+                <span class="town-list-title">Institutional Grievance Routing</span>
+                <span class="status-pill neutral">{route.portal_name}</span>
+            </div>
+            <div style="font-size: 0.92rem; color: #18181b; line-height: 1.5; margin-bottom: 6px;">
+                <b>Statutory Basis:</b> {route.statutory_basis}
+            </div>
+            <div style="font-size: 0.86rem; color: #52525b; line-height: 1.5;">
+                {route.routing_rationale}
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # 5. Evidentiary Exports
+    dossier_data = DossierGenerator.generate_json_dossier(report, content_to_analyze)
+    pdf_bytes = DossierGenerator.generate_pdf_dossier(dossier_data)
+    sms_text = DossierGenerator.generate_1930_sms(report, dossier_data["incident_id"])
+
+    exp_cols = st.columns(2)
+    with exp_cols[0]:
+        st.download_button(
+            label="Download PDF Dossier (Court-Ready)",
+            data=pdf_bytes,
+            file_name=f"Satark_Dossier_{dossier_data['incident_id']}.pdf",
+            mime="application/pdf",
+            use_container_width=True,
+        )
+    with exp_cols[1]:
+        st.download_button(
+            label="Download Structured JSON (SCORES / NCRP)",
+            data=json.dumps(dossier_data, indent=2),
+            file_name=f"Satark_Dossier_{dossier_data['incident_id']}.json",
+            mime="application/json",
+            use_container_width=True,
         )
 
-    # 4. Instant Actionable Grievance Downloads
-    with st.expander("📄 Export Evidentiary Complaint Dossier", expanded=False):
-        dossier_data = DossierGenerator.generate_json_dossier(report, content_to_analyze)
-        pdf_bytes = DossierGenerator.generate_pdf_dossier(dossier_data)
-        sms_text = DossierGenerator.generate_1930_sms(report, dossier_data["incident_id"])
-
-        exp_cols = st.columns(2)
-        with exp_cols[0]:
-            st.download_button(
-                label="📥 Download Court-Ready PDF Dossier",
-                data=pdf_bytes,
-                file_name=f"Satark_Dossier_{dossier_data['incident_id']}.pdf",
-                mime="application/pdf",
-                use_container_width=True,
-            )
-        with exp_cols[1]:
-            st.download_button(
-                label="📥 Download Structured JSON (SCORES / NCRP)",
-                data=json.dumps(dossier_data, indent=2),
-                file_name=f"Satark_Dossier_{dossier_data['incident_id']}.json",
-                mime="application/json",
-                use_container_width=True,
-            )
-
-        st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
-        st.markdown("<b style='font-size: 0.85rem;'>1930 National Cyber Fraud Helpline Pre-Formatted SMS:</b>", unsafe_allow_html=True)
+    with st.expander("1930 National Cyber Fraud Helpline SMS Dispatch", expanded=False):
         st.code(sms_text, language="text")
 
 # ---------------------------------------------------------
-# Footer / Institutional Disclaimer
+# Town Quiet Minimalist Footer
 # ---------------------------------------------------------
-st.markdown("<div style='height: 3rem;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='height: 3.5rem;'></div>", unsafe_allow_html=True)
 st.markdown(
     """
-    <div style="text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 1.5rem; font-size: 0.78rem; color: #73736c;">
-        SatarkBharat (सतर्क भारत) · Built for IIT-BHU × SEBI × NSDL Hackathon · Zero Stock Recommendations · 100% Investor Defense
+    <div style="text-align: center; border-top: 1px solid rgba(0, 0, 0, 0.06); padding-top: 2rem; font-size: 0.80rem; color: #a1a1aa;">
+        SatarkBharat · Built for SANGYAN (SNTC, IIT BHU Varanasi × SEBI × NSDL) · Zero Stock Tips · 100% Investor Defense
     </div>
     """,
     unsafe_allow_html=True,
