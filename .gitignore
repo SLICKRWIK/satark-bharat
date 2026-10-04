@@ -1,0 +1,19 @@
+# Virtual Environments & UV
+.venv/
+.env
+
+# Python & Caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.ruff_cache/
+
+# Streamlit
+.streamlit/
+
+# OS Artifacts
+.DS_Store
+*.swp
+*.swo
