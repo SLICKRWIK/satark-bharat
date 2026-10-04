@@ -26,6 +26,7 @@ advanced-ml = [
 
 [project.scripts]
 satark = "satark_bharat.cli:main"
+satark-bot = "satark_bharat.telegram_bot:main"
 
 [build-system]
 requires = ["hatchling"]

@@ -78,9 +78,9 @@ class IntentClassifier:
             r"\b(multibagger\s+(stock|share|pick|tip|ideas?))\b",
             re.IGNORECASE,
         ),
-        # Hinglish & Vernacular Advice Seeking
+        # Hinglish & Hindi Advice Seeking
         re.compile(
-            r"\b(kaun\s*sa|konsa|kisme|kya)\b.*?\b(share|stock|fund|option|trade)s?\b.*?\b(kharidu|kharidna|invest|le\s*lu|lu|lo|lena\s+hai|lagaye|buy)\b",
+            r"\b(kaun\s*sa|konsa|kisme|kya|kahan)\b.*?\b(share|stock|fund|option|trade|nifty)s?\b.*?\b(kharidu|kharidna|invest|le\s*lu|lu|lo|lena|lagau|lagaye|buy|badhega|chalega)\b",
             re.IGNORECASE,
         ),
         re.compile(
@@ -101,6 +101,40 @@ class IntentClassifier:
         ),
         re.compile(
             r"\b(paisa\s+kahan\s+lagau|kahan\s+invest\s+karu|kisme\s+fayda\s+hoga)\b",
+            re.IGNORECASE,
+        ),
+        # Bengali & Banglish Advice Seeking (Direct match for 'kal ki stock kinbo' and colloquial phrasing)
+        re.compile(
+            r"\b(kal|aaj|ekhon|akhon)?\s*(ki|kon|konta|konti|kono|kothay|kothaye)\b.*?\b(stock|share|fund|market|equity|nifty)s?\b.*?\b(kinbo|kinte|kena|kini|kinle|bechbo|bikri|invest|bhalo|uchit|laabh|barbe|uthbe|khelbe)\b",
+            re.IGNORECASE,
+        ),
+        re.compile(
+            r"\b(ki|kon|konta|konti|kono|kothay|kothaye)\b.*?\b(stock|share|fund|market|equity)s?\b",
+            re.IGNORECASE,
+        ),
+        re.compile(
+            r"\b(stock|share|fund|market)s?\b.*?\b(kinbo|kinte|kena|kini|kinle|bechbo|bikri|lagabo)\b",
+            re.IGNORECASE,
+        ),
+        re.compile(
+            r"\b(amake|bhai)?\s*(kono|ekta|bhalo)?\s*(stock|share|tip|call)s?\s*(dao|bolo|suggest\s+korun|bolun|deben)\b",
+            re.IGNORECASE,
+        ),
+        re.compile(
+            r"\b(kothay|kothaye)\s+(taka\s+lagabo|invest\s+korbo|taka\s+invest\s+korbo)\b",
+            re.IGNORECASE,
+        ),
+        # Indic Devanagari & Bengali Script Patterns
+        re.compile(
+            r"(क्या|कौन|कौन\s*सा|किसमें|कहाँ|कैसे)\s+.*?(शेयर|स्टॉक|मार्केट).*?(खरीदूं|खरीदना|खरीदें|लगाऊं|निवेश|फायदा|बढ़ेगा)",
+            re.IGNORECASE,
+        ),
+        re.compile(
+            r"(কি|কী|কোন|কোনটা|কোথায়|কেমন)\s+.*?(স্টক|শেয়ার|মার্কেট|ফান্ড).*?(কিনবো|কেনা|কিনতে|কিনলে|বিনিয়োগ|ভালো|লাভ|বাড়বে|উঠবে)",
+            re.IGNORECASE,
+        ),
+        re.compile(
+            r"(স্টক|শেয়ার).*?(কিনবো|কেনা|কিনতে|কিনলে|বেচবো|বিক্রি)",
             re.IGNORECASE,
         ),
     ]
@@ -135,8 +169,70 @@ class IntentClassifier:
         re.IGNORECASE,
     )
 
+    # 6. Universal Tri-Token Interrogative Syntactic Interceptor (Bengali, Hindi, English, Hinglish, Banglish)
+    INTERROGATIVE_SYNTAX_REGEX = re.compile(
+        r"(\?|"
+        r"\b(which|what|where|should|can|could|how|tell|suggest|recommend|give)\b|"
+        r"\b(kya|kaun|kaunsa|konsa|kahan|kisme|kaise|kab|batao|dedo)\b|"
+        r"\b(ki|kon|konta|konti|kono|kothay|kemon|kobe|koto|bolo|dao|bolun|deben)\b|"
+        r"(কি|কী|কোন|কোনটা|কোথায়|কেমন|কবে|কত|বলো|দাও|বলুন)|"
+        r"(क्या|कौन|कौनसा|कहाँ|किसमें|कैसे|कब|बताओ|दें)"
+        r")",
+        re.IGNORECASE,
+    )
+
+    SECURITIES_SYNTAX_REGEX = re.compile(
+        r"(\b(stock|stocks|share|shares|equity|equities|nifty|sensex|option|options|call|calls|put|puts|ce|pe|fund|funds|mutual\s+fund|crypto|portfolio|multibagger|scrip|scrips|intraday|delivery)\b|"
+        r"\b(tata\s+motors|reliance|hdfc|infosys|infy|tcs|wipro|itc|sbi|adani)\b|"
+        r"(স্টক|শেয়ার|ইক্যুইটি|নিফটি|মার্কেট)|"
+        r"(शेयर|स्टॉक|इक्विटी|निफ्टी|मार्केट)"
+        r")",
+        re.IGNORECASE,
+    )
+
+    ACTION_ADVICE_SYNTAX_REGEX = re.compile(
+        r"(\b(buy|sell|hold|invest|investing|trade|trading|pick|picks|tip|tips|target|price|predict|prediction|forecast|profit|gain|growth|grow|good|best|safest)\b|"
+        r"\b(kharidu|kharidna|kharide|le\s*lu|lelu|le\s*lo|lena|lagau|lagaye|nivesh|fayda|badhega|chalega|giraga)\b|"
+        r"\b(kinbo|kinba|kinbi|kena|kinte|kini|kinle|bechbo|bikri|bhalo|sheraa|uchit|laabh|barbe|uthbe|porbe|lagabo|lagai|biniyog)\b|"
+        r"(কিনবো|কেনা|কিনতে|কিনলে|বেচবো|বিক্রি|ভালো|সেরা|উচিত|লাভ|বাড়বে|উঠবে|বিনিয়োগ)|"
+        r"(खरीदूं|खरीदना|खरीदें|ले\s*लूं|लगाऊं|लगाएं|निवेश|फायदा|बढ़ेगा|चलेगा)"
+        r")",
+        re.IGNORECASE,
+    )
+
+    SOLICITATION_MARKERS_REGEX = re.compile(
+        r"(\b(guarantee(d)?\s+\d+%\s*return|paisa\s+double|100%\s+jackpot|vip\s+group|insider\s+pool|transfer\s+to|fees?|charges?|margin)\b|"
+        r"https?:\/\/|www\.|\.apk\b|@\w{2,64})",
+        re.IGNORECASE,
+    )
+
     def __init__(self, use_gemini: bool = True):
         self.use_gemini = use_gemini
+
+    def _is_syntactic_advice_seeking(self, text: str) -> bool:
+        """Determines if the text structure represents a speculative query / advice-seeking inquiry."""
+        # If it has definitive scam solicitation markers like UPI IDs or APKs, it is evidence to audit
+        if self.SOLICITATION_MARKERS_REGEX.search(text):
+            return False
+
+        has_interrogative = bool(self.INTERROGATIVE_SYNTAX_REGEX.search(text))
+        has_securities = bool(self.SECURITIES_SYNTAX_REGEX.search(text))
+        has_action = bool(self.ACTION_ADVICE_SYNTAX_REGEX.search(text))
+        has_buy_invest_intent = bool(re.search(r"(\b(buy|invest|investing|trade|trading|kharidu|kharidna|lagau|kinbo|kinle|kena|kinte|biniyog)\b|কিনবো|কিনলে|কেনা|বিনিয়োগ|खरीदूं|निवेश|लगाऊं)", text, re.IGNORECASE))
+
+        # Direct advice inquiry: Interrogative + (Securities OR Explicit Buy/Invest Action) + Action
+        if has_interrogative and (has_securities or has_buy_invest_intent) and has_action:
+            return True
+
+        # Also: Securities + Action with question mark '?'
+        if "?" in text and (has_securities or has_buy_invest_intent) and has_action:
+            return True
+
+        # Also: Interrogative + Securities for concise queries (e.g., "what stocks?", "konsa share?", "ki stock?")
+        if has_interrogative and has_securities and len(text.split()) <= 8:
+            return True
+
+        return False
 
     def detect_financial_activity(self, text: str) -> tuple[bool, list[str]]:
         """Detect whether the text contains any prima facie securities or transactional activity."""
@@ -190,6 +286,15 @@ class IntentClassifier:
                     matched_keywords=[match.group(0)],
                 )
 
+        if self._is_syntactic_advice_seeking(clean_text):
+            return IntentClassificationResult(
+                intent=InputIntent.ADVICE_SEEKING,
+                confidence=0.99,
+                is_financial_activity=True,
+                reason="Syntactic intent: Interrogative securities advice inquiry across Indic vernacular.",
+                matched_keywords=["SYNTACTIC_ADVICE_SEEKING"],
+            )
+
         # Check 3: Informational Inquiries about Regulations / Platform
         for pattern in self.INFORMATIONAL_PATTERNS:
             match = pattern.search(clean_text)
@@ -219,13 +324,16 @@ class IntentClassifier:
 
         # If explicit financial claims, guaranteed return promises, or payment handles exist
         if has_activity:
-            return IntentClassificationResult(
-                intent=InputIntent.SCAM_OR_ADVISORY_EVIDENCE,
-                confidence=0.90,
-                is_financial_activity=True,
-                reason=f"Financial securities tokens or transactional claims detected: {matched_tokens}",
-                matched_keywords=matched_tokens,
-            )
+            has_solicitation = bool(self.SOLICITATION_MARKERS_REGEX.search(clean_text))
+            has_tx = bool(self.TRANSACTIONAL_TOKENS.search(clean_text))
+            if has_solicitation or has_tx or len(clean_text.split()) > 10:
+                return IntentClassificationResult(
+                    intent=InputIntent.SCAM_OR_ADVISORY_EVIDENCE,
+                    confidence=0.90,
+                    is_financial_activity=True,
+                    reason=f"Financial securities tokens or transactional claims detected: {matched_tokens}",
+                    matched_keywords=matched_tokens,
+                )
 
         return None
 

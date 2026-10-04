@@ -70,6 +70,25 @@ def test_advice_seeking_hinglish():
         ), f"Failed on '{text}': got {res.intent}"
 
 
+def test_advice_seeking_bengali():
+    classifier = IntentClassifier(use_gemini=False)
+
+    bengali_banglish_queries = [
+        "kal ki stock kinbo?",
+        "konta kinle bhalo hobe?",
+        "bhai konta share kinbo kal?",
+        "কোন শেয়ার কিনবো কাল?",
+        "কাল কি স্টক কিনবো?",
+        "সেরা স্টক কোনটা বিনিয়োগের জন্য?",
+    ]
+
+    for text in bengali_banglish_queries:
+        res = classifier.classify_intent(text)
+        assert (
+            res.intent == InputIntent.ADVICE_SEEKING
+        ), f"Failed on '{text}': got {res.intent}"
+
+
 def test_informational_queries():
     classifier = IntentClassifier(use_gemini=False)
 

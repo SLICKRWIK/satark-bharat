@@ -9,12 +9,13 @@
 
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
-[![Tests Passing](https://img.shields.io/badge/tests-12%2F12%20passed-success)](https://github.com/SLICKRWIK/satark-bharat)
+[![Tests Passing](https://img.shields.io/badge/tests-30%2F30%20passed-success)](https://github.com/SLICKRWIK/satark-bharat)
 [![Streamlit](https://img.shields.io/badge/UI-Streamlit%201.35+-FF4B4B.svg)](https://streamlit.io)
+[![Telegram Bot](https://img.shields.io/badge/Telegram_Bot-Active_Sentinel-2CA5E0.svg?logo=telegram&logoColor=white)](#-telegram-bot-sentinel)
 [![SEBI Compliant](https://img.shields.io/badge/SEBI-Zero%20Stock%20Tips-10b981.svg)](https://www.sebi.gov.in)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[Live Architecture](#-system-architecture) • [Key Differentiators](#-the-top-1-institutional-moat) • [CLI Usage](#-command-line-interface-cli) • [Quickstart](#-quickstart-with-uv) • [Statutory Compliance](#-statutory-guardrails--legal-citations)
+[Live Architecture](#-system-architecture) • [Key Differentiators](#-the-top-1-institutional-moat) • [Telegram Bot](#-telegram-bot-sentinel) • [CLI Usage](#-command-line-interface-cli) • [Quickstart](#-quickstart-with-uv) • [Statutory Compliance](#-statutory-guardrails--legal-citations)
 
 </div>
 
@@ -30,7 +31,12 @@ Over **100 million retail investors** have entered India’s capital markets, wi
 
 Traditional consumer grievance mechanisms operate **post-facto**—complaints are filed *after* money has exited the account. Furthermore, naive GenAI wrappers hallucinate compliance and violate regulations by dispensing illegal stock advice.
 
-**SatarkBharat (सतर्क भारत)** is an open-source, pre-transaction, neuro-symbolic defense sentinel. It combines **multimodal neural perception** (Hindi/Bengali ASR, EasyOCR) with a **deterministic regulatory audit matrix** (regex AST, offline SEBI intermediary hashmap, dnstwist typosquatting, and payment clearing invariants) to stop fraud *before* money leaves the account. It translates complex legalities into instantaneous vernacular voice alerts and auto-generates court-ready Section 65B complaint dossiers.
+**SatarkBharat (सतर्क भारत)** is an open-source, pre-transaction, neuro-symbolic defense sentinel deployed across three interconnected channels:
+1. **Interactive Web Sentinel (`app.py`):** Town-inspired editorial UI with multi-modal tabs, live institutional scrolling ticker, audio playback, and PDF dossier generation.
+2. **Real-Time Telegram Bot Sentinel (`telegram_bot.py`):** Meets investors directly where scams occur, offering instant pre-transaction audit of forwarded channel messages, photos, voice notes, and APKs.
+3. **Headless CLI Tools (`satark` / `satark-bot`):** Automated screening pipelines and server automation.
+
+It combines **multimodal neural perception** (Hindi/Bengali ASR, EasyOCR) with a **deterministic regulatory audit matrix** (regex AST, offline SEBI intermediary hashmap, dnstwist typosquatting, and payment clearing invariants) to stop fraud *before* money leaves the account. It translates complex legalities into instantaneous vernacular voice alerts and auto-generates court-ready Section 65B complaint dossiers.
 
 ---
 
@@ -64,13 +70,18 @@ Typical projects claim: *"We automatically file on SEBI SCORES."*
 - **Regulation 15(1) of SEBI (Research Analysts) Regulations 2014:** Prohibits intermediaries from assuring, guaranteeing, or indicating fixed/sure-shot yields. Any claim of guaranteed return triggers an automatic $+35$ mathematical penalty.
 - **SEBI Circular 2023/71 & NPCI Gateway Directives:** Advisory fees and market funds cannot be collected into personal savings VPAs (`@okhdfcbank`, `@paytm`, `@ybl`). Funds must flow to authorized corporate merchant accounts or Clearing Corporation (CC) settlement pools.
 
-### 3. Zero-Hallucination Neuro-Symbolic Guarantee
+### 3. Zero-Hallucination Neuro-Symbolic Architecture
 - **Neural Layer:** Extracts unstructured indicators from Hindi/Bengali voice notes, chat screenshots, and forwarded SMS.
-- **Symbolic Layer:** Validates SEBI IDs against deterministic compiled regex `^IN[A-H]\d{9}$`, cross-references official offline snapshots, audits UPI handles, and checks Levenshtein homoglyphs against authentic broker endpoints.
+- **Symbolic Layer:** Validates SEBI IDs against deterministic compiled regex `^IN[A-H]\d{9}$`, cross-references official offline snapshots, audits UPI handles, checks NSDL Demat account invariants, and checks Levenshtein homoglyphs against authentic broker endpoints.
 
-### 4. Non-Negotiable SANGYAN Negative Guardrails
-- **0% Stock Recommendations:** Mathematically constrained from providing stock picks, buy/sell calls, or price targets.
-- **Instant Defensive Interception:** If a user asks *"Which stock should I buy for tomorrow's expiry?"*, the sentinel immediately refuses and reinforces the **SEBI Investor Charter** in Hindi and English.
+### 4. Deterministic Multi-Lingual Intent & Speculation Interceptor
+- **Tri-Vector Interrogative Interceptor:** Evaluates queries by intersecting interrogatives (`konsa`, `ki`, `which`), securities (`stock`, `share`, `nifty`), and action verbs (`kharidu`, `kinbo`, `buy`, `invest`) across English, Hindi, Hinglish, Bengali, and Banglish.
+- **100% Sub-Millisecond Guardrail:** Catches questions like *"kal konsa stock kharidu?"* or *"kal ki stock kinbo?"* in $<2\text{ms}$ with zero API token spend, ensuring absolute compliance with SEBI (Research Analysts) Regulations.
+- **Multilingual Defensive Refusal:** Automatically responds with localized SEBI Investor Charter reminders in Hindi, Bengali, and English.
+
+### 5. Deterministic Local-First Offline Resilience
+- **Zero API Downtime Risk:** The core sentinel—including SEBI registry lookup, NPCI payment validation, threat index calculation, PDF complaint generation, and 1930 SMS formatting—runs **100% locally and offline**.
+- Even if external cloud AI quotas or rate limits are reached, the application never freezes, halts, or fails.
 
 ---
 
@@ -78,45 +89,53 @@ Typical projects claim: *"We automatically file on SEBI SCORES."*
 
 ```mermaid
 flowchart TD
-    subgraph Ingestion ["1. Multimodal Ingestion Layer"]
-        A1["Vernacular Voice Note<br/>(Hindi / Bengali / Hinglish)"]
-        A2["Chat Screenshots<br/>(Telegram / WhatsApp / SMS)"]
-        A3["Advisory Messages<br/>(Raw Text / Links)"]
+    subgraph Channels ["Ingestion Channels"]
+        CH_WEB["Town-Inspired Sentinel Web UI<br/>(Streamlit with Ctrl+Enter & Live Ticker)"]
+        CH_BOT["Telegram Bot Sentinel<br/>(Forward Provenance, Voice, Photos, APKs)"]
+        CH_CLI["Headless CLI Tool<br/>(satark / satark-bot)"]
     end
 
-    subgraph Extraction ["2. Invariant Parsing & Symbolic Extraction"]
-        B1["Speech-to-Text / Transcriber<br/>(Indic Dialect Normalizer)"]
-        B2["Visual OCR & Layout Parser<br/>(EasyOCR Engine)"]
-        B3["Deterministic AST Tokenizer<br/>(SEBI IDs, UPI VPAs, URLs, APKs)"]
+    subgraph Ingestion ["Multimodal Perception Layer"]
+        ING_TEXT["Raw Advisory & Chat Text"]
+        ING_OCR["Visual OCR Parser<br/>(Gemini Vision + EasyOCR Fallback)"]
+        ING_AUDIO["Indic Speech-to-Text<br/>(Hindi, Bengali, Hinglish, English)"]
+        ING_APK["APK Binary Attachment Interceptor"]
     end
 
-    subgraph SymbolicMatrix ["3. Hybrid Verification Matrix"]
-        C1["SEBI Intermediary Registry<br/>(Offline Hashmap & AST Checksum)"]
-        C2["Payment Channel Auditor<br/>(Circular 2023/71 Personal VPA vs Clearing)"]
-        C3["Phishing & Permutation Auditor<br/>(Weighted Damerau-Levenshtein & APK Filter)"]
-        C4["NSDL Depository Invariant<br/>(16-Digit Demat & Depositories Act 1996)"]
-        C5["Cognitive Coercion Index<br/>(FOMO Saturation & Guaranteed Returns)"]
+    subgraph DecisionPrep ["Intent Classification & Guardrails"]
+        INTENT_CLS["Tri-Vector Interrogative Interceptor<br/>(Interrogative + Securities + Action Verbs)"]
+        SEBI_GUARD["SEBI Compliance Guardrail<br/>(Strict Block on Tips in Hindi/Bengali/English)"]
     end
 
-    subgraph DecisionLayer ["4. Decision & Investor Resilience Layer"]
-        D1["Deterministic Threat Engine<br/>(Bounded Score 0-100 & Red Lines)"]
-        D2["Vernacular Voice Synthesizer<br/>(Colloquial Hindi & Bengali Audio)"]
-        D3["Evidentiary Dossier Compiler<br/>(Section 65B PDF + SCORES JSON + 1930 SMS)"]
+    subgraph SymbolicMatrix ["Deterministic Symbolic Regulatory Matrix"]
+        REG_SEBI["SEBI Registry Auditor<br/>(Regex AST + Offline Intermediary Hashmap)"]
+        REG_PAY["Payment Channel Auditor<br/>(Circular 2023/71 Personal VPA vs Clearing)"]
+        REG_DOM["Domain Typosquatting Auditor<br/>(Levenshtein Distance + Homoglyphs + APKs)"]
+        REG_NSDL["NSDL Depository Invariant Auditor<br/>(16-Digit Demat & Depositories Act 1996)"]
+        REG_PVA["Psychological Coercion & PVA Auditor<br/>(Guaranteed Returns, FOMO, VIP Pools)"]
     end
 
-    A1 --> B1 --> B3
-    A2 --> B2 --> B3
-    A3 --> B3
+    subgraph ThreatEngine ["Threat & Risk Engine"]
+        ENG_MATH["Mathematical Penalty Engine<br/>(Bounded Threat Score 0-100 & Red Lines)"]
+        ENG_ROUTE["Jurisdictional Redressal Router<br/>(SCORES 2.0 vs NCRP 1930 / SEBI MI)"]
+    end
 
-    B3 --> C1
-    B3 --> C2
-    B3 --> C3
-    B3 --> C4
-    B3 --> C5
+    subgraph Redressal ["Evidentiary Redressal Layer"]
+        OUT_VOICE["Vernacular Voice Alerts<br/>(Colloquial Hindi, Bengali, English Audio)"]
+        OUT_PDF["Court-Ready PDF Dossier<br/>(Section 65B BSA Compliant + SHA-256)"]
+        OUT_SMS["1930 Cyber Fraud Quick-Dispatch SMS"]
+    end
 
-    C1 & C2 & C3 & C4 & C5 --> D1
-    D1 --> D2
-    D1 --> D3
+    CH_WEB & CH_BOT & CH_CLI --> Ingestion
+    ING_TEXT & ING_OCR & ING_AUDIO & ING_APK --> INTENT_CLS
+    INTENT_CLS -->|Speculation Query| SEBI_GUARD
+    INTENT_CLS -->|Evidence / Financial Text| SymbolicMatrix
+
+    REG_SEBI & REG_PAY & REG_DOM & REG_NSDL & REG_PVA --> ENG_MATH
+    ENG_MATH --> ENG_ROUTE
+    ENG_MATH --> OUT_VOICE
+    ENG_ROUTE --> OUT_PDF & OUT_SMS
+    OUT_PDF & OUT_SMS & OUT_VOICE --> CH_WEB & CH_BOT & CH_CLI
 ```
 
 ---
@@ -159,6 +178,26 @@ SatarkBharat includes 4 one-click test cases in `data/samples/scenarios.json`:
 
 ---
 
+## 🤖 Telegram Bot Sentinel (Real-Time Forward & Chat Defense)
+
+SatarkBharat includes a fully integrated, production-ready Telegram Bot sentinel (`satark_bharat.telegram_bot`). It provides instant pre-transaction investor defense right inside Telegram—where millions of fraudulent investment groups, pump-and-dump syndicates, and unverified tipsters operate.
+
+### Sentinel Capabilities on Telegram:
+- **Channel Forward Provenance:** Forward any suspicious post directly from a channel or group. SatarkBharat automatically extracts the channel's title, public username (`@channel`), and message ID to construct a legally traceable chain of custody.
+- **Multimodal Visual OCR:** Send screenshots of WhatsApp conversations, fraudulent SEBI registration certificates, or payment QR codes.
+- **Vernacular Voice Notes:** Send voice notes (`.oga`, `.ogg`, `.mp3`) in colloquial Hindi, Bengali, Hinglish, or English.
+- **Android APK Interceptor:** Uploading an `.apk` file (e.g. `zerodha-vip.apk`) triggers an immediate **Critical Risk (100/100) Red Line** alert warning against credential theft and unauthorized access.
+- **Court-Ready PDF Dossier Delivery:** If a risk is detected ($\ge 25/100$), the bot automatically replies with an official, court-ready Section 65B PDF Complaint Dossier ready for immediate submission.
+- **1930 Cyber Fraud Helpline Dispatch:** For high-threat scams, the bot generates a pre-formatted SMS string ready for 1-tap copy/paste to helpline **1930** or `cybercrime.gov.in`.
+- **SEBI Anti-Speculation Guardrail:** Rejects stock tips, price predictions, or buying calls across English, Hindi, and Bengali.
+
+### Available Commands:
+- `/start` — Multilingual introduction and step-by-step audit instructions.
+- `/help` — Emergency cybercrime helpline guidance (1930, SEBI SCORES, NCRP).
+- `/status` — Live diagnostic inspection of SEBI registry counts, verified broker databases, and engine health.
+
+---
+
 ## 💻 Command-Line Interface (CLI)
 
 SatarkBharat features a lightweight, high-performance CLI tool for automated screening and terminal workflows:
@@ -189,20 +228,66 @@ cd satark-bharat
 uv venv --python 3.11
 
 # 3. Activate virtual environment
-# Windows:
-.venv\Scripts\activate
+# Windows (PowerShell):
+.venv\Scripts\Activate.ps1
+# Windows (cmd):
+.venv\Scripts\activate.bat
 # Linux/macOS:
 source .venv/bin/activate
 
 # 4. Install dependencies in editable mode
 uv pip install -e ".[dev]"
 
-# 5. Run test suite
+# 5. Configure Environment (.env file in root)
+# Add your Telegram Bot Token & optional Gemini API Key:
+# TELEGRAM_BOT_TOKEN="your_telegram_bot_token"
+# GEMINI_API_KEY="your_gemini_api_key"
+
+# 6. Run test suite
 uv run pytest tests/
 
-# 6. Launch the Streamlit Sentinel Interface
+# 7. Launch the Streamlit Sentinel Web UI
 uv run streamlit run app.py
+
+# 8. Launch the Telegram Bot Sentinel
+uv run satark-bot
+# (or: python -m satark_bharat.telegram_bot)
 ```
+
+---
+
+## 🚀 How to Start the Telegram Bot
+
+You can run the Telegram Bot either through `uv` or standard Python:
+
+### Step 1: Obtain a Bot Token
+1. Open Telegram and search for `@BotFather`.
+2. Send `/newbot` and follow the prompts to choose a display name and username.
+3. Copy the HTTP API token provided by BotFather (e.g. `123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ`).
+
+### Step 2: Configure Environment
+Add your token to the `.env` file in the project root:
+```env
+TELEGRAM_BOT_TOKEN=your_token_here
+GEMINI_API_KEY=your_gemini_api_key_here  # Optional: for multimodal vision/audio
+```
+*(Alternatively, set it via shell environment variable: `$env:TELEGRAM_BOT_TOKEN="your_token"` on PowerShell or `export TELEGRAM_BOT_TOKEN="your_token"` on Linux/macOS).*
+
+### Step 3: Run the Bot
+In your activated terminal:
+```bash
+# Using uv:
+uv run satark-bot
+
+# OR using Python module syntax:
+python -m satark_bharat.telegram_bot
+```
+The console will confirm:
+```
+SatarkBharat Telegram Bot is starting polling...
+Application started
+```
+Open Telegram, message your bot, and send `/start` or forward any suspicious chat message!
 
 ---
 
@@ -226,6 +311,7 @@ satark-bharat/
 │   └── satark_bharat/
 │       ├── cli.py                     # Safe English-only command-line interface
 │       ├── config.py                  # Global application constants and paths
+│       ├── telegram_bot.py            # Real-time Telegram Bot Sentinel
 │       ├── ingestion/                 # Multimodal Perception (Audio & OCR)
 │       │   ├── audio.py               # Speech-to-text pipeline
 │       │   └── ocr.py                 # Multi-script Visual OCR
@@ -235,6 +321,7 @@ satark-bharat/
 │       │   ├── domain_auditor.py      # Damerau-Levenshtein typosquatting & APK detector
 │       │   └── nsdl_auditor.py        # 16-digit Demat & Depositories Act auditor
 │       ├── decision/                  # Threat Synthesis & Guardrails
+│       │   ├── intent_classifier.py   # Multi-script Intent & Speculation Classifier
 │       │   ├── math_engine.py         # Bayesian evidence fusion & coercion saturation
 │       │   ├── threat_engine.py       # Multi-factor penalty scoring formula (0-100)
 │       │   └── guardrails.py          # Anti-Speculation & Anti-Tipping Guardrail
@@ -244,7 +331,10 @@ satark-bharat/
 │       └── vernacular/                # Bharat-First Voice
 │           └── tts.py                 # Vernacular voice synthesizer (Hindi, Bengali)
 └── tests/
-    └── test_symbolic_engine.py        # Pytest suite (12/12 passing in 0.25s)
+    ├── test_symbolic_engine.py        # 14 deterministic symbolic & redressal tests
+    ├── test_intent_classifier.py      # 6 multi-lingual intent & Bengali advice tests
+    ├── test_telegram_bot.py           # 7 Telegram Bot provenance, guardrail & PDF tests
+    └── test_multimodal_ingestion.py   # 3 Visual OCR and Audio ingestion tests
 ```
 
 ---

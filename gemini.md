@@ -132,12 +132,48 @@ Scam syndicates operating across Uttar Pradesh, Bihar, West Bengal, and Maharash
 
 ## 4. Negative Guardrail Enforcement (Anti-Speculation)
 
-Whenever a user prompt contains queries like:
-- *"Which stock should I buy for tomorrow's expiry?"*
-- *"Can you analyze Tata Motors target price?"*
-- *"Tell me the safest mutual fund to double my money."*
+Whenever a user prompt contains speculative, stock-picking, or advisory-seeking queries such as:
+- **English:** *"Which stock should I buy for tomorrow's expiry?"*, *"Can you analyze Tata Motors target price?"*, *"Tell me the safest mutual fund to double my money."*
+- **Hindi / Hinglish:** *"Kal konsa stock kharidu?"*, *"Bhai kal konsa share lu?"*, *"Kisme invest kare batao?"*
+- **Bengali / Banglish:** *"Kal ki stock kinbo?"*, *"Konta kinle bhalo hobe?"*, *"কোন শেয়ার কিনবো কাল?"*, *"কাল কি স্টক কিনবো?"*
 
-The model triggers an absolute defensive refusal:
+The system triggers an absolute, deterministic defensive refusal across languages:
+
+**हिन्दी (Hindi):**
 ```text
-"सतर्क भारत एक नियामक सुरक्षा और धोखाधड़ी निवारक प्रणाली है। SEBI नियमों के तहत हम किसी भी शेयर, विकल्प या फंड की सिफारिश या मूल्य भविष्यवाणी नहीं करते हैं। कृपया केवल SEBI-पंजीकृत सलाहकारों से परामर्श लें।"
+"सतर्क भारत एक विनियामक सुरक्षा एवं धोखाधड़ी निवारण प्रणाली है। SEBI नियमों के अनुसार हम किसी भी शेयर या फंड की सिफारिश या भविष्यवाणी नहीं करते। कृपया केवल SEBI-पंजीकृत सलाहकारों से परामर्श लें।"
 ```
+
+**বাংলা (Bengali):**
+```text
+"সতর্ক ভারত একটি নিয়ন্ত্রক সুরক্ষা এবং জালিয়াতি প্রতিরোধ ব্যবস্থা। SEBI বিধিমালার অধীনে আমরা কোনো শেয়ার, মিউচুয়াল ফান্ড বা অপশনের সুপারিশ বা মূল্যের পূর্বাভাস প্রদান করি না। অনুগ্রহ করে শুধুমাত্র SEBI-নিবন্ধিত উপদেষ্টাদের সাথে পরামর্শ করুন।"
+```
+
+**English:**
+```text
+"SatarkBharat operates strictly as an investor defense sentinel. Under SEBI regulations, generative stock recommendations, price targets, and trading tips are strictly prohibited. Consult only SEBI-registered Research Analysts (INH) or Investment Advisers (INA)."
+```
+
+---
+
+## 5. Deterministic Local-First Offline Resilience (Zero Quota Failure)
+
+SatarkBharat is architected with a **Deterministic Local-First Hybrid Design**:
+- **Zero API Dependency for Core Defense:** The SEBI Registration Auditor (`INH/INA`), NSDL Depository Invariant Checker, NPCI/UPI VPA Classifier, Typo-squatting Scorer, 0-100 Threat Index Math, Section 65B PDF Dossier, and 1930 Cybercrime SMS formatter run **100% locally and offline**.
+- **Rate Limit & Quota Resilience:** If Gemini returns HTTP 429 (`RESOURCE_EXHAUSTED`) or network timeout, the pipeline catches the exception immediately and falls back to local regex AST and heuristic rule evaluation. **The application never crashes or halts**.
+- **Sub-Millisecond Guardrails:** The Tri-Vector Interrogative Interceptor executes locally before invoking any LLM, ensuring zero token spend on speculative queries.
+
+---
+
+## 6. Telegram Bot Sentinel Integration (`telegram_bot.py`)
+
+- **Interactive Pre-Transaction Defense:** Listens for forwarded messages from illicit Telegram channels, extracting provenance (channel title, username, post ID).
+- **Multimodal Message Ingestion:** Processes text, voice notes (`.oga`, `.ogg`, `.mp3`), screenshots (QR codes, chat logs), and `.apk` attachments.
+- **Automated Dossier Delivery:** Automatically replies with court-ready Section 65B PDF complaint dossiers and 1-tap 1930 SMS copy text when threats are identified.
+
+---
+
+## 7. NSDL Depository Invariant Auditing (`nsdl_auditor.py`)
+
+- Validates 16-character Demat account integrity: NSDL format (`IN` + 14 digits) and CDSL format (16 digits).
+- Detects fraudulent Demat freeze notices, margin recovery extortion, and unauthorized depository claim notices under the Depositories Act, 1996.
