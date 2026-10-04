@@ -20,6 +20,5 @@ __pycache__/
 ~$*.pptx
 ~$*.docx
 
-# Data & Docs (Internal)
-data/
+# Docs (Internal)
 docs/

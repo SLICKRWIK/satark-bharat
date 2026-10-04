@@ -1,0 +1,30 @@
+{
+  "exchanges_and_regulators": [
+    "sebi.gov.in",
+    "nseindia.com",
+    "bseindia.com",
+    "nsdl.co.in",
+    "cdslindia.com",
+    "cybercrime.gov.in",
+    "scores.sebi.gov.in"
+  ],
+  "top_registered_brokers": [
+    "zerodha.com",
+    "groww.in",
+    "angelone.in",
+    "upstox.com",
+    "icicidirect.com",
+    "kotaksecurities.com",
+    "hdfcsec.com",
+    "motilaloswal.com",
+    "sharekhan.com",
+    "5paisa.com"
+  ],
+  "authorized_payment_aggregators": [
+    "razorpay.com",
+    "billdesk.com",
+    "payu.in",
+    "ccavenue.com",
+    "cashfree.com"
+  ]
+}

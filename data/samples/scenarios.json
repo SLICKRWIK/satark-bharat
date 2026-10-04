@@ -1,0 +1,77 @@
+[
+  {
+    "id": "scenario_a_sebi_impersonation",
+    "title": "Case A: WhatsApp SEBI RA Impersonation + Personal VPA",
+    "description": "Scammer claims to be 'Apex Capital' (a real SEBI Research Analyst), but uses a fake personal Google Pay UPI handle and promises 200% guaranteed jackpot return.",
+    "input_type": "text",
+    "input_content": "Namaste Sir! This is Apex Capital Research (SEBI Reg: INH000008921). Today's BankNifty Expiry special jackpot call! 200% GUARANTEED RETURN in 2 hours! 100% loss-free recovery formula. Registration fee ₹4,999 only. Hurry, only 5 slots left in our VIP group! Pay immediately to VPA: rajesh.advisory99@okhdfcbank to get immediate entry. WhatsApp confirmation to +919876543210.",
+    "expected_verdict": {
+      "claimed_sebi_id": "INH000008921",
+      "claimed_entity": "Apex Capital Research",
+      "recipient_vpa": "rajesh.advisory99@okhdfcbank",
+      "is_personal_vpa": true,
+      "guaranteed_return_detected": true,
+      "urgency_fomo_detected": true,
+      "threat_score": 95,
+      "severity": "CRITICAL",
+      "routing": "SEBI_SCORES_2_0",
+      "routing_reason": "Claims real SEBI Research Analyst ID (INH000008921), but solicits unauthorized funds to personal savings VPA and violates SEBI PVA guaranteed return norms. Routed to SCORES 2.0 as Intermediary Impersonation/Misconduct."
+    }
+  },
+  {
+    "id": "scenario_b_telegram_unregistered_syndicate",
+    "title": "Case B: Telegram Hindi Voice Note / Syndicate Scam",
+    "description": "Unregistered Telegram channel operators promising daily fixed double money with no SEBI license, demanding cash pooling into a Paytm UPI address.",
+    "input_type": "audio_transcript",
+    "input_content": "Arre bhai suno! Kal Nifty aur Sensex ka confirmed upper circuit setting ho chuka hai operator ke sath! 500% pakka guaranteed jackpot return milega! Jitna paisa lagana hai lagao, ek rupaye ka loss nahi hoga. Fee sirf ₹2,500 hai. Jaldi se paytm karo: sureprofit.pool@paytm par. Koi SEBI ki bakwaas hum nahi maante, seedha double paisa banate hain!",
+    "expected_verdict": {
+      "claimed_sebi_id": null,
+      "claimed_entity": "Unregistered Syndicate",
+      "recipient_vpa": "sureprofit.pool@paytm",
+      "is_personal_vpa": true,
+      "guaranteed_return_detected": true,
+      "urgency_fomo_detected": true,
+      "threat_score": 95,
+      "severity": "CRITICAL",
+      "routing": "NCRP_1930_AND_SEBI_MI",
+      "routing_reason": "Completely unregistered operator running illegal fund-pooling with explicit guaranteed return claims. Routed to National Cyber Crime Portal (1930) for VPA freeze and SEBI Market Intelligence for illegal collective schemes."
+    }
+  },
+  {
+    "id": "scenario_c_cloned_apk_malware",
+    "title": "Case C: Cloned Trading Terminal APK & Phishing Domain",
+    "description": "SMS link asking the user to install a fraudulent 'Zerodha Pro VIP' trading application from an unofficial lookalike domain.",
+    "input_type": "text",
+    "input_content": "Dear Zerodha User, your trading account will be suspended in 24 hours due to KYC mismatch. To avoid suspension and claim ₹10,000 Institutional Zero-Loss Margin, download our official updated application from: https://zer0dha-app.trade/login.apk and login with your PAN and password immediately.",
+    "expected_verdict": {
+      "claimed_sebi_id": null,
+      "claimed_entity": "Spoofed Zerodha Broking",
+      "detected_urls": ["https://zer0dha-app.trade/login.apk"],
+      "typosquatting_detected": true,
+      "apk_malware_detected": true,
+      "threat_score": 100,
+      "severity": "CRITICAL",
+      "routing": "NCRP_1930_AND_SEBI_MI",
+      "routing_reason": "Distribution of malicious unauthorized APK terminal alongside typosquatted phishing domain (zer0dha-app.trade mimicking zerodha.com). Instant Critical Red-Line violation under IT Act Section 66D."
+    }
+  },
+  {
+    "id": "scenario_d_legitimate_verified_broker",
+    "title": "Case D: Legitimate SEBI Registered Broker (Safety Baseline)",
+    "description": "Official communication from a verified SEBI-registered broker with statutory risk disclaimers, no guaranteed returns, and official corporate domain.",
+    "input_type": "text",
+    "input_content": "Notice from Zerodha Broking Limited (SEBI Reg No: INZ000031633). Securities market investments are subject to market risks. Read all scheme related documents carefully before investing. For official account management, visit https://zerodha.com or write to support@zerodha.com. We never ask for client passwords or offer assured return schemes.",
+    "expected_verdict": {
+      "claimed_sebi_id": "INZ000031633",
+      "claimed_entity": "Zerodha Broking Limited",
+      "detected_urls": ["https://zerodha.com"],
+      "is_valid_sebi_id": true,
+      "is_domain_verified": true,
+      "guaranteed_return_detected": false,
+      "threat_score": 5,
+      "severity": "LOW_RISK",
+      "routing": "VERIFIED_NO_ACTION_REQUIRED",
+      "routing_reason": "Authentic SEBI Stock Broker registration (INZ000031633) matching official register. Legitimate domain, no return guarantees, mandatory risk disclosure present."
+    }
+  }
+]
