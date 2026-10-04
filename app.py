@@ -12,6 +12,7 @@ Faithfully crafted in the high-craft visual aesthetic of Town (town.com):
 """
 
 import json
+import textwrap
 
 import streamlit as st
 
@@ -515,78 +516,80 @@ if "input_text" not in st.session_state:
 # ---------------------------------------------------------
 # Top Navigation Bar (Clean Text Links, Zero Clunky Boxes)
 # ---------------------------------------------------------
-st.markdown(
-    """
-    <div class="town-nav-wrap">
-        <div class="town-nav-left">
-            <div class="town-logo-box">
-                <span style="color: #059669; font-size: 11px;">●</span>
-                <span>SATARK</span>
+st.html(
+    textwrap.dedent(
+        """
+        <div class="town-nav-wrap">
+            <div class="town-nav-left">
+                <div class="town-logo-box">
+                    <span style="color: #059669; font-size: 11px;">●</span>
+                    <span>SATARK</span>
+                </div>
+                <div class="town-nav-links" style="margin-left: 12px;">
+                    <span>Sentinel</span>
+                    <span>SCORES 2.0</span>
+                    <span>NCRP 1930</span>
+                    <span>Investor Charter</span>
+                </div>
             </div>
-            <div class="town-nav-links" style="margin-left: 12px;">
-                <span>Sentinel</span>
-                <span>SCORES 2.0</span>
-                <span>NCRP 1930</span>
-                <span>Investor Charter</span>
+            <div class="town-nav-right">
+                <span class="town-nav-badge">SANGYAN · Track A</span>
+                <a href="https://sangyan.sntciitbhu.co.in/" target="_blank" class="town-nav-btn">IIT-BHU × SEBI × NSDL</a>
             </div>
         </div>
-        <div class="town-nav-right">
-            <span class="town-nav-badge">SANGYAN · Track A</span>
-            <a href="https://sangyan.sntciitbhu.co.in/" target="_blank" class="town-nav-btn">IIT-BHU × SEBI × NSDL</a>
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
+        """
+    )
 )
 
 # ---------------------------------------------------------
 # Hero Section with High-Craft Mascot Illustration
 # ---------------------------------------------------------
-st.markdown(
-    """
-    <div class="hero-grid">
-        <div class="hero-text-col">
-            <div class="hero-title">
-                SatarkBharat protects your savings from fraud.
-            </div>
-            <div class="hero-lead-row">
-                <div class="hero-avatar">s</div>
-                <div>
-                    Forward any suspicious WhatsApp advisory, Telegram tip, or payment request.
-                    <span class="tag-salmon">Satark</span> audits regulatory invariants, recipient UPI accounts,
-                    and official SEBI registers before you transfer money.
+st.html(
+    textwrap.dedent(
+        """
+        <div class="hero-grid">
+            <div class="hero-text-col">
+                <div class="hero-title">
+                    SatarkBharat protects your savings from fraud.
+                </div>
+                <div class="hero-lead-row">
+                    <div class="hero-avatar">s</div>
+                    <div>
+                        Forward any suspicious WhatsApp advisory, Telegram tip, or payment request.
+                        <span class="tag-salmon">Satark</span> audits regulatory invariants, recipient UPI accounts,
+                        and official SEBI registers before you transfer money.
+                    </div>
                 </div>
             </div>
+            <div class="hero-mascot-col">
+                <!-- High-Craft Sentinel Guardian Mascot SVG -->
+                <svg width="125" height="140" viewBox="0 0 120 135" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Soft Glow Backdrop -->
+                    <circle cx="60" cy="65" r="50" fill="#fef3c7" fill-opacity="0.6"/>
+                    <!-- Guardian Shield Body -->
+                    <path d="M60 15L95 30V75C95 98 60 115 60 115C60 115 25 98 25 75V30L60 15Z" fill="#18181b" stroke="#3f3f46" stroke-width="2.5" stroke-linejoin="round"/>
+                    <!-- Inner Shield Accent -->
+                    <path d="M60 22L88 34V72C88 91 60 106 60 106C60 106 32 91 32 72V34L60 22Z" fill="#27272a"/>
+                    <!-- Golden Ashoka / Sentinel Seal -->
+                    <circle cx="60" cy="58" r="18" fill="#d97706" fill-opacity="0.2" stroke="#f59e0b" stroke-width="1.8"/>
+                    <circle cx="60" cy="58" r="13" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3 2"/>
+                    <circle cx="60" cy="58" r="5" fill="#fef3c7"/>
+                    <!-- Radiant Check / Verification Spear -->
+                    <path d="M53 58L58 63L68 52" stroke="#fef3c7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <!-- Little Pen / Audit Quill held in knight tradition -->
+                    <rect x="74" y="65" width="8" height="42" rx="4" transform="rotate(-30 74 65)" fill="#e06c53" stroke="#18181b" stroke-width="1.5"/>
+                    <polygon points="98,107 104,115 93,113" fill="#fbbf24" stroke="#18181b" stroke-width="1"/>
+                </svg>
+            </div>
         </div>
-        <div class="hero-mascot-col">
-            <!-- High-Craft Sentinel Guardian Mascot SVG -->
-            <svg width="125" height="140" viewBox="0 0 120 135" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Soft Glow Backdrop -->
-                <circle cx="60" cy="65" r="50" fill="#fef3c7" fill-opacity="0.6"/>
-                <!-- Guardian Shield Body -->
-                <path d="M60 15L95 30V75C95 98 60 115 60 115C60 115 25 98 25 75V30L60 15Z" fill="#18181b" stroke="#3f3f46" stroke-width="2.5" stroke-linejoin="round"/>
-                <!-- Inner Shield Accent -->
-                <path d="M60 22L88 34V72C88 91 60 106 60 106C60 106 32 91 32 72V34L60 22Z" fill="#27272a"/>
-                <!-- Golden Ashoka / Sentinel Seal -->
-                <circle cx="60" cy="58" r="18" fill="#d97706" fill-opacity="0.2" stroke="#f59e0b" stroke-width="1.8"/>
-                <circle cx="60" cy="58" r="13" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3 2"/>
-                <circle cx="60" cy="58" r="5" fill="#fef3c7"/>
-                <!-- Radiant Check / Verification Spear -->
-                <path d="M53 58L58 63L68 52" stroke="#fef3c7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <!-- Little Pen / Audit Quill held in knight tradition -->
-                <rect x="74" y="65" width="8" height="42" rx="4" transform="rotate(-30 74 65)" fill="#e06c53" stroke="#18181b" stroke-width="1.5"/>
-                <polygon points="98,107 104,115 93,113" fill="#fbbf24" stroke="#18181b" stroke-width="1"/>
-            </svg>
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
+        """
+    )
 )
 
 # ---------------------------------------------------------
 # Load Scenarios (Clean, Soft White Pill Chips)
 # ---------------------------------------------------------
-st.markdown("<p style='font-size: 0.78rem; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;'>Load Sample Scenarios</p>", unsafe_allow_html=True)
+st.html("<p style='font-size: 0.78rem; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;'>Load Sample Scenarios</p>")
 
 chip_cols = st.columns(4)
 chip_data = [
@@ -667,20 +670,17 @@ with input_tabs[3]:
             st.success("Query permitted.")
 
 # ---------------------------------------------------------
+# ---------------------------------------------------------
 # Action Buttons (Primary Black + Secondary Ghost)
 # ---------------------------------------------------------
 btn_col1, btn_col2 = st.columns([4, 1])
 with btn_col1:
-    st.markdown('<div class="primary-audit-btn">', unsafe_allow_html=True)
-    analyze_clicked = st.button("Run Regulatory Audit →", key="btn_run_audit", use_container_width=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+    analyze_clicked = st.button("Run Regulatory Audit →", key="btn_run_audit", type="primary", use_container_width=True)
 
 with btn_col2:
-    st.markdown('<div class="secondary-clear-btn">', unsafe_allow_html=True)
     if st.button("Clear", key="btn_clear_text", use_container_width=True):
         st.session_state.input_text = ""
         st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
 
 # ---------------------------------------------------------
 # Results Execution & High-Craft Visual Presentation
@@ -705,49 +705,50 @@ if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
     needle_angle = 180 - (gauge_pct * 180)
     gauge_color = "#ef4444" if is_critical else ("#f59e0b" if score > 24 else "#10b981")
 
-    st.markdown("<div style='height: 1.5rem;'></div>", unsafe_allow_html=True)
+    st.html("<div style='height: 1.5rem;'></div>")
 
     # 1. Main Verdict Card with SVG Speedometer Arc
-    st.markdown(
-        f"""
-        <div class="town-list-container">
-            <div class="town-list-header">
-                <span class="town-list-title">Sentinel Audit Report</span>
-                <span class="status-pill" style="background: {badge_bg}; color: {badge_color};">{badge_label}</span>
-            </div>
-
-            <!-- Radial Threat Gauge Arc (Visual Oomph) -->
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 12px 16px; background: #faf9f6; border-radius: 12px; border: 1px solid rgba(0,0,0,0.04);">
-                <div style="max-width: 500px;">
-                    <div style="font-size: 0.78rem; font-weight: 600; text-transform: uppercase; color: #71717a; margin-bottom: 2px;">Composite Risk Assessment</div>
-                    <div style="font-size: 1.05rem; font-weight: 600; color: #18181b;">{report.plain_english_summary}</div>
+    st.html(
+        textwrap.dedent(
+            f"""
+            <div class="town-list-container">
+                <div class="town-list-header">
+                    <span class="town-list-title">Sentinel Audit Report</span>
+                    <span class="status-pill" style="background: {badge_bg}; color: {badge_color};">{badge_label}</span>
                 </div>
-                <div style="text-align: center; flex-shrink: 0;">
-                    <!-- SVG Gauge -->
-                    <svg width="100" height="58" viewBox="0 0 100 58">
-                        <!-- Background Track -->
-                        <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#e4e4e7" stroke-width="8" stroke-linecap="round"/>
-                        <!-- Active Arc -->
-                        <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="{gauge_color}" stroke-width="8" stroke-linecap="round" stroke-dasharray="126" stroke-dashoffset="{126 - (126 * gauge_pct)}"/>
-                        <text x="50" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="16" font-weight="700" fill="#18181b" text-anchor="middle">{score}</text>
-                    </svg>
-                    <div style="font-size: 0.70rem; color: #71717a; font-weight: 500;">out of 100</div>
+
+                <!-- Radial Threat Gauge Arc (Visual Oomph) -->
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 12px 16px; background: #faf9f6; border-radius: 12px; border: 1px solid rgba(0,0,0,0.04);">
+                    <div style="max-width: 500px;">
+                        <div style="font-size: 0.78rem; font-weight: 600; text-transform: uppercase; color: #71717a; margin-bottom: 2px;">Composite Risk Assessment</div>
+                        <div style="font-size: 1.05rem; font-weight: 600; color: #18181b;">{report.plain_english_summary}</div>
+                    </div>
+                    <div style="text-align: center; flex-shrink: 0;">
+                        <!-- SVG Gauge -->
+                        <svg width="100" height="58" viewBox="0 0 100 58">
+                            <!-- Background Track -->
+                            <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#e4e4e7" stroke-width="8" stroke-linecap="round"/>
+                            <!-- Active Arc -->
+                            <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="{gauge_color}" stroke-width="8" stroke-linecap="round" stroke-dasharray="126" stroke-dashoffset="{126 - (126 * gauge_pct)}"/>
+                            <text x="50" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="16" font-weight="700" fill="#18181b" text-anchor="middle">{score}</text>
+                        </svg>
+                        <div style="font-size: 0.70rem; color: #71717a; font-weight: 500;">out of 100</div>
+                    </div>
+                </div>
+
+                <div style="font-size: 0.92rem; color: #3f3f46; line-height: 1.5; margin-bottom: 6px;">
+                    <b>हिन्दी:</b> {report.vernacular_hindi_summary}
+                </div>
+                <div style="font-size: 0.90rem; color: #71717a; line-height: 1.5;">
+                    <b>বাংলা:</b> {report.vernacular_bengali_summary}
                 </div>
             </div>
-
-            <div style="font-size: 0.92rem; color: #3f3f46; line-height: 1.5; margin-bottom: 6px;">
-                <b>हिन्दी:</b> {report.vernacular_hindi_summary}
-            </div>
-            <div style="font-size: 0.90rem; color: #71717a; line-height: 1.5;">
-                <b>বাংলা:</b> {report.vernacular_bengali_summary}
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
+            """
+        )
     )
 
     # 2. Vernacular Voice Alert Player
-    st.markdown("<p style='font-size: 0.78rem; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;'>Vernacular Voice Warning (Audio Playback)</p>", unsafe_allow_html=True)
+    st.html("<p style='font-size: 0.78rem; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;'>Vernacular Voice Warning (Audio Playback)</p>")
     voice_cols = st.columns([1, 1, 1])
     with voice_cols[0]:
         st.caption("Hindi Audio")
@@ -791,95 +792,98 @@ if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
     nsdl_pill = "danger" if report.depository_audit.is_fake_nsdl_claim else "safe"
     nsdl_pill_text = "Unauthorized NSDL Claim" if report.depository_audit.is_fake_nsdl_claim else "Depository Valid"
 
-    st.markdown(
-        f"""
-        <div class="town-list-container">
-            <div class="town-list-header">
-                <span class="town-list-title">Deterministic Regulatory Invariants</span>
-                <span style="font-size: 0.8rem; color: #71717a;">5 verified benchmarks</span>
-            </div>
-
-            <!-- Item 1: SEBI Registry -->
-            <div class="town-list-item">
-                <div class="town-item-left">
-                    <div class="town-item-checkbox {sebi_checked}">{sebi_mark}</div>
-                    <div>
-                        <div class="town-item-title">SEBI Intermediary Registration</div>
-                        <div class="town-item-desc">Claimed ID: {report.sebi_audit.claimed_id or 'None (Unregistered)'} · Registry status: {report.sebi_audit.registry_status}</div>
-                    </div>
+    # 3. Checklist-Oriented Regulatory Invariants
+    st.html(
+        textwrap.dedent(
+            f"""
+            <div class="town-list-container">
+                <div class="town-list-header">
+                    <span class="town-list-title">Deterministic Regulatory Invariants</span>
+                    <span style="font-size: 0.8rem; color: #71717a;">5 verified benchmarks</span>
                 </div>
-                <span class="status-pill {sebi_pill}">{sebi_pill_text}</span>
-            </div>
 
-            <!-- Item 2: Payment Routing -->
-            <div class="town-list-item">
-                <div class="town-item-left">
-                    <div class="town-item-checkbox {pay_checked}">{pay_mark}</div>
-                    <div>
-                        <div class="town-item-title">Payment Channel & Settlement Segregation</div>
-                        <div class="town-item-desc">Recipient VPA: {report.payment_audit.primary_vpa or 'None specified'} · Circular 2023/71 mandate</div>
+                <!-- Item 1: SEBI Registry -->
+                <div class="town-list-item">
+                    <div class="town-item-left">
+                        <div class="town-item-checkbox {sebi_checked}">{sebi_mark}</div>
+                        <div>
+                            <div class="town-item-title">SEBI Intermediary Registration</div>
+                            <div class="town-item-desc">Claimed ID: {report.sebi_audit.claimed_id or 'None (Unregistered)'} · Registry status: {report.sebi_audit.registry_status}</div>
+                        </div>
                     </div>
+                    <span class="status-pill {sebi_pill}">{sebi_pill_text}</span>
                 </div>
-                <span class="status-pill {pay_pill}">{pay_pill_text}</span>
-            </div>
 
-            <!-- Item 3: Return Guarantee (PVA) -->
-            <div class="town-list-item">
-                <div class="town-item-left">
-                    <div class="town-item-checkbox {pva_checked}">{pva_mark}</div>
-                    <div>
-                        <div class="town-item-title">Performance Guarantee Audit</div>
-                        <div class="town-item-desc">SEBI (Research Analysts) Regulation 15(1) & PVA Code of Conduct</div>
+                <!-- Item 2: Payment Routing -->
+                <div class="town-list-item">
+                    <div class="town-item-left">
+                        <div class="town-item-checkbox {pay_checked}">{pay_mark}</div>
+                        <div>
+                            <div class="town-item-title">Payment Channel & Settlement Segregation</div>
+                            <div class="town-item-desc">Recipient VPA: {report.payment_audit.primary_vpa or 'None specified'} · Circular 2023/71 mandate</div>
+                        </div>
                     </div>
+                    <span class="status-pill {pay_pill}">{pay_pill_text}</span>
                 </div>
-                <span class="status-pill {pva_pill}">{pva_pill_text}</span>
-            </div>
 
-            <!-- Item 4: Domain & APK -->
-            <div class="town-list-item">
-                <div class="town-item-left">
-                    <div class="town-item-checkbox {dom_checked}">{dom_mark}</div>
-                    <div>
-                        <div class="town-item-title">Domain Authenticity & APK Binary Invariant</div>
-                        <div class="town-item-desc">Weighted Damerau-Levenshtein homoglyph distance · Section 66D IT Act</div>
+                <!-- Item 3: Return Guarantee (PVA) -->
+                <div class="town-list-item">
+                    <div class="town-item-left">
+                        <div class="town-item-checkbox {pva_checked}">{pva_mark}</div>
+                        <div>
+                            <div class="town-item-title">Performance Guarantee Audit</div>
+                            <div class="town-item-desc">SEBI (Research Analysts) Regulation 15(1) & PVA Code of Conduct</div>
+                        </div>
                     </div>
+                    <span class="status-pill {pva_pill}">{pva_pill_text}</span>
                 </div>
-                <span class="status-pill {dom_pill}">{dom_pill_text}</span>
-            </div>
 
-            <!-- Item 5: NSDL Depository -->
-            <div class="town-list-item">
-                <div class="town-item-left">
-                    <div class="town-item-checkbox {nsdl_checked}">{nsdl_mark}</div>
-                    <div>
-                        <div class="town-item-title">NSDL Depository Invariant Safeguard</div>
-                        <div class="town-item-desc">Demat account 16-character format · Depositories Act 1996 verification</div>
+                <!-- Item 4: Domain & APK -->
+                <div class="town-list-item">
+                    <div class="town-item-left">
+                        <div class="town-item-checkbox {dom_checked}">{dom_mark}</div>
+                        <div>
+                            <div class="town-item-title">Domain Authenticity & APK Binary Invariant</div>
+                            <div class="town-item-desc">Weighted Damerau-Levenshtein homoglyph distance · Section 66D IT Act</div>
+                        </div>
                     </div>
+                    <span class="status-pill {dom_pill}">{dom_pill_text}</span>
                 </div>
-                <span class="status-pill {nsdl_pill}">{nsdl_pill_text}</span>
+
+                <!-- Item 5: NSDL Depository -->
+                <div class="town-list-item">
+                    <div class="town-item-left">
+                        <div class="town-item-checkbox {nsdl_checked}">{nsdl_mark}</div>
+                        <div>
+                            <div class="town-item-title">NSDL Depository Invariant Safeguard</div>
+                            <div class="town-item-desc">Demat account 16-character format · Depositories Act 1996 verification</div>
+                        </div>
+                    </div>
+                    <span class="status-pill {nsdl_pill}">{nsdl_pill_text}</span>
+                </div>
             </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
+            """
+        )
     )
 
     # 4. Institutional Grievance Routing (Quiet Minimalist Card)
-    st.markdown(
-        f"""
-        <div class="town-list-container">
-            <div class="town-list-header">
-                <span class="town-list-title">Institutional Grievance Routing</span>
-                <span class="status-pill neutral">{route.portal_name}</span>
+    st.html(
+        textwrap.dedent(
+            f"""
+            <div class="town-list-container">
+                <div class="town-list-header">
+                    <span class="town-list-title">Institutional Grievance Routing</span>
+                    <span class="status-pill neutral">{route.portal_name}</span>
+                </div>
+                <div style="font-size: 0.92rem; color: #18181b; line-height: 1.5; margin-bottom: 6px;">
+                    <b>Statutory Basis:</b> {route.statutory_basis}
+                </div>
+                <div style="font-size: 0.86rem; color: #52525b; line-height: 1.5;">
+                    {route.routing_rationale}
+                </div>
             </div>
-            <div style="font-size: 0.92rem; color: #18181b; line-height: 1.5; margin-bottom: 6px;">
-                <b>Statutory Basis:</b> {route.statutory_basis}
-            </div>
-            <div style="font-size: 0.86rem; color: #52525b; line-height: 1.5;">
-                {route.routing_rationale}
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
+            """
+        )
     )
 
     # 5. Evidentiary Exports
@@ -911,12 +915,13 @@ if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
 # ---------------------------------------------------------
 # Footer
 # ---------------------------------------------------------
-st.markdown("<div style='height: 3.5rem;'></div>", unsafe_allow_html=True)
-st.markdown(
-    """
-    <div style="text-align: center; border-top: 1px solid rgba(0, 0, 0, 0.06); padding-top: 2rem; font-size: 0.80rem; color: #a1a1aa;">
-        SatarkBharat · Built for SANGYAN (SNTC, IIT BHU Varanasi × SEBI × NSDL) · Zero Stock Tips · 100% Investor Defense
-    </div>
-    """,
-    unsafe_allow_html=True,
+st.html("<div style='height: 3.5rem;'></div>")
+st.html(
+    textwrap.dedent(
+        """
+        <div style="text-align: center; border-top: 1px solid rgba(0, 0, 0, 0.06); padding-top: 2rem; font-size: 0.80rem; color: #a1a1aa;">
+            SatarkBharat · Built for SANGYAN (SNTC, IIT BHU Varanasi × SEBI × NSDL) · Zero Stock Tips · 100% Investor Defense
+        </div>
+        """
+    )
 )
