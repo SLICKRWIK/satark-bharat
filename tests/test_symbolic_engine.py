@@ -96,3 +96,14 @@ def test_dossier_pdf_generation():
     pdf_bytes = DossierGenerator.generate_pdf_dossier(dossier_data)
     assert len(pdf_bytes) > 1000
     assert pdf_bytes.startswith(b"%PDF")
+
+
+def test_vernacular_hindi_and_bengali_summaries():
+    engine = ThreatIndexEngine()
+    text = "Kal 100% guaranteed jackpot return! Send money to scammer@ybl"
+    report = engine.evaluate(text)
+    assert len(report.vernacular_hindi_summary) > 10
+    assert len(report.vernacular_bengali_summary) > 10
+    assert "सतर्क" in report.vernacular_hindi_summary
+    assert "সতর্ক" in report.vernacular_bengali_summary
+
