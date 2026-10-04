@@ -549,44 +549,65 @@ st.markdown(
         font-size: 0.90rem !important;
     }
 
-    /* Segmented Pill-Toggle Tabs with High-Contrast Active State */
+    /* Clean, Spacious Editorial Modality Tabs */
     .stTabs [data-baseweb="tab-list"] {
-        display: inline-flex !important;
-        gap: 6px !important;
-        background: #f4f4f5 !important;
-        border-radius: 12px !important;
-        padding: 4px !important;
-        border: 1px solid #e4e4e7 !important;
-        margin-bottom: 1.1rem !important;
-        width: 100% !important;
+        display: flex !important;
+        gap: 32px !important;
+        background: transparent !important;
+        background-color: transparent !important;
+        border: none !important;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+        padding: 0 4px !important;
+        margin-top: 0.8rem !important;
+        margin-bottom: 1.2rem !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
     }
     .stTabs [data-baseweb="tab"] {
-        flex: 1 !important;
-        justify-content: center !important;
-        text-align: center !important;
         background: transparent !important;
+        background-color: transparent !important;
         color: #71717a !important;
-        font-size: 0.84rem !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+        font-size: 0.90rem !important;
         font-weight: 500 !important;
-        padding: 7px 14px !important;
-        border-radius: 8px !important;
+        padding: 8px 4px 12px 4px !important;
         border: none !important;
-        transition: all 0.15s ease !important;
+        border-bottom: 2px solid transparent !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        cursor: pointer !important;
+        margin-bottom: -1px !important;
+        transition: color 0.15s ease, border-color 0.15s ease !important;
     }
     .stTabs [data-baseweb="tab"]:hover {
         color: #18181b !important;
     }
     .stTabs [aria-selected="true"] {
-        background: #ffffff !important;
+        background: transparent !important;
+        background-color: transparent !important;
         color: #18181b !important;
         font-weight: 600 !important;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08), 0 1px 1px rgba(0, 0, 0, 0.04) !important;
+        border-bottom: 2px solid #18181b !important;
+        box-shadow: none !important;
     }
-    .stTabs [data-baseweb="tab-highlight"] {
-        display: none !important;
-    }
+    .stTabs [data-baseweb="tab-highlight"],
     .stTabs [data-baseweb="tab-border"] {
         display: none !important;
+    }
+
+    /* Completely hide Streamlit's "Press Ctrl+Enter to apply" instruction */
+    div[data-testid="InputInstructions"],
+    div[data-testid="stTextArea"] [data-testid="InputInstructions"],
+    .stTextArea [data-testid="InputInstructions"],
+    div[data-baseweb="textarea"] + div,
+    [data-testid="stTextArea"] small,
+    .stTextArea small {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
 
     /* Town Checklist Container */
@@ -921,16 +942,7 @@ for title, idx, _ in chip_data:
 # ---------------------------------------------------------
 # Input Tabs (Message, Screenshot, Audio)
 # ---------------------------------------------------------
-st.html(
-    textwrap.dedent(
-        """
-        <div style="margin-top: 1.8rem; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: space-between;">
-            <span style="font-size: 0.78rem; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: 0.5px;">Input Modality</span>
-            <span style="font-size: 0.72rem; color: #a1a1aa; font-family: 'Plus Jakarta Sans', sans-serif;">Direct Text · OCR Screenshot · Vernacular Speech</span>
-        </div>
-        """
-    )
-)
+st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
 
 input_tabs = st.tabs(["Advisory Text", "Upload Screenshot", "Upload Voice Note"])
 
@@ -1058,6 +1070,47 @@ with btn_col2:
         if "last_uploaded_audio_hash" in st.session_state:
             del st.session_state["last_uploaded_audio_hash"]
         st.rerun()
+
+# ---------------------------------------------------------
+# Keyboard Shortcut: Ctrl+Enter (or Cmd+Enter) executes Audit
+# ---------------------------------------------------------
+st.html(
+    """
+    <script>
+    (function() {
+        function attachCtrlEnterListener() {
+            const textareas = document.querySelectorAll('textarea');
+            textareas.forEach(ta => {
+                if (ta.dataset.ctrlEnterReady === "true") return;
+                ta.dataset.ctrlEnterReady = "true";
+                ta.addEventListener('keydown', function(e) {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        ta.dispatchEvent(new Event('input', { bubbles: true }));
+                        ta.dispatchEvent(new Event('change', { bubbles: true }));
+                        ta.blur();
+                        setTimeout(() => {
+                            const btn = document.querySelector('div.st-key-btn_run_audit button') ||
+                                        document.querySelector('button[kind="primary"]');
+                            if (btn) {
+                                btn.click();
+                            }
+                        }, 50);
+                    }
+                });
+            });
+        }
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", attachCtrlEnterListener);
+        } else {
+            attachCtrlEnterListener();
+        }
+        setInterval(attachCtrlEnterListener, 400);
+    })();
+    </script>
+    """
+)
 
 # ---------------------------------------------------------
 # Results Execution & High-Craft Visual Presentation
