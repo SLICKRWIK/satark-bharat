@@ -372,45 +372,59 @@ st.markdown(
 
     /* Subtle Minimal Speaker Icon Button */
     .speaker-icon-btn {
-        background: transparent !important;
-        background-color: transparent !important;
-        border: none !important;
+        background: #f4f4f5 !important;
+        background-color: #f4f4f5 !important;
+        border: 1px solid rgba(0, 0, 0, 0.06) !important;
         box-shadow: none !important;
-        padding: 4px !important;
+        width: 30px !important;
+        height: 24px !important;
+        padding: 0 !important;
         cursor: pointer !important;
-        color: #9ca3af !important;
-        -webkit-text-fill-color: #9ca3af !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        border-radius: 4px !important;
-        transition: color 0.15s ease, transform 0.15s ease !important;
+        border-radius: 6px !important;
+        transition: all 0.15s ease !important;
         outline: none !important;
-        line-height: 1 !important;
-        margin-left: 4px;
+        margin-left: 6px;
+        vertical-align: middle !important;
+    }
+    .speaker-glyph {
+        display: inline-block;
+        font-size: 0.85rem;
+        line-height: 1;
+        filter: grayscale(100%) opacity(0.6);
+        transition: all 0.15s ease;
+        user-select: none;
     }
     .speaker-icon-btn:hover {
-        color: #18181b !important;
-        -webkit-text-fill-color: #18181b !important;
-        transform: scale(1.08) !important;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+        border-color: rgba(0, 0, 0, 0.15) !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06) !important;
+        transform: translateY(-1px) !important;
+    }
+    .speaker-icon-btn:hover .speaker-glyph {
+        filter: grayscale(100%) brightness(0.2) opacity(1) !important;
     }
     .speaker-icon-btn.speaking {
-        color: #18181b !important;
-        -webkit-text-fill-color: #18181b !important;
-        animation: speaker-blink 0.75s ease-in-out infinite !important;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+        border-color: rgba(0, 0, 0, 0.2) !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
     }
-    .speaker-icon-btn * {
-        color: inherit !important;
-        -webkit-text-fill-color: inherit !important;
+    .speaker-icon-btn.speaking .speaker-glyph {
+        filter: grayscale(100%) brightness(0.2) opacity(1) !important;
+        animation: speaker-blink 0.75s ease-in-out infinite !important;
     }
     @keyframes speaker-blink {
         0%, 100% {
             opacity: 1;
-            transform: scale(1);
+            transform: scale(1.15);
         }
         50% {
-            opacity: 0.3;
-            transform: scale(0.92);
+            opacity: 0.25;
+            transform: scale(0.85);
         }
     }
 
@@ -820,32 +834,21 @@ if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
                             <button type="button" class="lang-tab" data-lang="bn">বাংলা</button>
                         </div>
                         <button type="button" class="speaker-icon-btn" id="sentinel-speaker-btn" title="Listen to advisory" aria-label="Listen to voice advisory">
-                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"></polygon>
-                                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-                            </svg>
+                            <span class="speaker-glyph">🔊</span>
                         </button>
                     </div>
                     <span class="status-pill" style="background: {badge_bg}; color: {badge_color};">{badge_label}</span>
                 </div>
 
-                <!-- Hidden HTML5 Audio Element (Zero Visible Sliders) -->
-                <audio id="sentinel-audio-player" style="display: none;"></audio>
-
-                <!-- Radial Threat Gauge Arc & Dynamic Text -->
+                <!-- Assessment Text & Editorial Score -->
                 <div style="display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 16px 18px; background: #faf9f6; border-radius: 12px; border: 1px solid rgba(0,0,0,0.04);">
                     <div style="flex: 1;">
                         <div id="sentinel-lang-label" style="font-size: 0.74rem; font-weight: 600; text-transform: uppercase; color: #71717a; letter-spacing: 0.5px; margin-bottom: 6px;">Composite Risk Assessment · English</div>
                         <div id="sentinel-summary-text" style="font-size: 1.05rem; font-weight: 500; color: #18181b; line-height: 1.6;">{en_text}</div>
                     </div>
-                    <div style="text-align: center; flex-shrink: 0; min-width: 100px;">
-                        <svg width="100" height="58" viewBox="0 0 100 58" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#e4e4e7" stroke-width="8" stroke-linecap="round"/>
-                            <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="{gauge_color}" stroke-width="8" stroke-linecap="round" stroke-dasharray="126" stroke-dashoffset="{126 - (126 * gauge_pct):.1f}"/>
-                            <text x="50" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="16" font-weight="700" fill="#18181b" text-anchor="middle">{score}</text>
-                        </svg>
-                        <div style="font-size: 0.70rem; color: #71717a; font-weight: 500;">out of 100</div>
+                    <div style="text-align: right; flex-shrink: 0; min-width: 85px; padding-left: 18px; border-left: 1px solid rgba(0,0,0,0.06);">
+                        <div style="font-size: 2.2rem; font-weight: 700; color: {gauge_color}; font-family: 'Fraunces', Georgia, serif; line-height: 1;">{score}</div>
+                        <div style="font-size: 0.68rem; color: #71717a; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">out of 100</div>
                     </div>
                 </div>
             </div>
@@ -866,38 +869,43 @@ if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
 
                 let currentLang = "en";
                 let isPlaying = false;
+                let currentAudio = null;
 
                 function init() {{
-                    const audio = document.getElementById("sentinel-audio-player");
                     const btn = document.getElementById("sentinel-speaker-btn");
                     const summary = document.getElementById("sentinel-summary-text");
                     const label = document.getElementById("sentinel-lang-label");
                     const tabs = document.querySelectorAll(".lang-tab");
 
-                    if (!audio || !btn || !summary || !label) {{
+                    if (!btn || !summary || !label) {{
                         setTimeout(init, 50);
                         return;
                     }}
 
                     function stopAudio() {{
-                        audio.pause();
-                        audio.currentTime = 0;
+                        if (currentAudio) {{
+                            currentAudio.pause();
+                            currentAudio.currentTime = 0;
+                        }}
                         isPlaying = false;
                         btn.classList.remove("speaking");
                     }}
 
                     function startAudio() {{
+                        stopAudio();
                         const track = audioTracks[currentLang];
                         if (!track) return;
-                        audio.src = track;
-                        audio.currentTime = 0;
-                        audio.play().then(() => {{
+                        currentAudio = new Audio(track);
+                        currentAudio.play().then(() => {{
                             isPlaying = true;
                             btn.classList.add("speaking");
                         }}).catch(e => {{
                             console.log("Audio play error:", e);
                             stopAudio();
                         }});
+                        currentAudio.onended = function() {{
+                            stopAudio();
+                        }};
                     }}
 
                     btn.onclick = function(e) {{
@@ -908,10 +916,6 @@ if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
                         }} else {{
                             startAudio();
                         }}
-                    }};
-
-                    audio.onended = function() {{
-                        stopAudio();
                     }};
 
                     tabs.forEach(tab => {{
