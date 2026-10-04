@@ -3,6 +3,10 @@
 import re
 from dataclasses import dataclass
 
+from satark_bharat.decision.intent_classifier import (
+    InputIntent,
+    IntentClassifier,
+)
 from satark_bharat.decision.math_engine import (
     BayesianEvidenceFusion,
     compute_cognitive_coercion_index,
@@ -51,13 +55,40 @@ class ThreatIndexEngine:
         re.IGNORECASE,
     )
 
-    def __init__(self):
+    def __init__(self, intent_classifier: IntentClassifier | None = None):
+        self.intent_classifier = intent_classifier or IntentClassifier(use_gemini=True)
         self.sebi_auditor = SebiRegistryAuditor()
         self.payment_auditor = PaymentChannelAuditor()
         self.domain_auditor = DomainAuditor()
         self.depository_auditor = NsdlDepositoryAuditor()
 
     def evaluate(self, text: str, claimed_entity_name: str | None = None) -> ThreatReport:
+        intent_res = self.intent_classifier.classify_intent(text)
+
+        # Non-financial noise / greetings fast-path (0 risk, clean invariants)
+        if intent_res.intent == InputIntent.NON_FINANCIAL_TEXT and not intent_res.is_financial_activity:
+            return ThreatReport(
+                composite_threat_score=0,
+                severity="LOW_RISK",
+                guaranteed_returns_detected=False,
+                urgency_fomo_detected=False,
+                unregistered_pool_detected=False,
+                red_line_triggered=False,
+                red_line_reason=None,
+                sebi_audit=self.sebi_auditor.audit_registration(text, claimed_name=claimed_entity_name, is_financial_context=False),
+                payment_audit=self.payment_auditor.audit_payment(text),
+                domain_audit=self.domain_auditor.audit_domains(text),
+                depository_audit=self.depository_auditor.audit_depository_claims(text),
+                statutory_violations=[],
+                penalty_breakdown={},
+                bayesian_posterior_p=0.01,
+                cognitive_coercion_score=0.0,
+                recommended_routing="VERIFIED_NO_ACTION_REQUIRED",
+                plain_english_summary="No securities advisory or financial solicitation detected. Input contains no regulatory risk.",
+                vernacular_hindi_summary="इस संदेश में कोई वित्तीय सलाह या धोखाधड़ी का तत्व नहीं पाया गया।",
+                vernacular_bengali_summary="এই বার্তায় কোনো আর্থিক পরামর্শ বা প্রতারণার উপাদান পাওয়া যায়নি।",
+            )
+
         # Run symbolic sub-engines
         sebi_res = self.sebi_auditor.audit_registration(text, claimed_name=claimed_entity_name)
         payment_res = self.payment_auditor.audit_payment(text)

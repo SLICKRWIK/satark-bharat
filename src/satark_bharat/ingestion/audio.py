@@ -61,7 +61,7 @@ class AudioIngestionModule:
                 lower_fn = filename.lower()
                 if lower_fn.endswith(".wav"):
                     mime_type = "audio/wav"
-                elif lower_fn.endswith(".ogg"):
+                elif lower_fn.endswith(".ogg") or lower_fn.endswith(".oga") or lower_fn.endswith(".opus"):
                     mime_type = "audio/ogg"
                 elif lower_fn.endswith(".m4a"):
                     mime_type = "audio/m4a"

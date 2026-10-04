@@ -829,7 +829,7 @@ for title, idx, _ in chip_data:
 # ---------------------------------------------------------
 st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
 
-input_tabs = st.tabs(["Advisory Text", "Upload Screenshot", "Upload Voice Note", "Guardrail Verification"])
+input_tabs = st.tabs(["Advisory Text", "Upload Screenshot", "Upload Voice Note"])
 
 with input_tabs[0]:
     user_text = st.text_area(
@@ -931,29 +931,6 @@ with input_tabs[2]:
             st.session_state.active_tab = "audio"
             st.session_state.audit_executed = False
 
-with input_tabs[3]:
-    st.caption("Verify that SatarkBharat strictly adheres to SANGYAN rules by refusing speculative stock advice.")
-    test_query = st.text_input(
-        "Speculative stock query",
-        value="Which stock should I buy for tomorrow's expiry?",
-        label_visibility="collapsed",
-    )
-    if st.button("Test Anti-Speculation Guardrail", key="btn_test_guardrail"):
-        gr_res = guardrail.check_query(test_query)
-        if gr_res.is_speculation_query:
-            st.markdown(
-                f"""
-                <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px; margin-top: 8px;">
-                    <div style="font-size: 0.8rem; font-weight: 600; color: #b91c1c; text-transform: uppercase;">Guardrail Active: Speculative Advisory Blocked</div>
-                    <div style="font-size: 0.88rem; color: #18181b; margin-top: 4px;">{gr_res.rejection_message_english}</div>
-                    <div style="font-size: 0.82rem; color: #52525b; margin-top: 4px; font-style: italic;">"{gr_res.rejection_message_hindi}"</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-        else:
-            st.success("Query permitted.")
-
 # ---------------------------------------------------------
 # ---------------------------------------------------------
 # Action Buttons (Primary Black + Secondary Ghost)
@@ -1001,10 +978,38 @@ if not content_to_analyze:
 
 st.session_state.input_text = content_to_analyze
 
-if st.session_state.audit_executed and len(content_to_analyze) <= 10:
-    st.warning("Please provide, upload, or select advisory content to analyze (minimum 10 characters required).")
+if st.session_state.audit_executed and len(content_to_analyze) < 2:
+    st.warning("Please provide, upload, or select advisory content to analyze.")
 
-if st.session_state.audit_executed and len(content_to_analyze) > 10:
+if st.session_state.audit_executed and len(content_to_analyze) >= 2:
+    gr_check = guardrail.check_query(content_to_analyze)
+    if gr_check.is_speculation_query:
+        st.html("<div style='height: 1.5rem;'></div>")
+        st.html(
+            textwrap.dedent(
+                f"""
+                <div style="background: #fee2e2; border: 1px solid #f87171; border-radius: 8px; padding: 20px; margin-top: 14px;">
+                    <div style="font-size: 0.85rem; font-weight: 700; color: #b91c1c; text-transform: uppercase; letter-spacing: 0.05em;">
+                        ⛔ SEBI Compliance Guardrail Enforced: Speculative Request Blocked
+                    </div>
+                    <div style="font-size: 0.9rem; color: #7f1d1d; margin-top: 8px;">
+                        <b>Query Intent:</b> {gr_check.blocked_intent}
+                    </div>
+                    <div style="font-size: 0.85rem; color: #991b1b; margin-top: 10px; line-height: 1.6;">
+                        <b>🇮🇳 हिन्दी:</b> {gr_check.rejection_message_hindi}
+                    </div>
+                    <div style="font-size: 0.85rem; color: #991b1b; margin-top: 6px; line-height: 1.6;">
+                        <b>🇬🇧 English:</b> {gr_check.rejection_message_english}
+                    </div>
+                    <div style="font-size: 0.80rem; color: #7f1d1d; margin-top: 12px; font-style: italic;">
+                        SatarkBharat operates strictly as an investor defense sentinel under SEBI regulations. We do not provide stock tips, price targets, or portfolio allocation advice.
+                    </div>
+                </div>
+                """
+            )
+        )
+        st.stop()
+
     report: ThreatReport = threat_engine.evaluate(content_to_analyze)
     route: JurisdictionalRoute = RegulatoryRouter.resolve_route(report)
 
@@ -1263,60 +1268,77 @@ if st.session_state.audit_executed and len(content_to_analyze) > 10:
     )
 
     # 5. Evidentiary Exports
-    dossier_data = DossierGenerator.generate_json_dossier(report, content_to_analyze)
-    pdf_bytes = DossierGenerator.generate_pdf_dossier(dossier_data)
-    sms_text = DossierGenerator.generate_1930_sms(report, dossier_data["incident_id"])
+    if score >= 25:
+        dossier_data = DossierGenerator.generate_json_dossier(report, content_to_analyze)
+        pdf_bytes = DossierGenerator.generate_pdf_dossier(dossier_data)
+        sms_text = DossierGenerator.generate_1930_sms(report, dossier_data["incident_id"])
 
-    st.html(
-        textwrap.dedent(
-            """
-            <div class="town-list-container" style="margin-bottom: 12px;">
-                <div class="town-list-header">
-                    <span class="town-list-title">Evidentiary Dossier & Regulatory Dispatch</span>
-                    <span style="font-size: 0.8rem; color: #71717a; font-family: 'Plus Jakarta Sans', sans-serif;">Sec 65B Indian Evidence Act compliant</span>
+        st.html(
+            textwrap.dedent(
+                """
+                <div class="town-list-container" style="margin-bottom: 12px;">
+                    <div class="town-list-header">
+                        <span class="town-list-title">Evidentiary Dossier & Regulatory Dispatch</span>
+                        <span style="font-size: 0.8rem; color: #71717a; font-family: 'Plus Jakarta Sans', sans-serif;">Sec 65B Indian Evidence Act compliant</span>
+                    </div>
+                    <div style="font-size: 0.85rem; color: #52525b; line-height: 1.55;">
+                        Generate court-ready cryptographically hashed records for official submission to <b>SEBI SCORES 2.0</b>, <b>NCRP 1930 Portal</b>, or jurisdictional Cyber Police records.
+                    </div>
                 </div>
-                <div style="font-size: 0.85rem; color: #52525b; line-height: 1.55;">
-                    Generate court-ready cryptographically hashed records for official submission to <b>SEBI SCORES 2.0</b>, <b>NCRP 1930 Portal</b>, or jurisdictional Cyber Police records.
-                </div>
-            </div>
-            """
-        )
-    )
-
-    exp_cols = st.columns(2)
-    with exp_cols[0]:
-        st.download_button(
-            label="📄 Download PDF Dossier (Court-Ready)",
-            data=pdf_bytes,
-            file_name=f"Satark_Dossier_{dossier_data['incident_id']}.pdf",
-            mime="application/pdf",
-            use_container_width=True,
-        )
-    with exp_cols[1]:
-        st.download_button(
-            label="💾 Download Structured JSON (SCORES / NCRP)",
-            data=json.dumps(dossier_data, indent=2),
-            file_name=f"Satark_Dossier_{dossier_data['incident_id']}.json",
-            mime="application/json",
-            use_container_width=True,
+                """
+            )
         )
 
-    st.html(
-        textwrap.dedent(
-            f"""
-            <details class="sms-dispatch-details">
-                <summary class="sms-dispatch-summary">
-                    <span style="font-size: 0.86rem; font-weight: 600; color: #18181b;">1930 Cyber Fraud Helpline Dispatch Template</span>
-                    <span style="font-size: 0.74rem; font-weight: 500; color: #71717a;">Click to expand</span>
-                </summary>
-                <div class="sms-dispatch-body">
-                    <div style="font-size: 0.78rem; color: #71717a; margin-bottom: 8px;">Pre-formatted statutory text ready for instant transmission to NCRP 1930 operators:</div>
-                    <pre class="sms-dispatch-pre">{sms_text}</pre>
-                </div>
-            </details>
-            """
+        exp_cols = st.columns(2)
+        with exp_cols[0]:
+            st.download_button(
+                label="📄 Download PDF Dossier (Court-Ready)",
+                data=pdf_bytes,
+                file_name=f"Satark_Dossier_{dossier_data['incident_id']}.pdf",
+                mime="application/pdf",
+                use_container_width=True,
+            )
+        with exp_cols[1]:
+            st.download_button(
+                label="💾 Download Structured JSON (SCORES / NCRP)",
+                data=json.dumps(dossier_data, indent=2),
+                file_name=f"Satark_Dossier_{dossier_data['incident_id']}.json",
+                mime="application/json",
+                use_container_width=True,
+            )
+
+        st.html(
+            textwrap.dedent(
+                f"""
+                <details class="sms-dispatch-details">
+                    <summary class="sms-dispatch-summary">
+                        <span style="font-size: 0.86rem; font-weight: 600; color: #18181b;">1930 Cyber Fraud Helpline Dispatch Template</span>
+                        <span style="font-size: 0.74rem; font-weight: 500; color: #71717a;">Click to expand</span>
+                    </summary>
+                    <div class="sms-dispatch-body">
+                        <div style="font-size: 0.78rem; color: #71717a; margin-bottom: 8px;">Pre-formatted statutory text ready for instant transmission to NCRP 1930 operators:</div>
+                        <pre class="sms-dispatch-pre">{sms_text}</pre>
+                    </div>
+                </details>
+                """
+            )
         )
-    )
+    else:
+        st.html(
+            textwrap.dedent(
+                """
+                <div class="town-list-container" style="margin-bottom: 12px; background: #ecfdf5; border: 1px solid #a7f3d0;">
+                    <div class="town-list-header">
+                        <span class="town-list-title" style="color: #065f46;">✅ Verified Invariants / No Action Required</span>
+                        <span style="font-size: 0.8rem; color: #047857; font-family: 'Plus Jakarta Sans', sans-serif;">SEBI & IT Act Invariants Cleared</span>
+                    </div>
+                    <div style="font-size: 0.85rem; color: #065f46; line-height: 1.55;">
+                        No illegal promises of guaranteed return, unofficial APK downloads, or personal payment collections were detected. No complaint filing or regulatory escalation is required.
+                    </div>
+                </div>
+                """
+            )
+        )
 
 # ---------------------------------------------------------
 # Footer

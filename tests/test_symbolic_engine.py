@@ -141,4 +141,30 @@ def test_advanced_deterministic_math():
     assert fusion.confidence_level in ("VERY_HIGH", "DEFINITIVE_RED_LINE")
 
 
+def test_sebi_registry_non_financial_text_zero_penalty():
+    auditor = SebiRegistryAuditor()
+    result = auditor.audit_registration("hello man")
+    assert result.claimed_id is None
+    assert result.penalty_points == 0
+    assert result.registry_status == "NOT_APPLICABLE"
+    assert result.statutory_violation is None
+
+
+def test_guardrail_blocks_recommendation_variations():
+    guardrail = SebiComplianceGuardrail()
+
+    test_queries = [
+        "can you recommend a stock for tomorrow?",
+        "can you recommend me some stocks for tommorwo?",
+        "bhai kal konsa share lu?",
+        "kisme invest kare batao?",
+        "give me intraday tips",
+    ]
+
+    for q in test_queries:
+        res = guardrail.check_query(q)
+        assert res.is_speculation_query is True, f"Guardrail failed to block: '{q}'"
+        assert "SEBI" in res.rejection_message_english
+
+
 

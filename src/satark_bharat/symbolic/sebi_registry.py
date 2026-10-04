@@ -1,10 +1,18 @@
 """Deterministic SEBI Registration Invariant Validator & Offline Registry Cross-Reference."""
 
 import json
+import re
 from dataclasses import dataclass
 from typing import Any
 
-from satark_bharat.config import SEBI_GENERAL_REGEX, SEBI_PATTERNS, SEBI_REGISTRY_PATH
+from satark_bharat.config import (
+    APK_REGEX,
+    SEBI_GENERAL_REGEX,
+    SEBI_PATTERNS,
+    SEBI_REGISTRY_PATH,
+    UPI_VPA_REGEX,
+    URL_REGEX,
+)
 
 
 @dataclass
@@ -14,13 +22,18 @@ class SebiAuditResult:
     category: str | None
     is_in_registry: bool
     registered_entity_name: str | None
-    registry_status: str  # "VERIFIED_ACTIVE", "NOT_FOUND", "INVALID_FORMAT", "NONE_CLAIMED"
+    registry_status: str  # "VERIFIED_ACTIVE", "NOT_FOUND", "INVALID_FORMAT", "NONE_CLAIMED", "NOT_APPLICABLE"
     is_impersonation_suspected: bool
     statutory_violation: str | None
     penalty_points: int
 
 
 class SebiRegistryAuditor:
+    FINANCIAL_ACTIVITY_REGEX = re.compile(
+        r"(\b(nifty|banknifty|sensex|finnifty|stocks?|shares?|equit(y|ies)|options?|futures?|f&o|calls?|puts?|ce|pe|crypto|forex|demat|trading|intraday|delivery|dividend|portfolio|mutual\s+funds?|sip|ipo|circuit|guarantee(d)?|jackpot|paisa\s+double|sure[-\s]?shot|pakka\s+profit|fixed\s+returns?|vip\s+group|insider\s+pool|operator\s+setting|fees?|charges?|margin|deposit|transfer|paytm|gpay|phonepe)\b|₹|rs\.?|\b\d+%\s*(return|profit|gain))",
+        re.IGNORECASE,
+    )
+
     def __init__(self, registry_path=SEBI_REGISTRY_PATH):
         self.registry = self._load_registry(registry_path)
 
@@ -45,10 +58,40 @@ class SebiRegistryAuditor:
                 return category
         return None
 
-    def audit_registration(self, text: str, claimed_name: str | None = None) -> SebiAuditResult:
+    def audit_registration(
+        self,
+        text: str,
+        claimed_name: str | None = None,
+        is_financial_context: bool | None = None,
+    ) -> SebiAuditResult:
         extracted_ids = self.extract_sebi_ids(text)
 
+        if is_financial_context is None:
+            has_financial_activity = (
+                bool(self.FINANCIAL_ACTIVITY_REGEX.search(text))
+                or bool(UPI_VPA_REGEX.search(text))
+                or bool(URL_REGEX.search(text))
+                or bool(APK_REGEX.search(text))
+            )
+        else:
+            has_financial_activity = is_financial_context
+
         if not extracted_ids:
+            # If input has no securities or transactional activity, absence of SEBI ID is completely lawful
+            if not has_financial_activity:
+                return SebiAuditResult(
+                    claimed_id=None,
+                    is_valid_format=False,
+                    category=None,
+                    is_in_registry=False,
+                    registered_entity_name=None,
+                    registry_status="NOT_APPLICABLE",
+                    is_impersonation_suspected=False,
+                    statutory_violation=None,
+                    penalty_points=0,
+                )
+
+            # Absence of SEBI ID in an active investment advisory/return solicitation pitch is an offense under Sec 12(1)
             return SebiAuditResult(
                 claimed_id=None,
                 is_valid_format=False,

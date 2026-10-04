@@ -1,5 +1,6 @@
 """Configuration constants, file paths, and Town-inspired design palette for SatarkBharat."""
 
+import os
 import re
 from pathlib import Path
 
@@ -54,3 +55,53 @@ TOWN_THEME = {
     "status_caution": "#fbbf24",      # Amber for caution
     "status_danger": "#f87171",       # Crimson coral for critical risk
 }
+
+
+def get_telegram_bot_token() -> str | None:
+    """Retrieve Telegram Bot Token from environment or project .env file."""
+    token = os.environ.get("TELEGRAM_BOT_TOKEN")
+    if token:
+        return token.strip()
+    env_paths = [PROJECT_ROOT / ".env", Path(".env")]
+    for env_path in env_paths:
+        if env_path.exists():
+            try:
+                for line in env_path.read_text(encoding="utf-8").splitlines():
+                    line = line.strip()
+                    if line.startswith("TELEGRAM_BOT_TOKEN="):
+                        return line.split("=", 1)[1].strip()
+            except Exception:
+                pass
+    return None
+
+
+def get_gemini_api_key() -> str | None:
+    """Retrieve Gemini API key from environment, Streamlit secrets, or project .env file."""
+    try:
+        import streamlit as st
+
+        if hasattr(st, "secrets"):
+            if "GEMINI_API_KEY" in st.secrets:
+                return str(st.secrets["GEMINI_API_KEY"]).strip()
+            if "GOOGLE_API_KEY" in st.secrets:
+                return str(st.secrets["GOOGLE_API_KEY"]).strip()
+    except Exception:
+        pass
+
+    key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+    if key:
+        return key.strip()
+
+    env_paths = [PROJECT_ROOT / ".env", Path(".env")]
+    for env_path in env_paths:
+        if env_path.exists():
+            try:
+                for line in env_path.read_text(encoding="utf-8").splitlines():
+                    line = line.strip()
+                    if line.startswith("GEMINI_API_KEY="):
+                        return line.split("=", 1)[1].strip()
+                    if line.startswith("GOOGLE_API_KEY="):
+                        return line.split("=", 1)[1].strip()
+            except Exception:
+                pass
+    return None

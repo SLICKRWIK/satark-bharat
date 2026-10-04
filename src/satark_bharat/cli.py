@@ -17,8 +17,17 @@ def main():
     parser.add_argument("text", nargs="?", help="Advisory chat message or claims text to audit")
     parser.add_argument("--json", action="store_true", help="Output full structured JSON dossier")
     parser.add_argument("--sms", action="store_true", help="Output 1930 Cyber Cell formatted SMS dispatch")
+    parser.add_argument("--bot", action="store_true", help="Launch the SatarkBharat Telegram Bot daemon")
 
     args = parser.parse_args()
+
+    if args.bot or args.text == "bot":
+        from satark_bharat.telegram_bot import SatarkTelegramBot
+
+        print("Starting SatarkBharat Telegram Bot Sentinel...")
+        bot = SatarkTelegramBot()
+        bot.run()
+        return
 
     if not args.text:
         # Check stdin
