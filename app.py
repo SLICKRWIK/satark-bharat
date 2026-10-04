@@ -41,7 +41,6 @@ from satark_bharat.vernacular.tts import VernacularVoiceEngine
 # Logo Asset
 LOGO_PATH = DATA_DIR / "satark_logo.png"
 logo_image = Image.open(LOGO_PATH) if LOGO_PATH.exists() else "🛡️"
-logo_b64 = base64.b64encode(LOGO_PATH.read_bytes()).decode() if LOGO_PATH.exists() else ""
 
 # ---------------------------------------------------------
 # Page Configuration
@@ -199,10 +198,10 @@ st.markdown(
         display: flex;
         align-items: flex-start;
         gap: 12px;
-        font-size: 0.96rem;
+        font-size: 0.98rem;
         line-height: 1.6;
         color: #3f3f46;
-        max-width: 580px;
+        max-width: 720px;
     }
     .tag-salmon {
         display: inline-block;
@@ -213,12 +212,6 @@ st.markdown(
         font-size: 0.85rem;
         font-weight: 500;
         font-family: 'JetBrains Mono', monospace;
-    }
-    .hero-mascot-col {
-        flex-shrink: 0;
-        width: 140px;
-        display: flex;
-        justify-content: center;
     }
 
     /* Input Floating Container */
@@ -878,7 +871,7 @@ st.html(
 # ---------------------------------------------------------
 st.html(
     textwrap.dedent(
-        f"""
+        """
         <div class="hero-grid">
             <div class="hero-text-col">
                 <div class="hero-title">
@@ -890,11 +883,6 @@ st.html(
                         Satark audits <b>regulatory invariants</b>, <b>recipient UPI accounts</b>,
                         and <b>official SEBI registers</b> before you transfer money.
                     </div>
-                </div>
-            </div>
-            <div class="hero-mascot-col">
-                <div style="width: 105px; height: 105px; border-radius: 22px; overflow: hidden; box-shadow: 0 10px 28px -4px rgba(24,24,27,0.16), 0 0 0 1px rgba(0,0,0,0.08); background: #161614; display: flex; align-items: center; justify-content: center;">
-                    <img src="data:image/png;base64,{logo_b64}" width="105" height="105" style="object-fit: cover; display: block;" alt="SatarkBharat Sentinel Logo" />
                 </div>
             </div>
         </div>
@@ -1487,10 +1475,10 @@ if st.session_state.audit_executed and len(content_to_analyze) >= 2:
 # ---------------------------------------------------------
 st.html(
     textwrap.dedent(
-        f"""
+        """
         <div class="footer-container">
             <div class="footer-content">
-                <span class="footer-brand"><img src="data:image/png;base64,{logo_b64}" width="18" height="18" style="vertical-align: -3px; border-radius: 4px; margin-right: 6px; display: inline-block;" alt="logo" />SatarkBharat</span>
+                <span class="footer-brand">SatarkBharat</span>
                 <span class="footer-sep">·</span>
                 <span>Built for <b>SANGYAN</b> (SNTC, IIT BHU Varanasi × SEBI × NSDL)</span>
                 <span class="footer-sep">·</span>
