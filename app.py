@@ -91,30 +91,31 @@ st.markdown(
         padding-right: 1.5rem !important;
     }
 
-    /* Refined Neutral Top Bar (Editorial Regulatory Dispatch) */
+    /* Continuous Professional Financial/Regulatory Ticker Bar at Top */
     .top-ticker-bar {
         position: fixed;
         top: 0;
         left: 0;
         width: 100vw;
-        height: 38px;
-        background: #f4f4f3;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        height: 36px;
+        background: #09090b;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         display: flex;
         align-items: center;
         overflow: hidden;
         z-index: 999999;
-        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-        font-size: 0.74rem;
-        letter-spacing: 0.2px;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
     }
     .ticker-track {
         display: flex;
         align-items: center;
         white-space: nowrap;
         will-change: transform;
-        animation: ticker-scroll 45s linear infinite;
+        animation: ticker-scroll 38s linear infinite;
     }
     .top-ticker-bar:hover .ticker-track {
         animation-play-state: paused;
@@ -130,29 +131,21 @@ st.markdown(
     .ticker-item {
         display: inline-flex;
         align-items: center;
-        padding: 0 18px;
+        padding: 0 16px;
     }
     .ticker-lbl {
-        color: #71717a;
+        color: #e4e4e7;
         font-weight: 500;
-        text-transform: uppercase;
-        font-size: 0.69rem;
-        letter-spacing: 0.6px;
         margin-right: 6px;
     }
     .ticker-val {
-        color: #18181b;
+        color: #fbbf24;
         font-weight: 600;
-        font-size: 0.74rem;
     }
-    .ticker-val-accent {
-        color: #b45309;
-        font-weight: 600;
-        font-size: 0.74rem;
-    }
+
     .ticker-sep {
-        color: rgba(0, 0, 0, 0.16);
-        margin-left: 18px;
+        color: rgba(255, 255, 255, 0.22);
+        margin-left: 16px;
         font-weight: 300;
     }
 
@@ -849,14 +842,15 @@ if "audit_executed" not in st.session_state:
 # Top Scrolling Regulatory Ticker Tape (Black Institutional Bar)
 # ---------------------------------------------------------
 ticker_items = """
-    <span class="ticker-item"><span class="ticker-lbl">Sentinel Status</span><span class="ticker-val-accent">Active Real-Time Defense</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">SATARK</span><span class="ticker-val">SENTINEL ACTIVE</span><span class="ticker-sep">|</span></span>
     <span class="ticker-item"><span class="ticker-lbl">SANGYAN 2024</span><span class="ticker-val">SNTC IIT-BHU × SEBI × NSDL</span><span class="ticker-sep">|</span></span>
-    <span class="ticker-item"><span class="ticker-lbl">Regulatory Mandate</span><span class="ticker-val">SEBI Circular 2023/71 Pooling Prohibited</span><span class="ticker-sep">|</span></span>
-    <span class="ticker-item"><span class="ticker-lbl">RA Reg 15(1)</span><span class="ticker-val-accent">Guaranteed Returns Prohibited</span><span class="ticker-sep">|</span></span>
-    <span class="ticker-item"><span class="ticker-lbl">NCRP Helpline</span><span class="ticker-val">Dial 1930 for Cyber Financial Fraud</span><span class="ticker-sep">|</span></span>
-    <span class="ticker-item"><span class="ticker-lbl">Dispute Redressal</span><span class="ticker-val">SCORES 2.0 & SMART ODR Integration</span><span class="ticker-sep">|</span></span>
-    <span class="ticker-item"><span class="ticker-lbl">Depository Guard</span><span class="ticker-val">16-Digit NSDL / CDSL Verification</span><span class="ticker-sep">|</span></span>
-    <span class="ticker-item"><span class="ticker-lbl">Sentinel Mandate</span><span class="ticker-val-accent">Zero Stock Tips / 100% Investor Defense</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">TRACK.A</span><span class="ticker-val">FRAUD RESILIENCE BENCHMARK</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">SEBI MANDATE</span><span class="ticker-val">CIRCULAR 2023/71 POOLING PROHIBITED</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">RA REG 15(1)</span><span class="ticker-val">GUARANTEED RETURNS BANNED</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">NCRP HELPLINE</span><span class="ticker-val">DIAL 1930 FOR CYBER FINANCIAL FRAUD</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">INSTITUTIONAL REDRESSAL</span><span class="ticker-val">SCORES 2.0 & SMART ODR PORTAL</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">NSDL INVARIANT</span><span class="ticker-val">16-DIGIT DEMAT VERIFICATION</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">SENTINEL INTEGRITY</span><span class="ticker-val">ZERO STOCK SPECULATION / 100% DEFENSE</span><span class="ticker-sep">|</span></span>
 """
 
 st.html(
