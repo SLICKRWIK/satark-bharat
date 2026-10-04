@@ -714,6 +714,16 @@ def load_sample_scenarios():
 samples = load_sample_scenarios()
 
 # Session State
+if "manual_input" not in st.session_state:
+    st.session_state.manual_input = ""
+if "screenshot_input" not in st.session_state:
+    st.session_state.screenshot_input = ""
+if "audio_input" not in st.session_state:
+    st.session_state.audio_input = ""
+if "sample_input" not in st.session_state:
+    st.session_state.sample_input = ""
+if "active_tab" not in st.session_state:
+    st.session_state.active_tab = "manual"
 if "input_text" not in st.session_state:
     st.session_state.input_text = ""
 if "audit_executed" not in st.session_state:
@@ -808,10 +818,9 @@ for title, idx, _ in chip_data:
     with chip_cols[idx]:
         if st.button(title, key=f"chip_btn_{idx}", use_container_width=True):
             content = samples[idx]["input_content"]
-            st.session_state.input_text = content
-            st.session_state.advisory_text_input = content
-            st.session_state.screenshot_text_editor = content
-            st.session_state.audio_text_editor = content
+            st.session_state.sample_input = content
+            st.session_state.manual_input = content
+            st.session_state.active_tab = "sample"
             st.session_state.audit_executed = False
             st.rerun()
 
@@ -823,26 +832,24 @@ st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
 input_tabs = st.tabs(["Advisory Text", "Upload Screenshot", "Upload Voice Note", "Guardrail Verification"])
 
 with input_tabs[0]:
-    def _on_advisory_text_change():
-        st.session_state.input_text = st.session_state.advisory_text_input
-        st.session_state.audit_executed = False
-
-    st.text_area(
+    user_text = st.text_area(
         label="Message Text",
-        value=st.session_state.get("advisory_text_input", st.session_state.input_text),
+        value=st.session_state.manual_input,
         height=110,
         placeholder="Type or paste advisory message, claimed SEBI ID, or payment request here...",
         label_visibility="collapsed",
-        key="advisory_text_input",
-        on_change=_on_advisory_text_change,
     )
+    if user_text != st.session_state.manual_input:
+        st.session_state.manual_input = user_text
+        st.session_state.active_tab = "manual"
+        st.session_state.audit_executed = False
 
 with input_tabs[1]:
     uploaded_file = st.file_uploader(
         "Upload Screenshot",
         type=["png", "jpg", "jpeg", "webp"],
         label_visibility="collapsed",
-        key="screenshot_uploader",
+        key="screenshot_uploader_file",
     )
     if uploaded_file is not None:
         file_bytes = uploaded_file.getvalue()
@@ -854,9 +861,8 @@ with input_tabs[1]:
                     extracted = ocr_engine.extract_text_from_image(file_bytes, mime_type=uploaded_file.type or "image/png")
                 except TypeError:
                     extracted = ocr_engine.extract_text_from_image(file_bytes)
-                st.session_state.input_text = extracted
-                st.session_state.advisory_text_input = extracted
-                st.session_state.screenshot_text_editor = extracted
+                st.session_state.screenshot_input = extracted
+                st.session_state.active_tab = "screenshot"
                 st.session_state.audit_executed = False
                 st.rerun()
 
@@ -865,27 +871,23 @@ with input_tabs[1]:
             st.image(uploaded_file, caption=f"Screenshot: {uploaded_file.name}")
         with col_txt:
             st.markdown("<div style='font-size: 0.82rem; font-weight: 600; color: #34d399; margin-bottom: 4px;'>✓ Multimodal Vision Extracted Buffer (Editable)</div>", unsafe_allow_html=True)
-
-            def _on_screenshot_text_change():
-                st.session_state.input_text = st.session_state.screenshot_text_editor
-                st.session_state.advisory_text_input = st.session_state.screenshot_text_editor
-                st.session_state.audit_executed = False
-
-            st.text_area(
+            sc_text = st.text_area(
                 "Extracted Text Review",
-                value=st.session_state.get("screenshot_text_editor", st.session_state.input_text),
+                value=st.session_state.screenshot_input,
                 height=160,
-                key="screenshot_text_editor",
                 label_visibility="collapsed",
-                on_change=_on_screenshot_text_change,
             )
+            if sc_text != st.session_state.screenshot_input:
+                st.session_state.screenshot_input = sc_text
+                st.session_state.active_tab = "screenshot"
+                st.session_state.audit_executed = False
 
 with input_tabs[2]:
     uploaded_audio = st.file_uploader(
         "Upload Voice Note",
         type=["mp3", "wav", "ogg", "m4a"],
         label_visibility="collapsed",
-        key="audio_uploader",
+        key="audio_uploader_file",
     )
     if uploaded_audio is not None:
         audio_bytes = uploaded_audio.getvalue()
@@ -894,27 +896,22 @@ with input_tabs[2]:
             st.session_state.last_uploaded_audio_hash = audio_hash
             with st.spinner("Transcribing vernacular speech with Gemini Speech Sentinel..."):
                 transcribed = voice_engine.transcribe_audio(audio_bytes, filename=uploaded_audio.name)
-                st.session_state.input_text = transcribed
-                st.session_state.advisory_text_input = transcribed
-                st.session_state.audio_text_editor = transcribed
+                st.session_state.audio_input = transcribed
+                st.session_state.active_tab = "audio"
                 st.session_state.audit_executed = False
                 st.rerun()
 
         st.caption(f"Audio stream '{uploaded_audio.name}' processed.")
-
-        def _on_audio_text_change():
-            st.session_state.input_text = st.session_state.audio_text_editor
-            st.session_state.advisory_text_input = st.session_state.audio_text_editor
-            st.session_state.audit_executed = False
-
-        st.text_area(
+        audio_text = st.text_area(
             "Transcribed Audio Text Review",
-            value=st.session_state.get("audio_text_editor", st.session_state.input_text),
+            value=st.session_state.audio_input,
             height=120,
-            key="audio_text_editor",
             label_visibility="collapsed",
-            on_change=_on_audio_text_change,
         )
+        if audio_text != st.session_state.audio_input:
+            st.session_state.audio_input = audio_text
+            st.session_state.active_tab = "audio"
+            st.session_state.audit_executed = False
 
 with input_tabs[3]:
     st.caption("Verify that SatarkBharat strictly adheres to SANGYAN rules by refusing speculative stock advice.")
@@ -951,10 +948,12 @@ with btn_col1:
 
 with btn_col2:
     if st.button("Clear", key="btn_clear_text", use_container_width=True):
+        st.session_state.manual_input = ""
+        st.session_state.screenshot_input = ""
+        st.session_state.audio_input = ""
+        st.session_state.sample_input = ""
         st.session_state.input_text = ""
-        st.session_state.advisory_text_input = ""
-        st.session_state.screenshot_text_editor = ""
-        st.session_state.audio_text_editor = ""
+        st.session_state.active_tab = "manual"
         st.session_state.audit_executed = False
         if "last_uploaded_screenshot_hash" in st.session_state:
             del st.session_state["last_uploaded_screenshot_hash"]
@@ -965,15 +964,24 @@ with btn_col2:
 # ---------------------------------------------------------
 # Results Execution & High-Craft Visual Presentation
 # ---------------------------------------------------------
-content_to_analyze = st.session_state.input_text.strip()
+if st.session_state.active_tab == "screenshot" and st.session_state.screenshot_input.strip():
+    content_to_analyze = st.session_state.screenshot_input.strip()
+elif st.session_state.active_tab == "audio" and st.session_state.audio_input.strip():
+    content_to_analyze = st.session_state.audio_input.strip()
+elif st.session_state.active_tab == "sample" and st.session_state.sample_input.strip():
+    content_to_analyze = st.session_state.sample_input.strip()
+else:
+    content_to_analyze = st.session_state.manual_input.strip()
+
 if not content_to_analyze:
     content_to_analyze = (
-        st.session_state.get("screenshot_text_editor", "").strip()
-        or st.session_state.get("audio_text_editor", "").strip()
-        or st.session_state.get("advisory_text_input", "").strip()
+        st.session_state.screenshot_input.strip()
+        or st.session_state.audio_input.strip()
+        or st.session_state.sample_input.strip()
+        or st.session_state.manual_input.strip()
     )
-    if content_to_analyze:
-        st.session_state.input_text = content_to_analyze
+
+st.session_state.input_text = content_to_analyze
 
 if st.session_state.audit_executed and len(content_to_analyze) <= 10:
     st.warning("Please provide, upload, or select advisory content to analyze (minimum 10 characters required).")
