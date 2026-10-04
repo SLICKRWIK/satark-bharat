@@ -705,6 +705,8 @@ samples = load_sample_scenarios()
 # Session State
 if "input_text" not in st.session_state:
     st.session_state.input_text = ""
+if "audit_executed" not in st.session_state:
+    st.session_state.audit_executed = False
 
 # ---------------------------------------------------------
 # Top Scrolling Regulatory Ticker Tape (Black Institutional Bar)
@@ -795,6 +797,7 @@ for title, idx, _ in chip_data:
     with chip_cols[idx]:
         if st.button(title, key=f"chip_btn_{idx}", use_container_width=True):
             st.session_state.input_text = samples[idx]["input_content"]
+            st.session_state.audit_executed = False
             st.rerun()
 
 # ---------------------------------------------------------
@@ -814,6 +817,7 @@ with input_tabs[0]:
     )
     if user_input != st.session_state.input_text:
         st.session_state.input_text = user_input
+        st.session_state.audit_executed = False
 
 with input_tabs[1]:
     uploaded_file = st.file_uploader(
@@ -826,6 +830,7 @@ with input_tabs[1]:
         st.caption("Screenshot text extracted to analysis buffer.")
         if extracted and "[OCR Ingestion Active" not in extracted:
             st.session_state.input_text = extracted
+            st.session_state.audit_executed = False
 
 with input_tabs[2]:
     uploaded_audio = st.file_uploader(
@@ -837,6 +842,7 @@ with input_tabs[2]:
         st.caption(f"Audio stream '{uploaded_audio.name}' received.")
         if not st.session_state.input_text:
             st.session_state.input_text = "Kal Nifty aur Sensex ka confirmed upper circuit setting ho chuka hai! 500% pakka guaranteed jackpot return milega! Fee sirf Rs 2,500 hai paytm karo: sureprofit.pool@paytm"
+            st.session_state.audit_executed = False
 
 with input_tabs[3]:
     st.caption("Verify that SatarkBharat strictly adheres to SANGYAN rules by refusing speculative stock advice.")
@@ -868,10 +874,13 @@ with input_tabs[3]:
 btn_col1, btn_col2 = st.columns([4, 1])
 with btn_col1:
     analyze_clicked = st.button("Run Regulatory Audit →", key="btn_run_audit", type="primary", use_container_width=True)
+    if analyze_clicked:
+        st.session_state.audit_executed = True
 
 with btn_col2:
     if st.button("Clear", key="btn_clear_text", use_container_width=True):
         st.session_state.input_text = ""
+        st.session_state.audit_executed = False
         st.rerun()
 
 # ---------------------------------------------------------
@@ -879,7 +888,7 @@ with btn_col2:
 # ---------------------------------------------------------
 content_to_analyze = st.session_state.input_text.strip()
 
-if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
+if st.session_state.audit_executed and len(content_to_analyze) > 10:
     report: ThreatReport = threat_engine.evaluate(content_to_analyze)
     route: JurisdictionalRoute = RegulatoryRouter.resolve_route(report)
 

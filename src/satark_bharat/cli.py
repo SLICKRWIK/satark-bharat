@@ -43,25 +43,30 @@ def main():
         print(DossierGenerator.generate_1930_sms(report, dossier["incident_id"]))
         return
 
-    # Beautiful minimal terminal readout
-    status_icon = "🔴" if report.composite_threat_score >= 60 else "🟢"
+    # Safe terminal output configuration for Windows
+    if sys.platform == "win32":
+        try:
+            sys.stdout.reconfigure(encoding="utf-8")
+        except Exception:
+            pass
+
+    # Clean English-only terminal readout
+    status_tag = "[ALERT: CRITICAL FRAUD]" if report.composite_threat_score >= 60 else "[STATUS: VERIFIED]"
     print("\n" + "=" * 60)
-    print(f"🛡️  SATARK BHARAT SENTINEL REPORT  [{dossier['incident_id']}]")
+    print(f"SATARK BHARAT SENTINEL REPORT  [{dossier['incident_id']}]")
     print("=" * 60)
-    print(f"Threat Score:      {report.composite_threat_score}/100 ({report.severity}) {status_icon}")
+    print(f"Threat Score:      {report.composite_threat_score}/100 ({report.severity}) {status_tag}")
     print(f"Designated Route:  {route.portal_name}")
     print(f"Statutory Basis:   {route.statutory_basis}")
     print("-" * 60)
-    print(f"English Summary:   {report.plain_english_summary}")
-    print(f"Hindi Advisory:    {report.vernacular_hindi_summary}")
-    print(f"Bengali Advisory:  {report.vernacular_bengali_summary}")
+    print(f"Assessment:        {report.plain_english_summary}")
     print("-" * 60)
     print("Regulatory Violations:")
     if report.statutory_violations:
         for v in report.statutory_violations:
-            print(f" • {v}")
+            print(f" * {v}")
     else:
-        print(" • None (Compliant with SEBI & NSDL Invariants)")
+        print(" * None (Compliant with SEBI & NSDL Invariants)")
     print("=" * 60 + "\n")
 
 
