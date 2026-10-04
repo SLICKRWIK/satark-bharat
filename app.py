@@ -203,87 +203,130 @@ st.markdown(
         box-shadow: 0 6px 24px -2px rgba(0, 0, 0, 0.07);
     }
 
-    /* Button Contrast Fixes (Force Visible Text) */
-    /* Scenario Chips: Soft Clean White Pills */
-    .stButton>button {
-        background-color: #ffffff !important;
-        color: #18181b !important;
-        border: 1px solid rgba(0, 0, 0, 0.12) !important;
-        border-radius: 9999px !important;
-        font-weight: 500 !important;
-        font-size: 0.82rem !important;
-        padding: 0.4rem 0.85rem !important;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+    /* ---------------------------------------------------------
+       Bulletproof High-Contrast Button Styling
+       --------------------------------------------------------- */
+    /* All Buttons: Sleek Ink Black with Crisp, Bright White Text */
+    button,
+    button[kind="secondary"],
+    button[kind="primary"],
+    div[data-testid="stButton"] button,
+    [data-testid="stBaseButton-secondary"],
+    [data-testid="baseButton-secondary"],
+    [data-testid="stBaseButton-primary"],
+    [data-testid="baseButton-primary"] {
+        background-color: #18181b !important;
+        background: #18181b !important;
+        color: #ffffff !important;
+        border: 1px solid #27272a !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        font-size: 0.84rem !important;
+        padding: 0.45rem 0.95rem !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
         transition: all 0.15s ease !important;
     }
-    .stButton>button:hover {
-        background-color: #f4f4f5 !important;
-        border-color: rgba(0, 0, 0, 0.25) !important;
-        color: #000000 !important;
-        transform: translateY(-1px);
-    }
-    .stButton>button p, .stButton>button span, .stButton>button div {
-        color: #18181b !important;
-        font-weight: 500 !important;
-    }
 
-    /* Primary Action Button (Solid Ink Black with Crisp White Text) */
-    div.primary-audit-btn .stButton>button {
-        background-color: #18181b !important;
-        color: #ffffff !important;
-        border: 1px solid #18181b !important;
-        border-radius: 10px !important;
-        font-weight: 600 !important;
-        font-size: 0.90rem !important;
-        padding: 0.55rem 1.4rem !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
-    }
-    div.primary-audit-btn .stButton>button:hover {
+    button:hover,
+    div[data-testid="stButton"] button:hover,
+    [data-testid="stBaseButton-secondary"]:hover,
+    [data-testid="baseButton-secondary"]:hover {
         background-color: #27272a !important;
-        border-color: #27272a !important;
+        background: #27272a !important;
+        border-color: #3f3f46 !important;
         color: #ffffff !important;
         transform: translateY(-1px) !important;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16) !important;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18) !important;
     }
-    div.primary-audit-btn .stButton>button p,
-    div.primary-audit-btn .stButton>button span,
-    div.primary-audit-btn .stButton>button div {
+
+    /* Force 100% Bright White Text on ALL button children, spans, paragraphs, and markdown wrappers */
+    button *,
+    button p,
+    button span,
+    button div,
+    button [data-testid="stMarkdownContainer"] p,
+    div[data-testid="stButton"] button *,
+    div[data-testid="stButton"] button p,
+    div[data-testid="stButton"] button span,
+    div[data-testid="stButton"] button div,
+    div[data-testid="stButton"] [data-testid="stMarkdownContainer"] p,
+    [data-testid="stBaseButton-secondary"] *,
+    [data-testid="stBaseButton-secondary"] p,
+    [data-testid="stBaseButton-secondary"] span,
+    [data-testid="baseButton-secondary"] *,
+    [data-testid="baseButton-secondary"] p,
+    [data-testid="baseButton-secondary"] span {
         color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+        font-weight: 600 !important;
+        font-size: 0.84rem !important;
+        opacity: 1 !important;
+    }
+
+    /* Primary Action Button (Extra Padding & Distinct Highlight) */
+    div.primary-audit-btn button,
+    div.primary-audit-btn div[data-testid="stButton"] button {
+        background-color: #09090b !important;
+        background: #09090b !important;
+        border-color: #000000 !important;
+        border-radius: 10px !important;
+        padding: 0.65rem 1.4rem !important;
+        font-size: 0.92rem !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+    }
+    div.primary-audit-btn button *,
+    div.primary-audit-btn button p,
+    div.primary-audit-btn button span {
+        font-size: 0.92rem !important;
         font-weight: 600 !important;
     }
 
-    /* Secondary Clear Button */
-    div.secondary-clear-btn .stButton>button {
-        background-color: transparent !important;
+    /* Secondary Clear Button (Light Outline) */
+    div.secondary-clear-btn button,
+    div.secondary-clear-btn div[data-testid="stButton"] button {
+        background-color: #ffffff !important;
+        background: #ffffff !important;
         color: #71717a !important;
-        border: 1px solid rgba(0, 0, 0, 0.12) !important;
+        border: 1px solid rgba(0, 0, 0, 0.15) !important;
         border-radius: 10px !important;
+        box-shadow: none !important;
     }
-    div.secondary-clear-btn .stButton>button:hover {
+    div.secondary-clear-btn button:hover,
+    div.secondary-clear-btn div[data-testid="stButton"] button:hover {
         background-color: #f4f4f5 !important;
-        color: #18181b !important;
+        background: #f4f4f5 !important;
+        border-color: rgba(0, 0, 0, 0.3) !important;
     }
-    div.secondary-clear-btn .stButton>button p,
-    div.secondary-clear-btn .stButton>button span {
+    div.secondary-clear-btn button *,
+    div.secondary-clear-btn button p,
+    div.secondary-clear-btn button span {
         color: #71717a !important;
+        -webkit-text-fill-color: #71717a !important;
+        font-weight: 500 !important;
     }
 
     /* Download Buttons */
-    .stDownloadButton>button {
+    .stDownloadButton button,
+    div[data-testid="stDownloadButton"] button {
         background-color: #ffffff !important;
+        background: #ffffff !important;
         color: #18181b !important;
-        border: 1px solid rgba(0, 0, 0, 0.12) !important;
+        border: 1px solid rgba(0, 0, 0, 0.15) !important;
         border-radius: 8px !important;
-        font-weight: 500 !important;
-        font-size: 0.84rem !important;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
     }
-    .stDownloadButton>button:hover {
+    .stDownloadButton button:hover,
+    div[data-testid="stDownloadButton"] button:hover {
         background-color: #f4f4f5 !important;
         border-color: rgba(0, 0, 0, 0.25) !important;
     }
-    .stDownloadButton>button p, .stDownloadButton>button span {
+    .stDownloadButton button *,
+    .stDownloadButton button p,
+    .stDownloadButton button span,
+    div[data-testid="stDownloadButton"] button * {
         color: #18181b !important;
+        -webkit-text-fill-color: #18181b !important;
+        font-weight: 500 !important;
     }
 
     /* Textarea Styling */

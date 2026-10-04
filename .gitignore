@@ -11,7 +11,7 @@ __pycache__/
 .ruff_cache/
 
 # Streamlit
-.streamlit/
+.streamlit/secrets.toml
 
 # OS Artifacts
 .DS_Store
