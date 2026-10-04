@@ -58,76 +58,68 @@ st.markdown(
     }
     .block-container {
         max-width: 800px !important;
-        padding-top: 2rem !important;
+        padding-top: 4rem !important;
         padding-bottom: 5rem !important;
         padding-left: 1.5rem !important;
         padding-right: 1.5rem !important;
     }
 
-    /* Top Navigation Bar */
-    .town-nav-wrap {
+    /* Continuous Professional Financial/Regulatory Ticker Bar at Top */
+    .top-ticker-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 36px;
+        background: #09090b;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        margin-bottom: 3rem;
-        padding-bottom: 1.2rem;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        z-index: 999999;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
     }
-    .town-nav-left {
+    .ticker-track {
         display: flex;
         align-items: center;
-        gap: 10px;
+        white-space: nowrap;
+        will-change: transform;
+        animation: ticker-scroll 38s linear infinite;
     }
-    .town-logo-box {
+    .top-ticker-bar:hover .ticker-track {
+        animation-play-state: paused;
+    }
+    @keyframes ticker-scroll {
+        0% {
+            transform: translate3d(0, 0, 0);
+        }
+        100% {
+            transform: translate3d(-50%, 0, 0);
+        }
+    }
+    .ticker-item {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        background: #ffffff;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        padding: 6px 12px;
-        font-weight: 700;
-        font-size: 0.88rem;
-        letter-spacing: 0.5px;
-        color: #18181b;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        padding: 0 16px;
     }
-    .town-nav-links {
-        display: flex;
-        align-items: center;
-        gap: 22px;
-        font-size: 0.85rem;
+    .ticker-lbl {
+        color: #e4e4e7;
         font-weight: 500;
-        color: #71717a;
+        margin-right: 6px;
     }
-    .town-nav-links a, .town-nav-links span {
-        color: #71717a;
-        text-decoration: none;
-        transition: color 0.15s ease;
+    .ticker-val {
+        color: #fbbf24;
+        font-weight: 600;
     }
-    .town-nav-links a:hover, .town-nav-links span:hover {
-        color: #18181b;
-        cursor: pointer;
-    }
-    .town-nav-right {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-    .town-nav-badge {
-        font-size: 0.78rem;
-        font-weight: 500;
-        color: #71717a;
-    }
-    .town-nav-btn {
-        background: #18181b;
-        color: #ffffff !important;
-        border-radius: 6px;
-        padding: 6px 14px;
-        font-size: 0.80rem;
-        font-weight: 500;
-        text-decoration: none;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+
+    .ticker-sep {
+        color: rgba(255, 255, 255, 0.22);
+        margin-left: 16px;
+        font-weight: 300;
     }
 
     /* Hero Section with Illustration */
@@ -158,20 +150,6 @@ st.markdown(
         line-height: 1.6;
         color: #3f3f46;
         max-width: 580px;
-    }
-    .hero-avatar {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        background: #e4e4e7;
-        color: #52525b;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.75rem;
-        font-weight: 600;
-        flex-shrink: 0;
-        margin-top: 3px;
     }
     .tag-salmon {
         display: inline-block;
@@ -206,129 +184,199 @@ st.markdown(
     }
 
     /* ---------------------------------------------------------
-       Bulletproof High-Contrast Button Styling
+       Distinct, Refined Button Palettes & Micro-Animations
        --------------------------------------------------------- */
-    /* All Buttons: Sleek Ink Black with Crisp, Bright White Text */
-    button,
+    /* Global Base Reset for Streamlit Buttons */
+    div[data-testid="stButton"] button,
     button[kind="secondary"],
     button[kind="primary"],
-    div[data-testid="stButton"] button,
     [data-testid="stBaseButton-secondary"],
+    [data-testid="stBaseButton-primary"],
     [data-testid="baseButton-secondary"],
+    [data-testid="baseButton-primary"] {
+        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        outline: none !important;
+    }
+
+    /* 1. SCENARIO PILLS (Case A, B, C, D): Soft White Pills with Dark Charcoal Text */
+    div[class*="st-key-chip_btn_"] button,
+    div[data-testid="stButton"] button[key*="chip_btn_"] {
+        background-color: #ffffff !important;
+        background: #ffffff !important;
+        color: #27272a !important;
+        border: 1px solid rgba(0, 0, 0, 0.12) !important;
+        border-radius: 20px !important;
+        font-weight: 600 !important;
+        font-size: 0.82rem !important;
+        letter-spacing: -0.05px !important;
+        padding: 0.45rem 0.85rem !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    div[class*="st-key-chip_btn_"] button *,
+    div[class*="st-key-chip_btn_"] button p,
+    div[class*="st-key-chip_btn_"] button span {
+        color: #27272a !important;
+        -webkit-text-fill-color: #27272a !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-weight: 600 !important;
+        font-size: 0.82rem !important;
+        transition: color 0.15s ease !important;
+    }
+
+    div[class*="st-key-chip_btn_"] button:hover {
+        background-color: #fbfbfa !important;
+        background: #fbfbfa !important;
+        border-color: #18181b !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07) !important;
+    }
+
+    div[class*="st-key-chip_btn_"] button:hover *,
+    div[class*="st-key-chip_btn_"] button:hover p,
+    div[class*="st-key-chip_btn_"] button:hover span {
+        color: #09090b !important;
+        -webkit-text-fill-color: #09090b !important;
+    }
+
+    div[class*="st-key-chip_btn_"] button:active {
+        transform: translateY(0) scale(0.98) !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    /* 2. PRIMARY AUDIT BUTTON: Ink Obsidian with Distinct Lift & Subtle Glow */
+    div.st-key-btn_run_audit button,
+    button[kind="primary"],
     [data-testid="stBaseButton-primary"],
     [data-testid="baseButton-primary"] {
         background-color: #18181b !important;
-        background: #18181b !important;
+        background: linear-gradient(180deg, #27272a 0%, #18181b 100%) !important;
         color: #ffffff !important;
-        border: 1px solid #27272a !important;
-        border-radius: 8px !important;
+        border: 1px solid #18181b !important;
+        border-radius: 10px !important;
         font-weight: 600 !important;
-        font-size: 0.84rem !important;
-        padding: 0.45rem 0.95rem !important;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
-        transition: all 0.15s ease !important;
+        font-size: 0.92rem !important;
+        letter-spacing: 0.25px !important;
+        padding: 0.65rem 1.4rem !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12), 0 6px 14px -3px rgba(0, 0, 0, 0.1) !important;
     }
 
-    button:hover,
-    div[data-testid="stButton"] button:hover,
-    [data-testid="stBaseButton-secondary"]:hover,
-    [data-testid="baseButton-secondary"]:hover {
-        background-color: #27272a !important;
-        background: #27272a !important;
-        border-color: #3f3f46 !important;
-        color: #ffffff !important;
-        transform: translateY(-1px) !important;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18) !important;
-    }
-
-    /* Force 100% Bright White Text on ALL button children, spans, paragraphs, and markdown wrappers */
-    button *,
-    button p,
-    button span,
-    button div,
-    button [data-testid="stMarkdownContainer"] p,
-    div[data-testid="stButton"] button *,
-    div[data-testid="stButton"] button p,
-    div[data-testid="stButton"] button span,
-    div[data-testid="stButton"] button div,
-    div[data-testid="stButton"] [data-testid="stMarkdownContainer"] p,
-    [data-testid="stBaseButton-secondary"] *,
-    [data-testid="stBaseButton-secondary"] p,
-    [data-testid="stBaseButton-secondary"] span,
-    [data-testid="baseButton-secondary"] *,
-    [data-testid="baseButton-secondary"] p,
-    [data-testid="baseButton-secondary"] span {
+    div.st-key-btn_run_audit button *,
+    div.st-key-btn_run_audit button p,
+    div.st-key-btn_run_audit button span,
+    button[kind="primary"] *,
+    button[kind="primary"] p,
+    button[kind="primary"] span,
+    [data-testid="stBaseButton-primary"] *,
+    [data-testid="baseButton-primary"] * {
         color: #ffffff !important;
         -webkit-text-fill-color: #ffffff !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
         font-weight: 600 !important;
-        font-size: 0.84rem !important;
-        opacity: 1 !important;
+        font-size: 0.92rem !important;
+        letter-spacing: 0.25px !important;
     }
 
-    /* Primary Action Button (Extra Padding & Distinct Highlight) */
-    div.primary-audit-btn button,
-    div.primary-audit-btn div[data-testid="stButton"] button {
+    div.st-key-btn_run_audit button:hover,
+    button[kind="primary"]:hover,
+    [data-testid="stBaseButton-primary"]:hover,
+    [data-testid="baseButton-primary"]:hover {
         background-color: #09090b !important;
         background: #09090b !important;
         border-color: #000000 !important;
-        border-radius: 10px !important;
-        padding: 0.65rem 1.4rem !important;
-        font-size: 0.92rem !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
-    }
-    div.primary-audit-btn button *,
-    div.primary-audit-btn button p,
-    div.primary-audit-btn button span {
-        font-size: 0.92rem !important;
-        font-weight: 600 !important;
+        transform: translateY(-2px) scale(1.005) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 12px 24px -4px rgba(0, 0, 0, 0.14) !important;
     }
 
-    /* Secondary Clear Button (Light Outline) */
-    div.secondary-clear-btn button,
-    div.secondary-clear-btn div[data-testid="stButton"] button {
-        background-color: #ffffff !important;
-        background: #ffffff !important;
-        color: #71717a !important;
-        border: 1px solid rgba(0, 0, 0, 0.15) !important;
-        border-radius: 10px !important;
-        box-shadow: none !important;
+    div.st-key-btn_run_audit button:active,
+    button[kind="primary"]:active,
+    [data-testid="stBaseButton-primary"]:active,
+    [data-testid="baseButton-primary"]:active {
+        transform: translateY(0) scale(0.99) !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12) !important;
     }
-    div.secondary-clear-btn button:hover,
-    div.secondary-clear-btn div[data-testid="stButton"] button:hover {
+
+    /* 3. SECONDARY CLEAR BUTTON: Ghost / Soft Neutral Outline */
+    div.st-key-btn_clear_text button {
         background-color: #f4f4f5 !important;
         background: #f4f4f5 !important;
-        border-color: rgba(0, 0, 0, 0.3) !important;
-    }
-    div.secondary-clear-btn button *,
-    div.secondary-clear-btn button p,
-    div.secondary-clear-btn button span {
         color: #71717a !important;
-        -webkit-text-fill-color: #71717a !important;
+        border: 1px solid #e4e4e7 !important;
+        border-radius: 10px !important;
         font-weight: 500 !important;
+        font-size: 0.88rem !important;
+        padding: 0.65rem 1rem !important;
+        box-shadow: none !important;
     }
 
-    /* Download Buttons */
+    div.st-key-btn_clear_text button *,
+    div.st-key-btn_clear_text button p,
+    div.st-key-btn_clear_text button span {
+        color: #71717a !important;
+        -webkit-text-fill-color: #71717a !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-weight: 500 !important;
+        font-size: 0.88rem !important;
+        transition: color 0.15s ease !important;
+    }
+
+    div.st-key-btn_clear_text button:hover {
+        background-color: #ffffff !important;
+        background: #ffffff !important;
+        border-color: #d4d4d8 !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    div.st-key-btn_clear_text button:hover *,
+    div.st-key-btn_clear_text button:hover p,
+    div.st-key-btn_clear_text button:hover span {
+        color: #18181b !important;
+        -webkit-text-fill-color: #18181b !important;
+    }
+
+    div.st-key-btn_clear_text button:active {
+        transform: translateY(0) scale(0.98) !important;
+    }
+
+    /* 4. OTHER BUTTONS: Downloads & Guardrail Test */
+    div.st-key-btn_test_guardrail button,
     .stDownloadButton button,
     div[data-testid="stDownloadButton"] button {
         background-color: #ffffff !important;
         background: #ffffff !important;
         color: #18181b !important;
-        border: 1px solid rgba(0, 0, 0, 0.15) !important;
-        border-radius: 8px !important;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+        border: 1px solid rgba(0, 0, 0, 0.12) !important;
+        border-radius: 10px !important;
+        font-weight: 600 !important;
+        font-size: 0.86rem !important;
+        padding: 0.65rem 1rem !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
-    .stDownloadButton button:hover,
-    div[data-testid="stDownloadButton"] button:hover {
-        background-color: #f4f4f5 !important;
-        border-color: rgba(0, 0, 0, 0.25) !important;
-    }
+
+    div.st-key-btn_test_guardrail button *,
+    div.st-key-btn_test_guardrail button p,
+    div.st-key-btn_test_guardrail button span,
     .stDownloadButton button *,
     .stDownloadButton button p,
     .stDownloadButton button span,
     div[data-testid="stDownloadButton"] button * {
         color: #18181b !important;
         -webkit-text-fill-color: #18181b !important;
-        font-weight: 500 !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-weight: 600 !important;
+        font-size: 0.86rem !important;
+    }
+
+    div.st-key-btn_test_guardrail button:hover,
+    .stDownloadButton button:hover,
+    div[data-testid="stDownloadButton"] button:hover {
+        background-color: #faf9f6 !important;
+        border-color: #18181b !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08) !important;
     }
 
     /* Minimal Language Switcher in Card Header */
@@ -370,74 +418,80 @@ st.markdown(
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) !important;
     }
 
-    /* Subtle Minimal Speaker Icon Button */
+    /* Standalone Minimalist Speaker Icon (No Border Box, Realistic Vector) */
     .speaker-icon-btn {
-        background: #f4f4f5 !important;
-        background-color: #f4f4f5 !important;
-        border: 1px solid rgba(0, 0, 0, 0.06) !important;
+        background: transparent !important;
+        background-color: transparent !important;
+        border: none !important;
+        border-radius: 0 !important;
         box-shadow: none !important;
-        width: 30px !important;
+        width: 24px !important;
         height: 24px !important;
         padding: 0 !important;
+        margin: 0 !important;
         cursor: pointer !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        border-radius: 6px !important;
-        transition: all 0.15s ease !important;
         outline: none !important;
-        margin-left: 6px;
-        vertical-align: middle !important;
+        transition: transform 0.15s ease, opacity 0.15s ease !important;
     }
-    .speaker-glyph {
-        display: inline-block;
-        font-size: 0.85rem;
-        line-height: 1;
-        filter: grayscale(100%) opacity(0.6);
-        transition: all 0.15s ease;
-        user-select: none;
+    .speaker-icon {
+        width: 20px;
+        height: 20px;
+        background-color: #9ca3af;
+        -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='11 5 6 9 2 9 2 15 6 15 11 19 11 5' fill='black'/%3E%3Cpath d='M15.54 8.46a5 5 0 0 1 0 7.07'/%3E%3Cpath d='M19.07 4.93a10 10 0 0 1 0 14.14'/%3E%3C/svg%3E") no-repeat center / contain;
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='11 5 6 9 2 9 2 15 6 15 11 19 11 5' fill='black'/%3E%3Cpath d='M15.54 8.46a5 5 0 0 1 0 7.07'/%3E%3Cpath d='M19.07 4.93a10 10 0 0 1 0 14.14'/%3E%3C/svg%3E") no-repeat center / contain;
+        transition: background-color 0.15s ease, transform 0.15s ease;
     }
-    .speaker-icon-btn:hover {
-        background: #ffffff !important;
-        background-color: #ffffff !important;
-        border-color: rgba(0, 0, 0, 0.15) !important;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06) !important;
-        transform: translateY(-1px) !important;
+    .speaker-icon-btn:hover .speaker-icon {
+        background-color: #18181b !important;
+        transform: scale(1.08) !important;
     }
-    .speaker-icon-btn:hover .speaker-glyph {
-        filter: grayscale(100%) brightness(0.2) opacity(1) !important;
-    }
-    .speaker-icon-btn.speaking {
-        background: #ffffff !important;
-        background-color: #ffffff !important;
-        border-color: rgba(0, 0, 0, 0.2) !important;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
-    }
-    .speaker-icon-btn.speaking .speaker-glyph {
-        filter: grayscale(100%) brightness(0.2) opacity(1) !important;
+    .speaker-icon-btn.speaking .speaker-icon {
+        background-color: #18181b !important;
         animation: speaker-blink 0.75s ease-in-out infinite !important;
     }
     @keyframes speaker-blink {
         0%, 100% {
             opacity: 1;
-            transform: scale(1.15);
+            transform: scale(1.12);
         }
         50% {
-            opacity: 0.25;
-            transform: scale(0.85);
+            opacity: 0.2;
+            transform: scale(0.9);
         }
     }
 
-    /* Textarea Styling */
-    .stTextArea textarea {
+    /* Textarea Styling & Generous Inset Padding */
+    div[data-testid="stTextArea"] {
+        margin-top: 6px;
+    }
+    div[data-baseweb="textarea"] {
+        border-radius: 12px !important;
+        border: 1px solid rgba(0, 0, 0, 0.12) !important;
         background-color: #ffffff !important;
+        padding: 4px 6px !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+    }
+    div[data-baseweb="textarea"]:focus-within {
+        border-color: #18181b !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important;
+    }
+    .stTextArea textarea {
+        background-color: transparent !important;
         color: #18181b !important;
         border: none !important;
         font-family: 'Plus Jakarta Sans', sans-serif !important;
-        font-size: 0.98rem !important;
-        line-height: 1.55 !important;
-        padding: 4px 0 !important;
+        font-size: 0.95rem !important;
+        line-height: 1.6 !important;
+        padding: 12px 14px !important;
         box-shadow: none !important;
+    }
+    .stTextArea textarea::placeholder {
+        color: #a1a1aa !important;
+        font-size: 0.90rem !important;
     }
 
     /* Clean Tabs (Underline Only, No Boxy Borders) */
@@ -480,6 +534,7 @@ st.markdown(
         margin-bottom: 16px;
     }
     .town-list-title {
+        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
         font-size: 0.84rem;
         font-weight: 600;
         letter-spacing: 0.5px;
@@ -488,9 +543,9 @@ st.markdown(
     }
     .town-list-item {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         justify-content: space-between;
-        padding: 14px 0;
+        padding: 13px 0;
         border-bottom: 1px solid rgba(0, 0, 0, 0.04);
         transition: background 0.15s ease;
     }
@@ -498,49 +553,56 @@ st.markdown(
         border-bottom: none;
         padding-bottom: 4px;
     }
-    .town-item-left {
-        display: flex;
-        gap: 14px;
-        max-width: 530px;
-    }
-    .town-item-checkbox {
-        width: 18px;
-        height: 18px;
-        border-radius: 4px;
-        border: 1.5px solid #d4d4d8;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 11px;
-        font-weight: 600;
-        margin-top: 2px;
-        flex-shrink: 0;
-    }
-    .town-item-checkbox.checked {
-        border-color: #18181b;
-        background: #18181b;
-        color: #ffffff;
-    }
-    .town-item-checkbox.alert {
-        border-color: #dc2626;
-        background: #fef2f2;
-        color: #dc2626;
+    .town-item-content {
+        max-width: 540px;
     }
     .town-item-title {
-        font-size: 0.95rem;
+        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+        font-size: 0.94rem;
         font-weight: 600;
         color: #18181b;
         line-height: 1.4;
+        letter-spacing: -0.15px;
     }
     .town-item-desc {
-        font-size: 0.83rem;
+        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+        font-size: 0.82rem;
         color: #71717a;
         margin-top: 3px;
         line-height: 1.45;
+        letter-spacing: 0.05px;
     }
 
-    /* Minimalist Badges */
+    /* Pure Typographic Invariant Status (No Pill / No Box / Elegant Color Only) */
+    .invariant-status {
+        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+        font-size: 0.88rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.2px !important;
+        white-space: nowrap !important;
+        text-align: right !important;
+        background: transparent !important;
+        background-color: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+    }
+    .invariant-status.warning {
+        color: #d97706 !important;
+    }
+    .invariant-status.danger {
+        color: #dc2626 !important;
+    }
+    .invariant-status.safe {
+        color: #059669 !important;
+    }
+    .invariant-status.neutral {
+        color: #71717a !important;
+    }
+
+    /* Minimalist Badges for Institutional Grievance Routing */
     .status-pill {
+        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
         font-size: 0.74rem;
         font-weight: 600;
         padding: 3px 9px;
@@ -565,18 +627,51 @@ st.markdown(
         color: #52525b;
     }
 
-    /* Expander Clean Overrides */
-    .streamlit-expanderHeader {
-        background-color: transparent !important;
-        color: #18181b !important;
-        font-size: 0.88rem !important;
-        font-weight: 500 !important;
+    /* Clean 1930 SMS Dispatch Box */
+    .sms-dispatch-details {
+        margin-top: 14px;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
-    .streamlit-expanderContent {
-        background-color: #ffffff !important;
-        border: 1px solid rgba(0, 0, 0, 0.06) !important;
-        border-radius: 12px !important;
-        padding: 16px !important;
+    .sms-dispatch-details:hover {
+        border-color: rgba(0, 0, 0, 0.18);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+    .sms-dispatch-summary {
+        padding: 12px 16px;
+        background-color: #faf9f6;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        user-select: none;
+        list-style: none;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .sms-dispatch-summary::-webkit-details-marker,
+    .sms-dispatch-summary::marker {
+        display: none !important;
+    }
+    .sms-dispatch-body {
+        padding: 14px 16px;
+        background: #ffffff;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .sms-dispatch-pre {
+        margin: 0;
+        padding: 12px 14px;
+        background: #faf9f6;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        border-radius: 8px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.81rem;
+        line-height: 1.55;
+        color: #18181b;
+        white-space: pre-wrap;
+        word-break: break-all;
     }
     </style>
     """,
@@ -612,27 +707,27 @@ if "input_text" not in st.session_state:
     st.session_state.input_text = ""
 
 # ---------------------------------------------------------
-# Top Navigation Bar (Clean Text Links, Zero Clunky Boxes)
+# Top Scrolling Regulatory Ticker Tape (Black Institutional Bar)
 # ---------------------------------------------------------
+ticker_items = """
+    <span class="ticker-item"><span class="ticker-lbl">SATARK</span><span class="ticker-val">SENTINEL ACTIVE</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">SANGYAN 2024</span><span class="ticker-val">SNTC IIT-BHU × SEBI × NSDL</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">TRACK.A</span><span class="ticker-val">FRAUD RESILIENCE BENCHMARK</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">SEBI MANDATE</span><span class="ticker-val">CIRCULAR 2023/71 POOLING PROHIBITED</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">RA REG 15(1)</span><span class="ticker-val">GUARANTEED RETURNS BANNED</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">NCRP HELPLINE</span><span class="ticker-val">DIAL 1930 FOR CYBER FINANCIAL FRAUD</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">INSTITUTIONAL REDRESSAL</span><span class="ticker-val">SCORES 2.0 & SMART ODR PORTAL</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">NSDL INVARIANT</span><span class="ticker-val">16-DIGIT DEMAT VERIFICATION</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">SENTINEL INTEGRITY</span><span class="ticker-val">ZERO STOCK SPECULATION / 100% DEFENSE</span><span class="ticker-sep">|</span></span>
+"""
+
 st.html(
     textwrap.dedent(
-        """
-        <div class="town-nav-wrap">
-            <div class="town-nav-left">
-                <div class="town-logo-box">
-                    <span style="color: #059669; font-size: 11px;">●</span>
-                    <span>SATARK</span>
-                </div>
-                <div class="town-nav-links" style="margin-left: 12px;">
-                    <span>Sentinel</span>
-                    <span>SCORES 2.0</span>
-                    <span>NCRP 1930</span>
-                    <span>Investor Charter</span>
-                </div>
-            </div>
-            <div class="town-nav-right">
-                <span class="town-nav-badge">SANGYAN · Track A</span>
-                <a href="https://sangyan.sntciitbhu.co.in/" target="_blank" class="town-nav-btn">IIT-BHU × SEBI × NSDL</a>
+        f"""
+        <div class="top-ticker-bar">
+            <div class="ticker-track">
+                {ticker_items}
+                {ticker_items}
             </div>
         </div>
         """
@@ -651,7 +746,6 @@ st.html(
                     SatarkBharat protects your savings from fraud.
                 </div>
                 <div class="hero-lead-row">
-                    <div class="hero-avatar">s</div>
                     <div>
                         Forward any suspicious WhatsApp advisory, Telegram tip, or payment request.
                         <span class="tag-salmon">Satark</span> audits regulatory invariants, recipient UPI accounts,
@@ -697,9 +791,9 @@ chip_data = [
     ("Case D: Verified Broker", 3, "Legitimate Broker Risk Notice Baseline"),
 ]
 
-for title, idx, desc in chip_data:
+for title, idx, _ in chip_data:
     with chip_cols[idx]:
-        if st.button(title, key=f"chip_btn_{idx}", help=desc, use_container_width=True):
+        if st.button(title, key=f"chip_btn_{idx}", use_container_width=True):
             st.session_state.input_text = samples[idx]["input_content"]
             st.rerun()
 
@@ -751,7 +845,7 @@ with input_tabs[3]:
         value="Which stock should I buy for tomorrow's expiry?",
         label_visibility="collapsed",
     )
-    if st.button("Test Anti-Speculation Guardrail"):
+    if st.button("Test Anti-Speculation Guardrail", key="btn_test_guardrail"):
         gr_res = guardrail.check_query(test_query)
         if gr_res.is_speculation_query:
             st.markdown(
@@ -826,18 +920,17 @@ if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
             f"""
             <div class="town-list-container" style="margin-top: 10px;">
                 <div class="town-list-header">
-                    <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
                         <span class="town-list-title">Sentinel Audit Report</span>
                         <div class="lang-switcher">
                             <button type="button" class="lang-tab active" data-lang="en">EN</button>
                             <button type="button" class="lang-tab" data-lang="hi">हिन्दी</button>
                             <button type="button" class="lang-tab" data-lang="bn">বাংলা</button>
                         </div>
-                        <button type="button" class="speaker-icon-btn" id="sentinel-speaker-btn" title="Listen to advisory" aria-label="Listen to voice advisory">
-                            <span class="speaker-glyph">🔊</span>
-                        </button>
                     </div>
-                    <span class="status-pill" style="background: {badge_bg}; color: {badge_color};">{badge_label}</span>
+                    <button type="button" class="speaker-icon-btn" id="sentinel-speaker-btn" title="Listen to voice advisory" aria-label="Listen to voice advisory">
+                        <div class="speaker-icon"></div>
+                    </button>
                 </div>
 
                 <!-- Assessment Text & Editorial Score -->
@@ -950,100 +1043,74 @@ if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
         unsafe_allow_javascript=True,
     )
 
-    # 3. Checklist-Oriented Regulatory Invariants
-    sebi_checked = "checked" if not report.sebi_audit.is_impersonation_suspected and report.sebi_audit.is_in_registry else "alert"
-    sebi_mark = "✓" if sebi_checked == "checked" else "!"
-    sebi_pill = "safe" if report.sebi_audit.is_in_registry and not report.sebi_audit.is_impersonation_suspected else ("danger" if report.sebi_audit.is_impersonation_suspected else "warning")
-    sebi_pill_text = "Verified Match" if sebi_pill == "safe" else ("Impersonation Alert" if sebi_pill == "danger" else "Unregistered")
+    # 3. Deterministic Regulatory Invariants (Clean Typographic Presentation)
+    sebi_status_class = "safe" if report.sebi_audit.is_in_registry and not report.sebi_audit.is_impersonation_suspected else ("danger" if report.sebi_audit.is_impersonation_suspected else "warning")
+    sebi_status_text = "Verified Match" if sebi_status_class == "safe" else ("Impersonation Alert" if sebi_status_class == "danger" else "Unregistered")
 
-    pay_checked = "checked" if report.payment_audit.is_clearing_compliant else "alert"
-    pay_mark = "✓" if pay_checked == "checked" else "!"
-    pay_pill = "safe" if report.payment_audit.is_clearing_compliant else "danger"
-    pay_pill_text = "Clearing Compliant" if pay_pill == "safe" else "Personal Savings VPA"
+    pay_status_class = "safe" if report.payment_audit.is_clearing_compliant else "danger"
+    pay_status_text = "Clearing Compliant" if pay_status_class == "safe" else "Personal Savings VPA"
 
-    pva_checked = "alert" if report.guaranteed_returns_detected else "checked"
-    pva_mark = "!" if report.guaranteed_returns_detected else "✓"
-    pva_pill = "danger" if report.guaranteed_returns_detected else "safe"
-    pva_pill_text = "Prohibited Return Claim" if report.guaranteed_returns_detected else "No Fixed Guarantees"
+    pva_status_class = "danger" if report.guaranteed_returns_detected else "safe"
+    pva_status_text = "Prohibited Return Claim" if pva_status_class == "danger" else "No Fixed Guarantees"
 
-    dom_checked = "alert" if report.domain_audit.is_typosquatted or report.domain_audit.has_apk_link else "checked"
-    dom_mark = "!" if dom_checked == "alert" else "✓"
-    dom_pill = "danger" if dom_checked == "alert" else "safe"
-    dom_pill_text = "Malware / Phishing" if dom_checked == "alert" else "Authentic Domain"
+    dom_status_class = "danger" if report.domain_audit.is_typosquatted or report.domain_audit.has_apk_link else "safe"
+    dom_status_text = "Malware / Phishing" if dom_status_class == "danger" else "Authentic Domain"
 
-    nsdl_checked = "alert" if report.depository_audit.is_fake_nsdl_claim else "checked"
-    nsdl_mark = "!" if report.depository_audit.is_fake_nsdl_claim else "✓"
-    nsdl_pill = "danger" if report.depository_audit.is_fake_nsdl_claim else "safe"
-    nsdl_pill_text = "Unauthorized NSDL Claim" if report.depository_audit.is_fake_nsdl_claim else "Depository Valid"
+    nsdl_status_class = "danger" if report.depository_audit.is_fake_nsdl_claim else "safe"
+    nsdl_status_text = "Unauthorized NSDL Claim" if nsdl_status_class == "danger" else "Depository Valid"
 
-    # 3. Checklist-Oriented Regulatory Invariants
     st.html(
         textwrap.dedent(
             f"""
             <div class="town-list-container">
                 <div class="town-list-header">
                     <span class="town-list-title">Deterministic Regulatory Invariants</span>
-                    <span style="font-size: 0.8rem; color: #71717a;">5 verified benchmarks</span>
+                    <span style="font-size: 0.8rem; color: #71717a; font-family: 'Plus Jakarta Sans', sans-serif;">5 verified benchmarks</span>
                 </div>
 
                 <!-- Item 1: SEBI Registry -->
                 <div class="town-list-item">
-                    <div class="town-item-left">
-                        <div class="town-item-checkbox {sebi_checked}">{sebi_mark}</div>
-                        <div>
-                            <div class="town-item-title">SEBI Intermediary Registration</div>
-                            <div class="town-item-desc">Claimed ID: {report.sebi_audit.claimed_id or 'None (Unregistered)'} · Registry status: {report.sebi_audit.registry_status}</div>
-                        </div>
+                    <div class="town-item-content">
+                        <div class="town-item-title">SEBI Intermediary Registration</div>
+                        <div class="town-item-desc">Claimed ID: {report.sebi_audit.claimed_id or 'None (Unregistered)'} · Registry status: {report.sebi_audit.registry_status}</div>
                     </div>
-                    <span class="status-pill {sebi_pill}">{sebi_pill_text}</span>
+                    <span class="invariant-status {sebi_status_class}">{sebi_status_text}</span>
                 </div>
 
                 <!-- Item 2: Payment Routing -->
                 <div class="town-list-item">
-                    <div class="town-item-left">
-                        <div class="town-item-checkbox {pay_checked}">{pay_mark}</div>
-                        <div>
-                            <div class="town-item-title">Payment Channel & Settlement Segregation</div>
-                            <div class="town-item-desc">Recipient VPA: {report.payment_audit.primary_vpa or 'None specified'} · Circular 2023/71 mandate</div>
-                        </div>
+                    <div class="town-item-content">
+                        <div class="town-item-title">Payment Channel & Settlement Segregation</div>
+                        <div class="town-item-desc">Recipient VPA: {report.payment_audit.primary_vpa or 'None specified'} · Circular 2023/71 mandate</div>
                     </div>
-                    <span class="status-pill {pay_pill}">{pay_pill_text}</span>
+                    <span class="invariant-status {pay_status_class}">{pay_status_text}</span>
                 </div>
 
                 <!-- Item 3: Return Guarantee (PVA) -->
                 <div class="town-list-item">
-                    <div class="town-item-left">
-                        <div class="town-item-checkbox {pva_checked}">{pva_mark}</div>
-                        <div>
-                            <div class="town-item-title">Performance Guarantee Audit</div>
-                            <div class="town-item-desc">SEBI (Research Analysts) Regulation 15(1) & PVA Code of Conduct</div>
-                        </div>
+                    <div class="town-item-content">
+                        <div class="town-item-title">Performance Guarantee Audit</div>
+                        <div class="town-item-desc">SEBI (Research Analysts) Regulation 15(1) & PVA Code of Conduct</div>
                     </div>
-                    <span class="status-pill {pva_pill}">{pva_pill_text}</span>
+                    <span class="invariant-status {pva_status_class}">{pva_status_text}</span>
                 </div>
 
                 <!-- Item 4: Domain & APK -->
                 <div class="town-list-item">
-                    <div class="town-item-left">
-                        <div class="town-item-checkbox {dom_checked}">{dom_mark}</div>
-                        <div>
-                            <div class="town-item-title">Domain Authenticity & APK Binary Invariant</div>
-                            <div class="town-item-desc">Weighted Damerau-Levenshtein homoglyph distance · Section 66D IT Act</div>
-                        </div>
+                    <div class="town-item-content">
+                        <div class="town-item-title">Domain Authenticity & APK Binary Invariant</div>
+                        <div class="town-item-desc">Weighted Damerau-Levenshtein homoglyph distance · Section 66D IT Act</div>
                     </div>
-                    <span class="status-pill {dom_pill}">{dom_pill_text}</span>
+                    <span class="invariant-status {dom_status_class}">{dom_status_text}</span>
                 </div>
 
                 <!-- Item 5: NSDL Depository -->
                 <div class="town-list-item">
-                    <div class="town-item-left">
-                        <div class="town-item-checkbox {nsdl_checked}">{nsdl_mark}</div>
-                        <div>
-                            <div class="town-item-title">NSDL Depository Invariant Safeguard</div>
-                            <div class="town-item-desc">Demat account 16-character format · Depositories Act 1996 verification</div>
-                        </div>
+                    <div class="town-item-content">
+                        <div class="town-item-title">NSDL Depository Invariant Safeguard</div>
+                        <div class="town-item-desc">Demat account 16-character format · Depositories Act 1996 verification</div>
                     </div>
-                    <span class="status-pill {nsdl_pill}">{nsdl_pill_text}</span>
+                    <span class="invariant-status {nsdl_status_class}">{nsdl_status_text}</span>
                 </div>
             </div>
             """
@@ -1057,7 +1124,7 @@ if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
             <div class="town-list-container">
                 <div class="town-list-header">
                     <span class="town-list-title">Institutional Grievance Routing</span>
-                    <span class="status-pill neutral">{route.portal_name}</span>
+                    <span style="font-size: 0.8rem; color: #71717a; font-family: 'Plus Jakarta Sans', sans-serif;">{route.portal_name}</span>
                 </div>
                 <div style="font-size: 0.92rem; color: #18181b; line-height: 1.5; margin-bottom: 6px;">
                     <b>Statutory Basis:</b> {route.statutory_basis}
@@ -1075,10 +1142,26 @@ if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
     pdf_bytes = DossierGenerator.generate_pdf_dossier(dossier_data)
     sms_text = DossierGenerator.generate_1930_sms(report, dossier_data["incident_id"])
 
+    st.html(
+        textwrap.dedent(
+            """
+            <div class="town-list-container" style="margin-bottom: 12px;">
+                <div class="town-list-header">
+                    <span class="town-list-title">Evidentiary Dossier & Regulatory Dispatch</span>
+                    <span style="font-size: 0.8rem; color: #71717a; font-family: 'Plus Jakarta Sans', sans-serif;">Sec 65B Indian Evidence Act compliant</span>
+                </div>
+                <div style="font-size: 0.85rem; color: #52525b; line-height: 1.55;">
+                    Generate court-ready cryptographically hashed records for official submission to <b>SEBI SCORES 2.0</b>, <b>NCRP 1930 Portal</b>, or jurisdictional Cyber Police records.
+                </div>
+            </div>
+            """
+        )
+    )
+
     exp_cols = st.columns(2)
     with exp_cols[0]:
         st.download_button(
-            label="Download PDF Dossier (Court-Ready)",
+            label="📄 Download PDF Dossier (Court-Ready)",
             data=pdf_bytes,
             file_name=f"Satark_Dossier_{dossier_data['incident_id']}.pdf",
             mime="application/pdf",
@@ -1086,15 +1169,29 @@ if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
         )
     with exp_cols[1]:
         st.download_button(
-            label="Download Structured JSON (SCORES / NCRP)",
+            label="💾 Download Structured JSON (SCORES / NCRP)",
             data=json.dumps(dossier_data, indent=2),
             file_name=f"Satark_Dossier_{dossier_data['incident_id']}.json",
             mime="application/json",
             use_container_width=True,
         )
 
-    with st.expander("1930 National Cyber Fraud Helpline SMS Dispatch", expanded=False):
-        st.code(sms_text, language="text")
+    st.html(
+        textwrap.dedent(
+            f"""
+            <details class="sms-dispatch-details">
+                <summary class="sms-dispatch-summary">
+                    <span style="font-size: 0.86rem; font-weight: 600; color: #18181b;">1930 Cyber Fraud Helpline Dispatch Template</span>
+                    <span style="font-size: 0.74rem; font-weight: 500; color: #71717a;">Click to expand</span>
+                </summary>
+                <div class="sms-dispatch-body">
+                    <div style="font-size: 0.78rem; color: #71717a; margin-bottom: 8px;">Pre-formatted statutory text ready for instant transmission to NCRP 1930 operators:</div>
+                    <pre class="sms-dispatch-pre">{sms_text}</pre>
+                </div>
+            </details>
+            """
+        )
+    )
 
 # ---------------------------------------------------------
 # Footer
