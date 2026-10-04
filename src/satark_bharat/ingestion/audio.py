@@ -14,10 +14,24 @@ class AudioIngestionModule:
         pass
 
     def _get_gemini_api_key(self) -> str | None:
+        # 1. Check Streamlit Cloud secrets
+        try:
+            import streamlit as st
+
+            if hasattr(st, "secrets"):
+                if "GEMINI_API_KEY" in st.secrets:
+                    return str(st.secrets["GEMINI_API_KEY"]).strip()
+                if "GOOGLE_API_KEY" in st.secrets:
+                    return str(st.secrets["GOOGLE_API_KEY"]).strip()
+        except Exception:
+            pass
+
+        # 2. Check environment variables
         key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
         if key:
             return key.strip()
 
+        # 3. Check local .env file
         env_paths = [PROJECT_ROOT / ".env", Path(".env")]
         for env_path in env_paths:
             if env_path.exists():
