@@ -19,3 +19,7 @@ __pycache__/
 *.swo
 ~$*.pptx
 ~$*.docx
+
+# Data & Docs (Internal)
+data/
+docs/
