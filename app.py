@@ -11,6 +11,7 @@ Faithfully crafted in the high-craft visual aesthetic of Town (town.com):
 - Zero tacky emojis; refined typography, micro-badges, and generous whitespace
 """
 
+import base64
 import json
 import textwrap
 
@@ -328,6 +329,71 @@ st.markdown(
         color: #18181b !important;
         -webkit-text-fill-color: #18181b !important;
         font-weight: 500 !important;
+    }
+
+    /* Segmented Control Styling (Town Minimalist Pill) */
+    div[data-testid="stButtonGroup"] {
+        background-color: #f4f4f5 !important;
+        border-radius: 10px !important;
+        padding: 3px !important;
+        border: 1px solid rgba(0, 0, 0, 0.08) !important;
+        gap: 2px !important;
+    }
+    div[data-testid="stButtonGroup"] button {
+        background: transparent !important;
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 8px !important;
+        color: #71717a !important;
+        font-weight: 500 !important;
+        font-size: 0.82rem !important;
+        padding: 0.35rem 0.85rem !important;
+        transition: all 0.15s ease !important;
+    }
+    div[data-testid="stButtonGroup"] button * {
+        color: #71717a !important;
+        -webkit-text-fill-color: #71717a !important;
+        font-weight: 500 !important;
+    }
+    div[data-testid="stButtonGroup"] button:hover {
+        background-color: rgba(255, 255, 255, 0.6) !important;
+    }
+    div[data-testid="stButtonGroup"] button[aria-selected="true"],
+    div[data-testid="stButtonGroup"] button[aria-checked="true"] {
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+    }
+    div[data-testid="stButtonGroup"] button[aria-selected="true"] *,
+    div[data-testid="stButtonGroup"] button[aria-checked="true"] * {
+        color: #18181b !important;
+        -webkit-text-fill-color: #18181b !important;
+        font-weight: 600 !important;
+    }
+
+    /* Minimal Speaker Action Button */
+    div.speaker-btn-wrap button {
+        background-color: #18181b !important;
+        background: #18181b !important;
+        border: 1px solid #18181b !important;
+        border-radius: 10px !important;
+        color: #ffffff !important;
+        padding: 0.38rem 0.8rem !important;
+        font-size: 0.82rem !important;
+        font-weight: 600 !important;
+    }
+    div.speaker-btn-wrap button:hover {
+        background-color: #27272a !important;
+        border-color: #27272a !important;
+    }
+    div.speaker-btn-wrap button *,
+    div.speaker-btn-wrap button p,
+    div.speaker-btn-wrap button span {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+        font-size: 0.82rem !important;
+        font-weight: 600 !important;
     }
 
     /* Textarea Styling */
@@ -707,64 +773,77 @@ if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
 
     st.html("<div style='height: 1.5rem;'></div>")
 
-    # 1. Main Verdict Card with SVG Speedometer Arc
+    # 1. Minimal Language Selection & Speaker Control Bar
+    ctrl_col1, ctrl_col2 = st.columns([3, 1], vertical_alignment="center")
+    with ctrl_col1:
+        selected_lang = st.segmented_control(
+            "Language",
+            options=["English", "हिन्दी", "বাংলা"],
+            default="English",
+            label_visibility="collapsed",
+            key="summary_lang_toggle",
+        )
+    with ctrl_col2:
+        st.markdown('<div class="speaker-btn-wrap">', unsafe_allow_html=True)
+        play_audio = st.button("🔊 Listen", key="btn_play_audio", use_container_width=True, help="Listen to audio warning in selected language")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    active_lang = selected_lang or "English"
+    if active_lang == "हिन्दी":
+        display_text = report.vernacular_hindi_summary
+        lang_code = "hi"
+    elif active_lang == "বাংলা":
+        display_text = report.vernacular_bengali_summary
+        lang_code = "bn"
+    else:
+        display_text = report.plain_english_summary
+        lang_code = "en"
+
+    # On-demand Audio Player (rendered only when user clicks Listen)
+    audio_player_html = ""
+    if play_audio:
+        audio_bytes = voice_engine.synthesize(display_text, lang=lang_code)
+        if audio_bytes:
+            b64_audio = base64.b64encode(audio_bytes).decode("utf-8")
+            audio_player_html = f"""
+            <div style="margin-top: 14px; padding: 10px 14px; background: #ffffff; border-radius: 10px; border: 1px solid rgba(0,0,0,0.08); display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 0.78rem; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: 0.5px;">Playing {active_lang} Voice Alert:</span>
+                <audio autoplay controls style="height: 32px; flex: 1;">
+                    <source src="data:audio/mp3;base64,{b64_audio}" type="audio/mp3">
+                </audio>
+            </div>
+            """
+
+    # 2. Main Verdict Card with SVG Speedometer Arc (Showing ONLY the selected language)
     st.html(
         textwrap.dedent(
             f"""
-            <div class="town-list-container">
+            <div class="town-list-container" style="margin-top: 8px;">
                 <div class="town-list-header">
                     <span class="town-list-title">Sentinel Audit Report</span>
                     <span class="status-pill" style="background: {badge_bg}; color: {badge_color};">{badge_label}</span>
                 </div>
 
-                <!-- Radial Threat Gauge Arc (Visual Oomph) -->
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 12px 16px; background: #faf9f6; border-radius: 12px; border: 1px solid rgba(0,0,0,0.04);">
-                    <div style="max-width: 500px;">
-                        <div style="font-size: 0.78rem; font-weight: 600; text-transform: uppercase; color: #71717a; margin-bottom: 2px;">Composite Risk Assessment</div>
-                        <div style="font-size: 1.05rem; font-weight: 600; color: #18181b;">{report.plain_english_summary}</div>
+                <!-- Radial Threat Gauge Arc & Dynamic Text -->
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 16px 18px; background: #faf9f6; border-radius: 12px; border: 1px solid rgba(0,0,0,0.04);">
+                    <div style="flex: 1;">
+                        <div style="font-size: 0.74rem; font-weight: 600; text-transform: uppercase; color: #71717a; letter-spacing: 0.5px; margin-bottom: 6px;">Composite Risk Assessment · {active_lang}</div>
+                        <div style="font-size: 1.05rem; font-weight: 500; color: #18181b; line-height: 1.6;">{display_text}</div>
                     </div>
-                    <div style="text-align: center; flex-shrink: 0;">
-                        <!-- SVG Gauge -->
-                        <svg width="100" height="58" viewBox="0 0 100 58">
-                            <!-- Background Track -->
+                    <div style="text-align: center; flex-shrink: 0; min-width: 100px;">
+                        <svg width="100" height="58" viewBox="0 0 100 58" xmlns="http://www.w3.org/2000/svg">
                             <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#e4e4e7" stroke-width="8" stroke-linecap="round"/>
-                            <!-- Active Arc -->
-                            <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="{gauge_color}" stroke-width="8" stroke-linecap="round" stroke-dasharray="126" stroke-dashoffset="{126 - (126 * gauge_pct)}"/>
+                            <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="{gauge_color}" stroke-width="8" stroke-linecap="round" stroke-dasharray="126" stroke-dashoffset="{126 - (126 * gauge_pct):.1f}"/>
                             <text x="50" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="16" font-weight="700" fill="#18181b" text-anchor="middle">{score}</text>
                         </svg>
                         <div style="font-size: 0.70rem; color: #71717a; font-weight: 500;">out of 100</div>
                     </div>
                 </div>
-
-                <div style="font-size: 0.92rem; color: #3f3f46; line-height: 1.5; margin-bottom: 6px;">
-                    <b>हिन्दी:</b> {report.vernacular_hindi_summary}
-                </div>
-                <div style="font-size: 0.90rem; color: #71717a; line-height: 1.5;">
-                    <b>বাংলা:</b> {report.vernacular_bengali_summary}
-                </div>
+                {audio_player_html}
             </div>
             """
         )
     )
-
-    # 2. Vernacular Voice Alert Player
-    st.html("<p style='font-size: 0.78rem; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;'>Vernacular Voice Warning (Audio Playback)</p>")
-    voice_cols = st.columns([1, 1, 1])
-    with voice_cols[0]:
-        st.caption("Hindi Audio")
-        hi_audio = voice_engine.synthesize(report.vernacular_hindi_summary, lang="hi")
-        if hi_audio:
-            st.audio(hi_audio, format="audio/mp3")
-    with voice_cols[1]:
-        st.caption("Bengali Audio")
-        bn_audio = voice_engine.synthesize(report.vernacular_bengali_summary, lang="bn")
-        if bn_audio:
-            st.audio(bn_audio, format="audio/mp3")
-    with voice_cols[2]:
-        st.caption("English Audio")
-        en_audio = voice_engine.synthesize(report.plain_english_summary, lang="en")
-        if en_audio:
-            st.audio(en_audio, format="audio/mp3")
 
     # 3. Checklist-Oriented Regulatory Invariants
     sebi_checked = "checked" if not report.sebi_audit.is_impersonation_suspected and report.sebi_audit.is_in_registry else "alert"
