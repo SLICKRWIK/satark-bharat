@@ -866,17 +866,26 @@ with input_tabs[1]:
                 st.session_state.audit_executed = False
                 st.rerun()
 
-        col_img, col_txt = st.columns([1, 2])
+        col_img, col_txt = st.columns([1, 2], gap="medium")
         with col_img:
-            st.image(uploaded_file, caption=f"Screenshot: {uploaded_file.name}")
+            st.image(uploaded_file, caption="Evidence Screenshot")
         with col_txt:
-            st.markdown("<div style='font-size: 0.82rem; font-weight: 600; color: #34d399; margin-bottom: 4px;'>✓ Multimodal Vision Extracted Buffer (Editable)</div>", unsafe_allow_html=True)
+            st.markdown(
+                """
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                    <span style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #52525b;">Extracted Advisory Transcription</span>
+                    <span style="font-size: 0.70rem; font-weight: 600; color: #71717a; background: #f4f4f5; padding: 2px 8px; border-radius: 9999px; border: 1px solid #e4e4e7;">Gemini Multimodal Vision</span>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
             sc_text = st.text_area(
                 "Extracted Text Review",
                 value=st.session_state.screenshot_input,
-                height=160,
+                height=280,
                 label_visibility="collapsed",
             )
+            st.markdown("<div style='font-size: 0.72rem; color: #a1a1aa; margin-top: 4px;'>Review, edit, or append details prior to regulatory compliance audit.</div>", unsafe_allow_html=True)
             if sc_text != st.session_state.screenshot_input:
                 st.session_state.screenshot_input = sc_text
                 st.session_state.active_tab = "screenshot"
@@ -901,13 +910,22 @@ with input_tabs[2]:
                 st.session_state.audit_executed = False
                 st.rerun()
 
-        st.caption(f"Audio stream '{uploaded_audio.name}' processed.")
+        st.markdown(
+            """
+            <div style="display: flex; align-items: center; justify-content: space-between; margin: 8px 0;">
+                <span style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #52525b;">Speech Transcription</span>
+                <span style="font-size: 0.70rem; font-weight: 600; color: #71717a; background: #f4f4f5; padding: 2px 8px; border-radius: 9999px; border: 1px solid #e4e4e7;">Gemini Speech Sentinel</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
         audio_text = st.text_area(
             "Transcribed Audio Text Review",
             value=st.session_state.audio_input,
-            height=120,
+            height=140,
             label_visibility="collapsed",
         )
+        st.markdown("<div style='font-size: 0.72rem; color: #a1a1aa; margin-top: 4px;'>Regional speech transcribed verbatim into advisory buffer.</div>", unsafe_allow_html=True)
         if audio_text != st.session_state.audio_input:
             st.session_state.audio_input = audio_text
             st.session_state.active_tab = "audio"
