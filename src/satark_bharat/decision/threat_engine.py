@@ -3,6 +3,10 @@
 import re
 from dataclasses import dataclass
 
+from satark_bharat.decision.math_engine import (
+    BayesianEvidenceFusion,
+    compute_cognitive_coercion_index,
+)
 from satark_bharat.symbolic.domain_auditor import DomainAuditor, DomainAuditResult
 from satark_bharat.symbolic.nsdl_auditor import DepositoryAuditResult, NsdlDepositoryAuditor
 from satark_bharat.symbolic.payment_auditor import PaymentAuditResult, PaymentChannelAuditor
@@ -24,6 +28,8 @@ class ThreatReport:
     depository_audit: DepositoryAuditResult
     statutory_violations: list[str]
     penalty_breakdown: dict[str, int]
+    bayesian_posterior_p: float
+    cognitive_coercion_score: float
     recommended_routing: str
     plain_english_summary: str
     vernacular_hindi_summary: str
@@ -142,6 +148,28 @@ class ThreatIndexEngine:
         else:
             recommended_routing = "VERIFIED_NO_ACTION_REQUIRED"
 
+        # Multi-Signal Bayesian Evidence Fusion & Coercion Metric
+        active_signals = []
+        if has_guaranteed_returns:
+            active_signals.append("GUARANTEED_RETURNS_CLAIM")
+        if not sebi_res.is_in_registry:
+            active_signals.append("UNREGISTERED_OPERATOR")
+        else:
+            active_signals.append("VERIFIED_SEBI_INTERMEDIARY")
+        if payment_res.is_personal_vpa:
+            active_signals.append("PERSONAL_UPI_VPA")
+        elif payment_res.primary_vpa:
+            active_signals.append("CORPORATE_CLEARING_VPA")
+        if domain_res.is_typosquatted:
+            active_signals.append("TYPOSQUATTED_DOMAIN")
+        if domain_res.has_apk_link:
+            active_signals.append("MALICIOUS_APK")
+        if depository_res.is_fake_nsdl_claim:
+            active_signals.append("NSDL_UNAUTHORIZED_CLAIM")
+
+        bayes_res = BayesianEvidenceFusion.fuse_evidence(active_signals, is_red_line=red_line)
+        coercion_score = compute_cognitive_coercion_index(len(self.URGENCY_PATTERNS.findall(text)))
+
         # Build Plain summaries
         en_summary, hi_summary, bn_summary = self._generate_summaries(
             severity=severity,
@@ -167,6 +195,8 @@ class ThreatIndexEngine:
             depository_audit=depository_res,
             statutory_violations=violations,
             penalty_breakdown=penalties,
+            bayesian_posterior_p=bayes_res.posterior_probability,
+            cognitive_coercion_score=coercion_score,
             recommended_routing=recommended_routing,
             plain_english_summary=en_summary,
             vernacular_hindi_summary=hi_summary,

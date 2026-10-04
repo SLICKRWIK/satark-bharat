@@ -439,6 +439,16 @@ if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
             for v in report.statutory_violations:
                 st.markdown(f"• <span style='font-size: 0.88rem; color: #e5e5dc;'>{v}</span>", unsafe_allow_html=True)
 
+        st.markdown("---")
+        st.markdown("<p style='font-size: 0.78rem; font-weight: 600; color: #a1a19a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;'>Deterministic Mathematical Modeling</p>", unsafe_allow_html=True)
+        m_col1, m_col2, m_col3 = st.columns(3)
+        with m_col1:
+            st.metric("Bayesian Posterior P(Scam|E)", f"{report.bayesian_posterior_p * 100:.1f}%")
+        with m_col2:
+            st.metric("Cognitive Coercion Index", f"{report.cognitive_coercion_score:.1f}/100")
+        with m_col3:
+            st.metric("Domain Shannon Entropy", f"{report.domain_audit.domain_entropy:.2f} bits")
+
     with st.expander("🏛️ Institutional Grievance Routing (Top 1% Jurisdictional Logic)", expanded=True):
         st.markdown(f"**Designated Redressal Endpoint:** `{route.portal_name}`")
         st.markdown(f"**Statutory Basis:** `{route.statutory_basis}`")

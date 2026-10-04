@@ -118,3 +118,27 @@ def test_nsdl_depository_auditor():
     assert res.penalty_points == 35
 
 
+def test_advanced_deterministic_math():
+    from satark_bharat.decision.math_engine import (
+        BayesianEvidenceFusion,
+        compute_cognitive_coercion_index,
+        weighted_damerau_levenshtein,
+    )
+
+    # 1. Homoglyph cost check (0 vs o should be distance ~0.25 rather than 1.0)
+    dist = weighted_damerau_levenshtein("zer0dha", "zerodha")
+    assert dist < 0.5
+
+    # 2. Cognitive coercion saturation curve
+    c0 = compute_cognitive_coercion_index(0)
+    c3 = compute_cognitive_coercion_index(3)
+    assert c0 == 0.0
+    assert c3 > 75.0
+
+    # 3. Bayesian evidence fusion
+    fusion = BayesianEvidenceFusion.fuse_evidence(["GUARANTEED_RETURNS_CLAIM", "PERSONAL_UPI_VPA"])
+    assert fusion.posterior_probability > 0.95
+    assert fusion.confidence_level in ("VERY_HIGH", "DEFINITIVE_RED_LINE")
+
+
+
