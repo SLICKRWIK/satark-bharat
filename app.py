@@ -17,6 +17,14 @@ import textwrap
 
 import streamlit as st
 
+import importlib
+
+import satark_bharat.decision.threat_engine
+import satark_bharat.redressal.dossier
+
+importlib.reload(satark_bharat.redressal.dossier)
+importlib.reload(satark_bharat.decision.threat_engine)
+
 from satark_bharat.config import SAMPLES_PATH
 from satark_bharat.decision.guardrails import SebiComplianceGuardrail
 from satark_bharat.decision.threat_engine import ThreatIndexEngine, ThreatReport

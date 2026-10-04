@@ -16,43 +16,10 @@ from satark_bharat.redressal.router import JurisdictionalRoute, RegulatoryRouter
 
 FONT_REGULAR = "Helvetica"
 FONT_BOLD = "Helvetica-Bold"
-_FONTS_REGISTERED = False
-
-
-def _ensure_fonts_registered() -> None:
-    global FONT_REGULAR, FONT_BOLD, _FONTS_REGISTERED
-    if _FONTS_REGISTERED:
-        return
-    _FONTS_REGISTERED = True
-
-    import os
-    from reportlab.pdfbase import pdfmetrics
-    from reportlab.pdfbase.ttfonts import TTFont
-
-    candidates = [
-        ("C:/Windows/Fonts/Nirmala.ttf", "C:/Windows/Fonts/NirmalaB.ttf", "SatarkNirmala"),
-        ("C:/Windows/Fonts/segoeui.ttf", "C:/Windows/Fonts/segoeuib.ttf", "SatarkSegoe"),
-        ("C:/Windows/Fonts/arial.ttf", "C:/Windows/Fonts/arialbd.ttf", "SatarkArial"),
-        ("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", "SatarkDejaVu"),
-    ]
-
-    for reg, bld, name in candidates:
-        if os.path.exists(reg):
-            try:
-                pdfmetrics.registerFont(TTFont(name, reg))
-                if os.path.exists(bld):
-                    pdfmetrics.registerFont(TTFont(f"{name}-Bold", bld))
-                    FONT_BOLD = f"{name}-Bold"
-                else:
-                    FONT_BOLD = name
-                FONT_REGULAR = name
-                break
-            except Exception:
-                continue
 
 
 def _sanitize_pdf_text(text: str) -> str:
-    """Sanitize Unicode symbols (e.g. Rupee sign, smart quotes) to prevent PDF black box glyphs."""
+    """Sanitize text to guarantee 100% universal PDF compatibility with zero black block glyphs."""
     if not text:
         return ""
     replacements = {
@@ -64,10 +31,30 @@ def _sanitize_pdf_text(text: str) -> str:
         "—": " - ",
         "–": " - ",
         "…": "...",
+        "•": "*",
+        "✓": "[OK]",
+        "✔": "[OK]",
+        "✕": "[X]",
+        "✖": "[X]",
+        "⚠": "[!]",
     }
     for old, new in replacements.items():
         text = text.replace(old, new)
-    return text
+
+    # Filter out any non-Latin1 / high-Unicode characters that render as black blocks in standard PDF readers
+    clean_chars = []
+    for ch in text:
+        if ord(ch) < 128:
+            clean_chars.append(ch)
+        elif ord(ch) in range(128, 256):
+            try:
+                ch.encode("latin-1")
+                clean_chars.append(ch)
+            except UnicodeEncodeError:
+                clean_chars.append(" ")
+        else:
+            clean_chars.append(" ")
+    return "".join(clean_chars)
 
 
 class DossierGenerator:
@@ -141,8 +128,6 @@ class DossierGenerator:
     @staticmethod
     def generate_pdf_dossier(dossier_data: dict[str, Any]) -> bytes:
         """Compile a formal court-ready PDF complaint package."""
-        _ensure_fonts_registered()
-
         buffer = io.BytesIO()
         doc = SimpleDocTemplate(
             buffer,
@@ -191,6 +176,23 @@ class DossierGenerator:
             spaceAfter=6,
         )
 
+        table_cell_style = ParagraphStyle(
+            "TableCell",
+            parent=styles["Normal"],
+            fontName=FONT_REGULAR,
+            fontSize=8.5,
+            leading=11.5,
+            textColor=colors.HexColor("#1f2937"),
+        )
+        table_cell_bold = ParagraphStyle(
+            "TableCellBold",
+            parent=styles["Normal"],
+            fontName=FONT_BOLD,
+            fontSize=8.5,
+            leading=11.5,
+            textColor=colors.HexColor("#374151"),
+        )
+
         story = []
 
         # Header Title (Clean English to avoid missing glyphs in PDF viewers)
@@ -198,23 +200,27 @@ class DossierGenerator:
         story.append(Paragraph("EVIDENTIARY REGULATORY GRIEVANCE &amp; CYBER FRAUD INCIDENT DOSSIER", subtitle_style))
         story.append(Spacer(1, 10))
 
-        # Incident Metadata Table
-        meta_data = [
-            ["Incident Reference ID:", dossier_data["incident_id"]],
-            ["Generated Timestamp (UTC):", dossier_data["generated_at_utc"]],
-            ["Designated Redressal Portal:", dossier_data["target_portal"]["name"]],
-            ["Primary Authority:", dossier_data["target_portal"]["authority"]],
-            ["Statutory Jurisdiction:", dossier_data["target_portal"]["statutory_basis"]],
-            ["Composite Threat Score:", f"{dossier_data['threat_metrics']['composite_threat_score']}/100 ({dossier_data['threat_metrics']['severity']})"],
+        # Incident Metadata Table (Cells wrapped in Paragraphs for text wrapping)
+        meta_raw = [
+            ("Incident Reference ID:", str(dossier_data["incident_id"])),
+            ("Generated Timestamp (UTC):", str(dossier_data["generated_at_utc"])),
+            ("Designated Redressal Portal:", str(dossier_data["target_portal"]["name"])),
+            ("Primary Authority:", str(dossier_data["target_portal"]["authority"])),
+            ("Statutory Jurisdiction:", str(dossier_data["target_portal"]["statutory_basis"])),
+            ("Composite Threat Score:", f"{dossier_data['threat_metrics']['composite_threat_score']}/100 ({dossier_data['threat_metrics']['severity']})"),
         ]
-        meta_table = Table(meta_data, colWidths=[180, 340])
+        meta_data = [
+            [Paragraph(_sanitize_pdf_text(lbl), table_cell_bold), Paragraph(_sanitize_pdf_text(val), table_cell_style)]
+            for lbl, val in meta_raw
+        ]
+        meta_table = Table(meta_data, colWidths=[160, 360])
         meta_table.setStyle(TableStyle([
             ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#f8fafc")),
-            ('TEXTCOLOR', (0, 0), (0, -1), colors.HexColor("#374151")),
-            ('FONTNAME', (0, 0), (-1, -1), FONT_REGULAR),
-            ('FONTSIZE', (0, 0), (-1, -1), 9),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
-            ('TOPPADDING', (0, 0), (-1, -1), 5),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('LEFTPADDING', (0, 0), (-1, -1), 6),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 6),
             ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#e2e8f0")),
         ]))
         story.append(meta_table)
@@ -235,24 +241,29 @@ class DossierGenerator:
         # Extracted Regulatory Invariants Section
         story.append(Paragraph("<b>2. Extracted Regulatory Invariants &amp; Entities</b>", section_style))
         tokens = dossier_data["extracted_regulatory_tokens"]
-        token_data = [
-            ["Claimed SEBI Reg ID:", _sanitize_pdf_text(str(tokens.get("claimed_sebi_id") or "None (Unregistered)"))],
-            ["Registry Verification Status:", _sanitize_pdf_text(str(tokens.get("sebi_registry_status")))],
-            ["Registered Name on SEBI Master:", _sanitize_pdf_text(str(tokens.get("registered_entity_name") or "N/A"))],
-            ["Identity Impersonation Suspected:", str(tokens.get("is_impersonation_suspected"))],
-            ["Solicited Recipient UPI VPA:", _sanitize_pdf_text(", ".join(tokens.get("recipient_vpas", [])) or "None")],
-            ["Personal VPA (Clearance Violation):", str(tokens.get("is_personal_vpa"))],
-            ["Typosquatted Lookalike Domain:", str(tokens.get("is_domain_typosquatted"))],
-            ["Malicious APK File Link:", str(tokens.get("has_apk_link"))],
+        token_raw = [
+            ("Claimed SEBI Reg ID:", str(tokens.get("claimed_sebi_id") or "None (Unregistered)")),
+            ("Registry Verification Status:", str(tokens.get("sebi_registry_status"))),
+            ("Registered Name on SEBI Master:", str(tokens.get("registered_entity_name") or "N/A")),
+            ("Identity Impersonation Suspected:", str(tokens.get("is_impersonation_suspected"))),
+            ("Solicited Recipient UPI VPA:", ", ".join(tokens.get("recipient_vpas", [])) or "None"),
+            ("Personal VPA (Clearance Violation):", str(tokens.get("is_personal_vpa"))),
+            ("Typosquatted Lookalike Domain:", str(tokens.get("is_domain_typosquatted"))),
+            ("Malicious APK File Link:", str(tokens.get("has_apk_link"))),
         ]
-        token_table = Table(token_data, colWidths=[180, 340])
+        token_data = [
+            [Paragraph(_sanitize_pdf_text(lbl), table_cell_bold), Paragraph(_sanitize_pdf_text(val), table_cell_style)]
+            for lbl, val in token_raw
+        ]
+        token_table = Table(token_data, colWidths=[160, 360])
         token_table.setStyle(TableStyle([
             ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#ffffff")),
-            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
-            ('FONTNAME', (0, 0), (-1, -1), FONT_REGULAR),
-            ('FONTSIZE', (0, 0), (-1, -1), 9),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
             ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
             ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('LEFTPADDING', (0, 0), (-1, -1), 6),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
         ]))
         story.append(token_table)
         story.append(Spacer(1, 15))

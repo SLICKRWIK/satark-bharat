@@ -13,7 +13,9 @@ __pycache__/
 # Streamlit
 .streamlit/secrets.toml
 
-# OS Artifacts
+# OS & Office Artifacts
 .DS_Store
 *.swp
 *.swo
+~$*.pptx
+~$*.docx
