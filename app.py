@@ -28,7 +28,9 @@ importlib.reload(satark_bharat.ingestion.audio)
 importlib.reload(satark_bharat.redressal.dossier)
 importlib.reload(satark_bharat.decision.threat_engine)
 
-from satark_bharat.config import SAMPLES_PATH
+from PIL import Image
+
+from satark_bharat.config import DATA_DIR, SAMPLES_PATH
 from satark_bharat.decision.guardrails import SebiComplianceGuardrail
 from satark_bharat.decision.threat_engine import ThreatIndexEngine, ThreatReport
 from satark_bharat.ingestion.ocr import VisualOcrIngestion
@@ -36,12 +38,17 @@ from satark_bharat.redressal.dossier import DossierGenerator
 from satark_bharat.redressal.router import JurisdictionalRoute, RegulatoryRouter
 from satark_bharat.vernacular.tts import VernacularVoiceEngine
 
+# Logo Asset
+LOGO_PATH = DATA_DIR / "satark_logo.png"
+logo_image = Image.open(LOGO_PATH) if LOGO_PATH.exists() else "🛡️"
+logo_b64 = base64.b64encode(LOGO_PATH.read_bytes()).decode() if LOGO_PATH.exists() else ""
+
 # ---------------------------------------------------------
 # Page Configuration
 # ---------------------------------------------------------
 st.set_page_config(
     page_title="SatarkBharat — Investor Defense Sentinel",
-    page_icon="○",
+    page_icon=logo_image,
     layout="centered",
     initial_sidebar_state="collapsed",
 )
@@ -871,7 +878,7 @@ st.html(
 # ---------------------------------------------------------
 st.html(
     textwrap.dedent(
-        """
+        f"""
         <div class="hero-grid">
             <div class="hero-text-col">
                 <div class="hero-title">
@@ -886,24 +893,9 @@ st.html(
                 </div>
             </div>
             <div class="hero-mascot-col">
-                <!-- High-Craft Sentinel Guardian Mascot SVG -->
-                <svg width="125" height="140" viewBox="0 0 120 135" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Soft Glow Backdrop -->
-                    <circle cx="60" cy="65" r="50" fill="#fef3c7" fill-opacity="0.6"/>
-                    <!-- Guardian Shield Body -->
-                    <path d="M60 15L95 30V75C95 98 60 115 60 115C60 115 25 98 25 75V30L60 15Z" fill="#18181b" stroke="#3f3f46" stroke-width="2.5" stroke-linejoin="round"/>
-                    <!-- Inner Shield Accent -->
-                    <path d="M60 22L88 34V72C88 91 60 106 60 106C60 106 32 91 32 72V34L60 22Z" fill="#27272a"/>
-                    <!-- Golden Ashoka / Sentinel Seal -->
-                    <circle cx="60" cy="58" r="18" fill="#d97706" fill-opacity="0.2" stroke="#f59e0b" stroke-width="1.8"/>
-                    <circle cx="60" cy="58" r="13" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3 2"/>
-                    <circle cx="60" cy="58" r="5" fill="#fef3c7"/>
-                    <!-- Radiant Check / Verification Spear -->
-                    <path d="M53 58L58 63L68 52" stroke="#fef3c7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <!-- Little Pen / Audit Quill held in knight tradition -->
-                    <rect x="74" y="65" width="8" height="42" rx="4" transform="rotate(-30 74 65)" fill="#e06c53" stroke="#18181b" stroke-width="1.5"/>
-                    <polygon points="98,107 104,115 93,113" fill="#fbbf24" stroke="#18181b" stroke-width="1"/>
-                </svg>
+                <div style="width: 105px; height: 105px; border-radius: 22px; overflow: hidden; box-shadow: 0 10px 28px -4px rgba(24,24,27,0.16), 0 0 0 1px rgba(0,0,0,0.08); background: #161614; display: flex; align-items: center; justify-content: center;">
+                    <img src="data:image/png;base64,{logo_b64}" width="105" height="105" style="object-fit: cover; display: block;" alt="SatarkBharat Sentinel Logo" />
+                </div>
             </div>
         </div>
         """
@@ -1495,10 +1487,10 @@ if st.session_state.audit_executed and len(content_to_analyze) >= 2:
 # ---------------------------------------------------------
 st.html(
     textwrap.dedent(
-        """
+        f"""
         <div class="footer-container">
             <div class="footer-content">
-                <span class="footer-brand">SatarkBharat</span>
+                <span class="footer-brand"><img src="data:image/png;base64,{logo_b64}" width="18" height="18" style="vertical-align: -3px; border-radius: 4px; margin-right: 6px; display: inline-block;" alt="logo" />SatarkBharat</span>
                 <span class="footer-sep">·</span>
                 <span>Built for <b>SANGYAN</b> (SNTC, IIT BHU Varanasi × SEBI × NSDL)</span>
                 <span class="footer-sep">·</span>
