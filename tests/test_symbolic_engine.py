@@ -107,3 +107,14 @@ def test_vernacular_hindi_and_bengali_summaries():
     assert "सतर्क" in report.vernacular_hindi_summary
     assert "সতর্ক" in report.vernacular_bengali_summary
 
+
+def test_nsdl_depository_auditor():
+    from satark_bharat.symbolic.nsdl_auditor import NsdlDepositoryAuditor
+    auditor = NsdlDepositoryAuditor()
+    scam_text = "Urgent: Pay Rs 10,000 to avoid NSDL freeze notice on your demat account IN30012345678901."
+    res = auditor.audit_depository_claims(scam_text)
+    assert res.is_fake_nsdl_claim is True
+    assert res.depository_type == "NSDL"
+    assert res.penalty_points == 35
+
+

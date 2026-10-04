@@ -367,16 +367,20 @@ if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
         if is_critical
         else f'<span class="threat-pill-safe">VERIFIED COMPLIANT ({score}/100)</span>'
     )
+    bar_color = "#34d399" if score <= 24 else ("#fbbf24" if score <= 59 else "#f87171")
 
     st.markdown("<div style='height: 1.5rem;'></div>", unsafe_allow_html=True)
     st.markdown(
         f"""
         <div class="town-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <span style="font-size: 0.8rem; font-weight: 600; color: #a1a19a; text-transform: uppercase; letter-spacing: 0.5px;">Sentinel Verdict</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 0.8rem; font-weight: 600; color: #a1a19a; text-transform: uppercase; letter-spacing: 0.5px;">Sentinel Risk Index</span>
                 {status_pill_html}
             </div>
-            <div style="font-size: 1.15rem; font-weight: 500; color: #fdfdfc; line-height: 1.4; margin-bottom: 10px;">
+            <div style="width: 100%; height: 8px; background: rgba(255, 255, 255, 0.08); border-radius: 9999px; overflow: hidden; margin-bottom: 16px;">
+                <div style="width: {score}%; height: 100%; background: {bar_color}; border-radius: 9999px; transition: width 0.5s ease;"></div>
+            </div>
+            <div style="font-size: 1.12rem; font-weight: 500; color: #fdfdfc; line-height: 1.4; margin-bottom: 10px;">
                 {report.plain_english_summary}
             </div>
             <div style="font-size: 0.95rem; color: #c2c2b8; line-height: 1.4; margin-bottom: 4px;">
@@ -427,7 +431,7 @@ if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
             st.markdown(f"**Recipient VPA:** `{report.payment_audit.primary_vpa or 'None'}`")
             st.markdown(f"**Payment Account Type:** `{'Personal VPA (Unregulated)' if report.payment_audit.is_personal_vpa else 'Corporate / Clearing Pool'}`")
             st.markdown(f"**Deceptive Lookalike Domain:** `{'YES' if report.domain_audit.is_typosquatted else 'No'}`")
-            st.markdown(f"**Unofficial APK Download:** `{'YES (Critical Malware Risk)' if report.domain_audit.has_apk_link else 'No'}`")
+            st.markdown(f"**NSDL Depository Claim:** `{'ALERT: Fake NSDL Scheme' if report.depository_audit.is_fake_nsdl_claim else 'Compliant / None'}`")
 
         if report.statutory_violations:
             st.markdown("---")

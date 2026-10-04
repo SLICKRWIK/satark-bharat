@@ -4,6 +4,7 @@ import re
 from dataclasses import dataclass
 
 from satark_bharat.symbolic.domain_auditor import DomainAuditor, DomainAuditResult
+from satark_bharat.symbolic.nsdl_auditor import DepositoryAuditResult, NsdlDepositoryAuditor
 from satark_bharat.symbolic.payment_auditor import PaymentAuditResult, PaymentChannelAuditor
 from satark_bharat.symbolic.sebi_registry import SebiAuditResult, SebiRegistryAuditor
 
@@ -20,6 +21,7 @@ class ThreatReport:
     sebi_audit: SebiAuditResult
     payment_audit: PaymentAuditResult
     domain_audit: DomainAuditResult
+    depository_audit: DepositoryAuditResult
     statutory_violations: list[str]
     penalty_breakdown: dict[str, int]
     recommended_routing: str
@@ -47,12 +49,14 @@ class ThreatIndexEngine:
         self.sebi_auditor = SebiRegistryAuditor()
         self.payment_auditor = PaymentChannelAuditor()
         self.domain_auditor = DomainAuditor()
+        self.depository_auditor = NsdlDepositoryAuditor()
 
     def evaluate(self, text: str, claimed_entity_name: str | None = None) -> ThreatReport:
         # Run symbolic sub-engines
         sebi_res = self.sebi_auditor.audit_registration(text, claimed_name=claimed_entity_name)
         payment_res = self.payment_auditor.audit_payment(text)
         domain_res = self.domain_auditor.audit_domains(text)
+        depository_res = self.depository_auditor.audit_depository_claims(text)
 
         # Audit psychological & illegal scheme invariants
         has_guaranteed_returns = bool(self.GUARANTEED_PATTERNS.search(text))
@@ -93,6 +97,11 @@ class ThreatIndexEngine:
             violations.append(
                 "Section 11AA SEBI Act 1992 (Prohibition on Unregistered Collective Investment Schemes / Syndicate Pooling)"
             )
+
+        if depository_res.penalty_points > 0:
+            penalties["UNAUTHORIZED_NSDL_EXPLOITATION"] = depository_res.penalty_points
+            if depository_res.statutory_violation:
+                violations.append(depository_res.statutory_violation)
 
         # Evaluate Red Line Overrides
         red_line = False
@@ -155,6 +164,7 @@ class ThreatIndexEngine:
             sebi_audit=sebi_res,
             payment_audit=payment_res,
             domain_audit=domain_res,
+            depository_audit=depository_res,
             statutory_violations=violations,
             penalty_breakdown=penalties,
             recommended_routing=recommended_routing,

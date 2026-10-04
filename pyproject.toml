@@ -23,6 +23,9 @@ advanced-ml = [
     "easyocr>=1.7.0",
 ]
 
+[project.scripts]
+satark = "satark_bharat.cli:main"
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

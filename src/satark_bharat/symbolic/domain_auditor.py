@@ -15,6 +15,8 @@ class DomainAuditResult:
     is_typosquatted: bool
     spoofed_target: str | None
     suspicious_domain: str | None
+    domain_entropy: float
+    has_suspicious_tld: bool
     statutory_violation: str | None
     penalty_points: int
 
@@ -36,6 +38,19 @@ def levenshtein_distance(s1: str, s2: str) -> int:
         previous_row = current_row
 
     return previous_row[-1]
+
+
+def calculate_shannon_entropy(s: str) -> float:
+    if not s:
+        return 0.0
+    import math
+    from collections import Counter
+    counts = Counter(s)
+    total = len(s)
+    return round(-sum((count / total) * math.log2(count / total) for count in counts.values()), 2)
+
+
+SUSPICIOUS_TLDS = {".trade", ".vip", ".top", ".click", ".icu", ".site", ".club", ".xyz", ".cc", ".buzz", ".work", ".link"}
 
 
 class DomainAuditor:
@@ -72,6 +87,8 @@ class DomainAuditor:
                 is_typosquatted=False,
                 spoofed_target=None,
                 suspicious_domain=None,
+                domain_entropy=0.0,
+                has_suspicious_tld=False,
                 statutory_violation=None,
                 penalty_points=0,
             )
@@ -79,6 +96,8 @@ class DomainAuditor:
         is_typosquatted = False
         spoofed_target = None
         suspicious_domain = None
+        max_entropy = 0.0
+        has_suspicious_tld = False
 
         for u in urls:
             parsed = urlparse(u)
@@ -88,6 +107,15 @@ class DomainAuditor:
 
             # Strip port or www
             netloc = netloc.removeprefix("www.")
+
+            # Calculate entropy
+            entropy = calculate_shannon_entropy(netloc)
+            if entropy > max_entropy:
+                max_entropy = entropy
+
+            # Check suspicious TLD
+            if any(netloc.endswith(tld) for tld in SUSPICIOUS_TLDS):
+                has_suspicious_tld = True
 
             # If perfectly matched with verified whitelist, safe
             if netloc in self.verified_targets:
@@ -131,6 +159,10 @@ class DomainAuditor:
             penalty += 30
             violations.append(f"Deceptive Lookalike Domain '{suspicious_domain}' Spoofing Verified Entity '{spoofed_target}'")
 
+        if has_suspicious_tld and not is_typosquatted:
+            penalty += 15
+            violations.append("High-Risk Deceptive Top-Level Domain (TLD) Associated with Financial Cyber Syndicates")
+
         statutory = " & ".join(violations) if violations else None
 
         return DomainAuditResult(
@@ -139,6 +171,8 @@ class DomainAuditor:
             is_typosquatted=is_typosquatted,
             spoofed_target=spoofed_target,
             suspicious_domain=suspicious_domain,
+            domain_entropy=max_entropy,
+            has_suspicious_tld=has_suspicious_tld,
             statutory_violation=statutory,
             penalty_points=min(40, penalty),
         )
