@@ -153,6 +153,25 @@ st.markdown(
         color: #18181b !important;
         margin-bottom: 1.2rem !important;
     }
+    .hero-brand {
+        position: relative;
+        display: inline-block;
+        background: linear-gradient(135deg, #18181b 15%, #9a3412 60%, #c2410c 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 500 !important;
+    }
+    .hero-brand::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 2px;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, #ea580c, #f59e0b);
+        border-radius: 2px;
+        opacity: 0.75;
+    }
     .hero-lead-row {
         display: flex;
         align-items: flex-start;
@@ -766,7 +785,7 @@ st.html(
         <div class="hero-grid">
             <div class="hero-text-col">
                 <div class="hero-title">
-                    SatarkBharat protects your savings from fraud.
+                    <span class="hero-brand">SatarkBharat</span> protects your savings from fraud.
                 </div>
                 <div class="hero-lead-row">
                     <div>
