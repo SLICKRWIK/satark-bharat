@@ -19,8 +19,12 @@ import textwrap
 import streamlit as st
 
 import satark_bharat.decision.threat_engine
+import satark_bharat.ingestion.audio
+import satark_bharat.ingestion.ocr
 import satark_bharat.redressal.dossier
 
+importlib.reload(satark_bharat.ingestion.ocr)
+importlib.reload(satark_bharat.ingestion.audio)
 importlib.reload(satark_bharat.redressal.dossier)
 importlib.reload(satark_bharat.decision.threat_engine)
 
@@ -694,10 +698,10 @@ def get_engines():
         ThreatIndexEngine(),
         SebiComplianceGuardrail(),
         VernacularVoiceEngine(),
-        VisualOcrIngestion(),
     )
 
-threat_engine, guardrail, voice_engine, ocr_engine = get_engines()
+threat_engine, guardrail, voice_engine = get_engines()
+ocr_engine = VisualOcrIngestion()
 
 # Load Sample Scenarios
 @st.cache_data
@@ -838,14 +842,17 @@ with input_tabs[1]:
         if st.session_state.get("last_uploaded_screenshot_hash") != file_hash:
             st.session_state.last_uploaded_screenshot_hash = file_hash
             with st.spinner("Extracting advisory tokens with Gemini Multimodal Vision Sentinel..."):
-                extracted = ocr_engine.extract_text_from_image(file_bytes, mime_type=uploaded_file.type or "image/png")
+                try:
+                    extracted = ocr_engine.extract_text_from_image(file_bytes, mime_type=uploaded_file.type or "image/png")
+                except TypeError:
+                    extracted = ocr_engine.extract_text_from_image(file_bytes)
                 st.session_state.input_text = extracted
                 st.session_state.audit_executed = False
                 st.rerun()
 
         col_img, col_txt = st.columns([1, 2])
         with col_img:
-            st.image(uploaded_file, caption=f"Screenshot: {uploaded_file.name}", use_container_width=True)
+            st.image(uploaded_file, caption=f"Screenshot: {uploaded_file.name}")
         with col_txt:
             st.markdown("<div style='font-size: 0.82rem; font-weight: 600; color: #a1a19a; margin-bottom: 4px;'>Multimodal Vision Extracted Buffer (Editable)</div>", unsafe_allow_html=True)
             sc_text = st.text_area(

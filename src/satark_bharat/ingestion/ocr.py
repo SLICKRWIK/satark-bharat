@@ -110,7 +110,9 @@ class VisualOcrIngestion:
             pass
         return None
 
-    def extract_text_from_image(self, image_bytes: bytes, mime_type: str = "image/png") -> str:
+    def extract_text_from_image(
+        self, image_bytes: bytes, mime_type: str = "image/png", *args, **kwargs
+    ) -> str:
         """Extract text from screenshot bytes using Gemini Vision or local OCR fallback."""
         if not image_bytes:
             return ""
