@@ -1327,12 +1327,12 @@ if st.session_state.audit_executed and len(content_to_analyze) >= 2:
         st.html(
             textwrap.dedent(
                 """
-                <div class="town-list-container" style="margin-bottom: 12px; background: #ecfdf5; border: 1px solid #a7f3d0;">
+                <div class="town-list-container" style="margin-bottom: 12px; background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.08);">
                     <div class="town-list-header">
-                        <span class="town-list-title" style="color: #065f46;">✅ Verified Invariants / No Action Required</span>
-                        <span style="font-size: 0.8rem; color: #047857; font-family: 'Plus Jakarta Sans', sans-serif;">SEBI & IT Act Invariants Cleared</span>
+                        <span class="town-list-title" style="color: #18181b; font-weight: 600;">Verified Invariants / No Action Required</span>
+                        <span style="font-size: 0.74rem; font-weight: 600; color: #059669; background: #f0fdf4; border: 1px solid #dcfce7; padding: 2px 10px; border-radius: 9999px; letter-spacing: 0.02em;">SEBI & IT Act Invariants Cleared</span>
                     </div>
-                    <div style="font-size: 0.85rem; color: #065f46; line-height: 1.55;">
+                    <div style="font-size: 0.86rem; color: #52525b; line-height: 1.6;">
                         No illegal promises of guaranteed return, unofficial APK downloads, or personal payment collections were detected. No complaint filing or regulatory escalation is required.
                     </div>
                 </div>
