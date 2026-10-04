@@ -67,39 +67,54 @@ st.markdown(
     header[data-testid="stHeader"], footer, [data-testid="stSidebar"], section[data-testid="stSidebar"] {
         display: none !important;
     }
-    .block-container {
-        max-width: 800px !important;
-        padding-top: 4rem !important;
-        padding-bottom: 5rem !important;
+
+    /* Central Alignment Anchor for Balanced Desktop Viewports */
+    section.main,
+    div[data-testid="stMain"],
+    div[data-testid="stAppViewContainer"] > section {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        width: 100% !important;
+    }
+    .block-container,
+    [data-testid="block-container"],
+    [data-testid="stMainBlockContainer"],
+    [data-testid="stAppViewBlockContainer"] {
+        max-width: 840px !important;
+        width: 100% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        padding-top: 4.8rem !important;
+        padding-bottom: 6rem !important;
         padding-left: 1.5rem !important;
         padding-right: 1.5rem !important;
     }
 
-    /* Continuous Professional Financial/Regulatory Ticker Bar at Top */
+    /* Refined Neutral Top Bar (Editorial Regulatory Dispatch) */
     .top-ticker-bar {
         position: fixed;
         top: 0;
         left: 0;
         width: 100vw;
-        height: 36px;
-        background: #09090b;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        height: 38px;
+        background: #f4f4f3;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
         display: flex;
         align-items: center;
         overflow: hidden;
         z-index: 999999;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.72rem;
-        letter-spacing: 0.8px;
-        text-transform: uppercase;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+        font-size: 0.74rem;
+        letter-spacing: 0.2px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
     }
     .ticker-track {
         display: flex;
         align-items: center;
         white-space: nowrap;
         will-change: transform;
-        animation: ticker-scroll 38s linear infinite;
+        animation: ticker-scroll 45s linear infinite;
     }
     .top-ticker-bar:hover .ticker-track {
         animation-play-state: paused;
@@ -115,21 +130,29 @@ st.markdown(
     .ticker-item {
         display: inline-flex;
         align-items: center;
-        padding: 0 16px;
+        padding: 0 18px;
     }
     .ticker-lbl {
-        color: #e4e4e7;
+        color: #71717a;
         font-weight: 500;
+        text-transform: uppercase;
+        font-size: 0.69rem;
+        letter-spacing: 0.6px;
         margin-right: 6px;
     }
     .ticker-val {
-        color: #fbbf24;
+        color: #18181b;
         font-weight: 600;
+        font-size: 0.74rem;
     }
-
+    .ticker-val-accent {
+        color: #b45309;
+        font-weight: 600;
+        font-size: 0.74rem;
+    }
     .ticker-sep {
-        color: rgba(255, 255, 255, 0.22);
-        margin-left: 16px;
+        color: rgba(0, 0, 0, 0.16);
+        margin-left: 18px;
         font-weight: 300;
     }
 
@@ -327,36 +350,38 @@ st.markdown(
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12) !important;
     }
 
-    /* 3. SECONDARY CLEAR BUTTON: Ghost / Soft Neutral Outline */
-    div.st-key-btn_clear_text button {
-        background-color: #f4f4f5 !important;
-        background: #f4f4f5 !important;
-        color: #71717a !important;
-        border: 1px solid #e4e4e7 !important;
+    /* 3. SECONDARY CLEAR BUTTON: High-Affordance Secondary Action */
+    div.st-key-btn_clear_text button,
+    div[data-testid="stButton"] button[key="btn_clear_text"] {
+        background-color: #ffffff !important;
+        background: #ffffff !important;
+        color: #3f3f46 !important;
+        border: 1px solid #d4d4d8 !important;
         border-radius: 10px !important;
-        font-weight: 500 !important;
+        font-weight: 600 !important;
         font-size: 0.88rem !important;
         padding: 0.65rem 1rem !important;
-        box-shadow: none !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
     }
 
     div.st-key-btn_clear_text button *,
     div.st-key-btn_clear_text button p,
     div.st-key-btn_clear_text button span {
-        color: #71717a !important;
-        -webkit-text-fill-color: #71717a !important;
+        color: #3f3f46 !important;
+        -webkit-text-fill-color: #3f3f46 !important;
         font-family: 'Plus Jakarta Sans', sans-serif !important;
-        font-weight: 500 !important;
+        font-weight: 600 !important;
         font-size: 0.88rem !important;
         transition: color 0.15s ease !important;
     }
 
     div.st-key-btn_clear_text button:hover {
-        background-color: #ffffff !important;
-        background: #ffffff !important;
-        border-color: #d4d4d8 !important;
-        transform: translateY(-2px) !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+        background-color: #f4f4f5 !important;
+        background: #f4f4f5 !important;
+        border-color: #a1a1aa !important;
+        color: #18181b !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06) !important;
     }
 
     div.st-key-btn_clear_text button:hover *,
@@ -367,7 +392,7 @@ st.markdown(
     }
 
     div.st-key-btn_clear_text button:active {
-        transform: translateY(0) scale(0.98) !important;
+        transform: translateY(0) scale(0.99) !important;
     }
 
     /* 4. OTHER BUTTONS: Downloads & Guardrail Test */
@@ -499,15 +524,15 @@ st.markdown(
     }
     div[data-baseweb="textarea"] {
         border-radius: 12px !important;
-        border: 1px solid rgba(0, 0, 0, 0.12) !important;
+        border: 1px solid #d4d4d8 !important;
         background-color: #ffffff !important;
         padding: 4px 6px !important;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
         transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
     }
     div[data-baseweb="textarea"]:focus-within {
-        border-color: #18181b !important;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important;
+        border-color: #d97706 !important;
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18), 0 2px 8px rgba(0, 0, 0, 0.05) !important;
     }
     .stTextArea textarea {
         background-color: transparent !important;
@@ -515,7 +540,7 @@ st.markdown(
         border: none !important;
         font-family: 'Plus Jakarta Sans', sans-serif !important;
         font-size: 0.95rem !important;
-        line-height: 1.6 !important;
+        line-height: 1.65 !important;
         padding: 12px 14px !important;
         box-shadow: none !important;
     }
@@ -524,25 +549,44 @@ st.markdown(
         font-size: 0.90rem !important;
     }
 
-    /* Clean Tabs (Underline Only, No Boxy Borders) */
+    /* Segmented Pill-Toggle Tabs with High-Contrast Active State */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 20px;
-        background: transparent;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-        padding-bottom: 4px;
-        margin-bottom: 0.8rem;
+        display: inline-flex !important;
+        gap: 6px !important;
+        background: #f4f4f5 !important;
+        border-radius: 12px !important;
+        padding: 4px !important;
+        border: 1px solid #e4e4e7 !important;
+        margin-bottom: 1.1rem !important;
+        width: 100% !important;
     }
     .stTabs [data-baseweb="tab"] {
+        flex: 1 !important;
+        justify-content: center !important;
+        text-align: center !important;
         background: transparent !important;
         color: #71717a !important;
         font-size: 0.84rem !important;
         font-weight: 500 !important;
-        padding: 4px 2px !important;
+        padding: 7px 14px !important;
+        border-radius: 8px !important;
         border: none !important;
+        transition: all 0.15s ease !important;
+    }
+    .stTabs [data-baseweb="tab"]:hover {
+        color: #18181b !important;
     }
     .stTabs [aria-selected="true"] {
+        background: #ffffff !important;
         color: #18181b !important;
-        border-bottom: 2px solid #18181b !important;
+        font-weight: 600 !important;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08), 0 1px 1px rgba(0, 0, 0, 0.04) !important;
+    }
+    .stTabs [data-baseweb="tab-highlight"] {
+        display: none !important;
+    }
+    .stTabs [data-baseweb="tab-border"] {
+        display: none !important;
     }
 
     /* Town Checklist Container */
@@ -703,6 +747,38 @@ st.markdown(
         white-space: pre-wrap;
         word-break: break-all;
     }
+
+    /* Institutional Regulatory Footer */
+    .footer-container {
+        margin-top: 4.5rem;
+        padding-top: 2rem;
+        padding-bottom: 3.5rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        text-align: center;
+    }
+    .footer-content {
+        font-size: 0.85rem;
+        color: #52525b;
+        font-weight: 450;
+        line-height: 1.6;
+    }
+    .footer-brand {
+        font-weight: 600;
+        color: #18181b;
+    }
+    .footer-sep {
+        color: #d4d4d8;
+        margin: 0 8px;
+    }
+    .footer-tag {
+        color: #047857;
+        font-weight: 600;
+    }
+    .footer-sub {
+        font-size: 0.74rem;
+        color: #71717a;
+        margin-top: 6px;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -752,15 +828,14 @@ if "audit_executed" not in st.session_state:
 # Top Scrolling Regulatory Ticker Tape (Black Institutional Bar)
 # ---------------------------------------------------------
 ticker_items = """
-    <span class="ticker-item"><span class="ticker-lbl">SATARK</span><span class="ticker-val">SENTINEL ACTIVE</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">Sentinel Status</span><span class="ticker-val-accent">Active Real-Time Defense</span><span class="ticker-sep">|</span></span>
     <span class="ticker-item"><span class="ticker-lbl">SANGYAN 2024</span><span class="ticker-val">SNTC IIT-BHU × SEBI × NSDL</span><span class="ticker-sep">|</span></span>
-    <span class="ticker-item"><span class="ticker-lbl">TRACK.A</span><span class="ticker-val">FRAUD RESILIENCE BENCHMARK</span><span class="ticker-sep">|</span></span>
-    <span class="ticker-item"><span class="ticker-lbl">SEBI MANDATE</span><span class="ticker-val">CIRCULAR 2023/71 POOLING PROHIBITED</span><span class="ticker-sep">|</span></span>
-    <span class="ticker-item"><span class="ticker-lbl">RA REG 15(1)</span><span class="ticker-val">GUARANTEED RETURNS BANNED</span><span class="ticker-sep">|</span></span>
-    <span class="ticker-item"><span class="ticker-lbl">NCRP HELPLINE</span><span class="ticker-val">DIAL 1930 FOR CYBER FINANCIAL FRAUD</span><span class="ticker-sep">|</span></span>
-    <span class="ticker-item"><span class="ticker-lbl">INSTITUTIONAL REDRESSAL</span><span class="ticker-val">SCORES 2.0 & SMART ODR PORTAL</span><span class="ticker-sep">|</span></span>
-    <span class="ticker-item"><span class="ticker-lbl">NSDL INVARIANT</span><span class="ticker-val">16-DIGIT DEMAT VERIFICATION</span><span class="ticker-sep">|</span></span>
-    <span class="ticker-item"><span class="ticker-lbl">SENTINEL INTEGRITY</span><span class="ticker-val">ZERO STOCK SPECULATION / 100% DEFENSE</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">Regulatory Mandate</span><span class="ticker-val">SEBI Circular 2023/71 Pooling Prohibited</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">RA Reg 15(1)</span><span class="ticker-val-accent">Guaranteed Returns Prohibited</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">NCRP Helpline</span><span class="ticker-val">Dial 1930 for Cyber Financial Fraud</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">Dispute Redressal</span><span class="ticker-val">SCORES 2.0 & SMART ODR Integration</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">Depository Guard</span><span class="ticker-val">16-Digit NSDL / CDSL Verification</span><span class="ticker-sep">|</span></span>
+    <span class="ticker-item"><span class="ticker-lbl">Sentinel Mandate</span><span class="ticker-val-accent">Zero Stock Tips / 100% Investor Defense</span><span class="ticker-sep">|</span></span>
 """
 
 st.html(
@@ -790,8 +865,8 @@ st.html(
                 <div class="hero-lead-row">
                     <div>
                         Forward any suspicious WhatsApp advisory, Telegram tip, or payment request.
-                        <span class="tag-salmon">Satark</span> audits regulatory invariants, recipient UPI accounts,
-                        and official SEBI registers before you transfer money.
+                        Satark audits <b>regulatory invariants</b>, <b>recipient UPI accounts</b>,
+                        and <b>official SEBI registers</b> before you transfer money.
                     </div>
                 </div>
             </div>
@@ -844,9 +919,18 @@ for title, idx, _ in chip_data:
             st.rerun()
 
 # ---------------------------------------------------------
-# Input Tabs (Message, Screenshot, Audio, Guardrail)
+# Input Tabs (Message, Screenshot, Audio)
 # ---------------------------------------------------------
-st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+st.html(
+    textwrap.dedent(
+        """
+        <div style="margin-top: 1.8rem; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-size: 0.78rem; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: 0.5px;">Input Modality</span>
+            <span style="font-size: 0.72rem; color: #a1a1aa; font-family: 'Plus Jakarta Sans', sans-serif;">Direct Text · OCR Screenshot · Vernacular Speech</span>
+        </div>
+        """
+    )
+)
 
 input_tabs = st.tabs(["Advisory Text", "Upload Screenshot", "Upload Voice Note"])
 
@@ -854,7 +938,7 @@ with input_tabs[0]:
     user_text = st.text_area(
         label="Message Text",
         value=st.session_state.manual_input,
-        height=110,
+        height=175,
         placeholder="Type or paste advisory message, claimed SEBI ID, or payment request here...",
         label_visibility="collapsed",
     )
@@ -1362,12 +1446,20 @@ if st.session_state.audit_executed and len(content_to_analyze) >= 2:
 # ---------------------------------------------------------
 # Footer
 # ---------------------------------------------------------
-st.html("<div style='height: 3.5rem;'></div>")
 st.html(
     textwrap.dedent(
         """
-        <div style="text-align: center; border-top: 1px solid rgba(0, 0, 0, 0.06); padding-top: 2rem; font-size: 0.80rem; color: #a1a1aa;">
-            SatarkBharat · Built for SANGYAN (SNTC, IIT BHU Varanasi × SEBI × NSDL) · Zero Stock Tips · 100% Investor Defense
+        <div class="footer-container">
+            <div class="footer-content">
+                <span class="footer-brand">SatarkBharat</span>
+                <span class="footer-sep">·</span>
+                <span>Built for <b>SANGYAN</b> (SNTC, IIT BHU Varanasi × SEBI × NSDL)</span>
+                <span class="footer-sep">·</span>
+                <span class="footer-tag">100% Investor Defense Sentinel</span>
+            </div>
+            <div class="footer-sub">
+                Sec 65B Indian Evidence Act Compliant · SEBI (Research Analysts) Regulations 2014 · NCRP 1930 Dispatch Ready
+            </div>
         </div>
         """
     )
