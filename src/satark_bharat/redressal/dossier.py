@@ -13,7 +13,6 @@ from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, Tabl
 from satark_bharat.decision.threat_engine import ThreatReport
 from satark_bharat.redressal.router import JurisdictionalRoute, RegulatoryRouter
 
-
 FONT_REGULAR = "Helvetica"
 FONT_BOLD = "Helvetica-Bold"
 

@@ -12,12 +12,11 @@ Faithfully crafted in the high-craft visual aesthetic of Town (town.com):
 """
 
 import base64
+import importlib
 import json
 import textwrap
 
 import streamlit as st
-
-import importlib
 
 import satark_bharat.decision.threat_engine
 import satark_bharat.redressal.dossier
@@ -834,11 +833,31 @@ with input_tabs[1]:
         label_visibility="collapsed",
     )
     if uploaded_file is not None:
-        extracted = ocr_engine.extract_text_from_image(uploaded_file.read())
-        st.caption("Screenshot text extracted to analysis buffer.")
-        if extracted and "[OCR Ingestion Active" not in extracted:
-            st.session_state.input_text = extracted
-            st.session_state.audit_executed = False
+        file_bytes = uploaded_file.getvalue()
+        file_hash = f"{uploaded_file.name}_{len(file_bytes)}"
+        if st.session_state.get("last_uploaded_screenshot_hash") != file_hash:
+            st.session_state.last_uploaded_screenshot_hash = file_hash
+            with st.spinner("Extracting advisory tokens with Gemini Multimodal Vision Sentinel..."):
+                extracted = ocr_engine.extract_text_from_image(file_bytes, mime_type=uploaded_file.type or "image/png")
+                st.session_state.input_text = extracted
+                st.session_state.audit_executed = False
+                st.rerun()
+
+        col_img, col_txt = st.columns([1, 2])
+        with col_img:
+            st.image(uploaded_file, caption=f"Screenshot: {uploaded_file.name}", use_container_width=True)
+        with col_txt:
+            st.markdown("<div style='font-size: 0.82rem; font-weight: 600; color: #a1a19a; margin-bottom: 4px;'>Multimodal Vision Extracted Buffer (Editable)</div>", unsafe_allow_html=True)
+            sc_text = st.text_area(
+                "Extracted Text Review",
+                value=st.session_state.input_text,
+                height=160,
+                key="screenshot_text_editor",
+                label_visibility="collapsed",
+            )
+            if sc_text != st.session_state.input_text:
+                st.session_state.input_text = sc_text
+                st.session_state.audit_executed = False
 
 with input_tabs[2]:
     uploaded_audio = st.file_uploader(
@@ -847,9 +866,26 @@ with input_tabs[2]:
         label_visibility="collapsed",
     )
     if uploaded_audio is not None:
-        st.caption(f"Audio stream '{uploaded_audio.name}' received.")
-        if not st.session_state.input_text:
-            st.session_state.input_text = "Kal Nifty aur Sensex ka confirmed upper circuit setting ho chuka hai! 500% pakka guaranteed jackpot return milega! Fee sirf Rs 2,500 hai paytm karo: sureprofit.pool@paytm"
+        audio_bytes = uploaded_audio.getvalue()
+        audio_hash = f"{uploaded_audio.name}_{len(audio_bytes)}"
+        if st.session_state.get("last_uploaded_audio_hash") != audio_hash:
+            st.session_state.last_uploaded_audio_hash = audio_hash
+            with st.spinner("Transcribing vernacular speech with Gemini Speech Sentinel..."):
+                transcribed = voice_engine.transcribe_audio(audio_bytes, filename=uploaded_audio.name)
+                st.session_state.input_text = transcribed
+                st.session_state.audit_executed = False
+                st.rerun()
+
+        st.caption(f"Audio stream '{uploaded_audio.name}' processed.")
+        audio_text = st.text_area(
+            "Transcribed Audio Text Review",
+            value=st.session_state.input_text,
+            height=120,
+            key="audio_text_editor",
+            label_visibility="collapsed",
+        )
+        if audio_text != st.session_state.input_text:
+            st.session_state.input_text = audio_text
             st.session_state.audit_executed = False
 
 with input_tabs[3]:
@@ -889,12 +925,19 @@ with btn_col2:
     if st.button("Clear", key="btn_clear_text", use_container_width=True):
         st.session_state.input_text = ""
         st.session_state.audit_executed = False
+        if "last_uploaded_screenshot_hash" in st.session_state:
+            del st.session_state["last_uploaded_screenshot_hash"]
+        if "last_uploaded_audio_hash" in st.session_state:
+            del st.session_state["last_uploaded_audio_hash"]
         st.rerun()
 
 # ---------------------------------------------------------
 # Results Execution & High-Craft Visual Presentation
 # ---------------------------------------------------------
 content_to_analyze = st.session_state.input_text.strip()
+
+if st.session_state.audit_executed and len(content_to_analyze) <= 10:
+    st.warning("Please provide, upload, or select advisory content to analyze (minimum 10 characters required).")
 
 if st.session_state.audit_executed and len(content_to_analyze) > 10:
     report: ThreatReport = threat_engine.evaluate(content_to_analyze)
