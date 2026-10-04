@@ -331,69 +331,87 @@ st.markdown(
         font-weight: 500 !important;
     }
 
-    /* Segmented Control Styling (Town Minimalist Pill) */
-    div[data-testid="stButtonGroup"] {
-        background-color: #f4f4f5 !important;
-        border-radius: 10px !important;
-        padding: 3px !important;
-        border: 1px solid rgba(0, 0, 0, 0.08) !important;
-        gap: 2px !important;
+    /* Minimal Language Switcher in Card Header */
+    .lang-switcher {
+        display: inline-flex;
+        align-items: center;
+        background: #f4f4f5;
+        border-radius: 6px;
+        padding: 2px;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        gap: 2px;
+        margin-left: 6px;
     }
-    div[data-testid="stButtonGroup"] button {
+    .lang-tab {
+        background: transparent !important;
+        background-color: transparent !important;
+        border: none !important;
+        border-radius: 4px !important;
+        font-size: 0.72rem !important;
+        font-weight: 500 !important;
+        color: #71717a !important;
+        -webkit-text-fill-color: #71717a !important;
+        padding: 2px 7px !important;
+        cursor: pointer !important;
+        transition: all 0.15s ease !important;
+        line-height: 1.2 !important;
+        box-shadow: none !important;
+    }
+    .lang-tab:hover {
+        color: #18181b !important;
+        -webkit-text-fill-color: #18181b !important;
+    }
+    .lang-tab.active {
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+        color: #18181b !important;
+        -webkit-text-fill-color: #18181b !important;
+        font-weight: 600 !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    /* Subtle Minimal Speaker Icon Button */
+    .speaker-icon-btn {
         background: transparent !important;
         background-color: transparent !important;
         border: none !important;
         box-shadow: none !important;
-        border-radius: 8px !important;
-        color: #71717a !important;
-        font-weight: 500 !important;
-        font-size: 0.82rem !important;
-        padding: 0.35rem 0.85rem !important;
-        transition: all 0.15s ease !important;
+        padding: 4px !important;
+        cursor: pointer !important;
+        color: #9ca3af !important;
+        -webkit-text-fill-color: #9ca3af !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 4px !important;
+        transition: color 0.15s ease, transform 0.15s ease !important;
+        outline: none !important;
+        line-height: 1 !important;
+        margin-left: 4px;
     }
-    div[data-testid="stButtonGroup"] button * {
-        color: #71717a !important;
-        -webkit-text-fill-color: #71717a !important;
-        font-weight: 500 !important;
-    }
-    div[data-testid="stButtonGroup"] button:hover {
-        background-color: rgba(255, 255, 255, 0.6) !important;
-    }
-    div[data-testid="stButtonGroup"] button[aria-selected="true"],
-    div[data-testid="stButtonGroup"] button[aria-checked="true"] {
-        background: #ffffff !important;
-        background-color: #ffffff !important;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
-    }
-    div[data-testid="stButtonGroup"] button[aria-selected="true"] *,
-    div[data-testid="stButtonGroup"] button[aria-checked="true"] * {
+    .speaker-icon-btn:hover {
         color: #18181b !important;
         -webkit-text-fill-color: #18181b !important;
-        font-weight: 600 !important;
+        transform: scale(1.08) !important;
     }
-
-    /* Minimal Speaker Action Button */
-    div.speaker-btn-wrap button {
-        background-color: #18181b !important;
-        background: #18181b !important;
-        border: 1px solid #18181b !important;
-        border-radius: 10px !important;
-        color: #ffffff !important;
-        padding: 0.38rem 0.8rem !important;
-        font-size: 0.82rem !important;
-        font-weight: 600 !important;
+    .speaker-icon-btn.speaking {
+        color: #18181b !important;
+        -webkit-text-fill-color: #18181b !important;
+        animation: speaker-blink 0.75s ease-in-out infinite !important;
     }
-    div.speaker-btn-wrap button:hover {
-        background-color: #27272a !important;
-        border-color: #27272a !important;
+    .speaker-icon-btn * {
+        color: inherit !important;
+        -webkit-text-fill-color: inherit !important;
     }
-    div.speaker-btn-wrap button *,
-    div.speaker-btn-wrap button p,
-    div.speaker-btn-wrap button span {
-        color: #ffffff !important;
-        -webkit-text-fill-color: #ffffff !important;
-        font-size: 0.82rem !important;
-        font-weight: 600 !important;
+    @keyframes speaker-blink {
+        0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.3;
+            transform: scale(0.92);
+        }
     }
 
     /* Textarea Styling */
@@ -773,62 +791,53 @@ if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
 
     st.html("<div style='height: 1.5rem;'></div>")
 
-    # 1. Minimal Language Selection & Speaker Control Bar
-    ctrl_col1, ctrl_col2 = st.columns([3, 1], vertical_alignment="center")
-    with ctrl_col1:
-        selected_lang = st.segmented_control(
-            "Language",
-            options=["English", "हिन्दी", "বাংলা"],
-            default="English",
-            label_visibility="collapsed",
-            key="summary_lang_toggle",
-        )
-    with ctrl_col2:
-        st.markdown('<div class="speaker-btn-wrap">', unsafe_allow_html=True)
-        play_audio = st.button("🔊 Listen", key="btn_play_audio", use_container_width=True, help="Listen to audio warning in selected language")
-        st.markdown('</div>', unsafe_allow_html=True)
+    # Synthesize vernacular audio and escape summaries
+    en_text = report.plain_english_summary
+    hi_text = report.vernacular_hindi_summary
+    bn_text = report.vernacular_bengali_summary
 
-    active_lang = selected_lang or "English"
-    if active_lang == "हिन्दी":
-        display_text = report.vernacular_hindi_summary
-        lang_code = "hi"
-    elif active_lang == "বাংলা":
-        display_text = report.vernacular_bengali_summary
-        lang_code = "bn"
-    else:
-        display_text = report.plain_english_summary
-        lang_code = "en"
+    en_audio = voice_engine.synthesize(en_text, lang="en")
+    hi_audio = voice_engine.synthesize(hi_text, lang="hi")
+    bn_audio = voice_engine.synthesize(bn_text, lang="bn")
 
-    # On-demand Audio Player (rendered only when user clicks Listen)
-    audio_player_html = ""
-    if play_audio:
-        audio_bytes = voice_engine.synthesize(display_text, lang=lang_code)
-        if audio_bytes:
-            b64_audio = base64.b64encode(audio_bytes).decode("utf-8")
-            audio_player_html = f"""
-            <div style="margin-top: 14px; padding: 10px 14px; background: #ffffff; border-radius: 10px; border: 1px solid rgba(0,0,0,0.08); display: flex; align-items: center; gap: 12px;">
-                <span style="font-size: 0.78rem; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: 0.5px;">Playing {active_lang} Voice Alert:</span>
-                <audio autoplay controls style="height: 32px; flex: 1;">
-                    <source src="data:audio/mp3;base64,{b64_audio}" type="audio/mp3">
-                </audio>
-            </div>
-            """
+    b64_en = base64.b64encode(en_audio).decode("utf-8") if en_audio else ""
+    b64_hi = base64.b64encode(hi_audio).decode("utf-8") if hi_audio else ""
+    b64_bn = base64.b64encode(bn_audio).decode("utf-8") if bn_audio else ""
 
-    # 2. Main Verdict Card with SVG Speedometer Arc (Showing ONLY the selected language)
+    summaries_json = json.dumps({"en": en_text, "hi": hi_text, "bn": bn_text})
+
+    # Main Verdict Card with Integrated Language Switcher & Subtle Speaker Icon
     st.html(
         textwrap.dedent(
             f"""
-            <div class="town-list-container" style="margin-top: 8px;">
+            <div class="town-list-container" style="margin-top: 10px;">
                 <div class="town-list-header">
-                    <span class="town-list-title">Sentinel Audit Report</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="town-list-title">Sentinel Audit Report</span>
+                        <div class="lang-switcher">
+                            <button type="button" class="lang-tab active" data-lang="en">EN</button>
+                            <button type="button" class="lang-tab" data-lang="hi">हिन्दी</button>
+                            <button type="button" class="lang-tab" data-lang="bn">বাংলা</button>
+                        </div>
+                        <button type="button" class="speaker-icon-btn" id="sentinel-speaker-btn" title="Listen to advisory" aria-label="Listen to voice advisory">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"></polygon>
+                                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                            </svg>
+                        </button>
+                    </div>
                     <span class="status-pill" style="background: {badge_bg}; color: {badge_color};">{badge_label}</span>
                 </div>
+
+                <!-- Hidden HTML5 Audio Element (Zero Visible Sliders) -->
+                <audio id="sentinel-audio-player" style="display: none;"></audio>
 
                 <!-- Radial Threat Gauge Arc & Dynamic Text -->
                 <div style="display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 16px 18px; background: #faf9f6; border-radius: 12px; border: 1px solid rgba(0,0,0,0.04);">
                     <div style="flex: 1;">
-                        <div style="font-size: 0.74rem; font-weight: 600; text-transform: uppercase; color: #71717a; letter-spacing: 0.5px; margin-bottom: 6px;">Composite Risk Assessment · {active_lang}</div>
-                        <div style="font-size: 1.05rem; font-weight: 500; color: #18181b; line-height: 1.6;">{display_text}</div>
+                        <div id="sentinel-lang-label" style="font-size: 0.74rem; font-weight: 600; text-transform: uppercase; color: #71717a; letter-spacing: 0.5px; margin-bottom: 6px;">Composite Risk Assessment · English</div>
+                        <div id="sentinel-summary-text" style="font-size: 1.05rem; font-weight: 500; color: #18181b; line-height: 1.6;">{en_text}</div>
                     </div>
                     <div style="text-align: center; flex-shrink: 0; min-width: 100px;">
                         <svg width="100" height="58" viewBox="0 0 100 58" xmlns="http://www.w3.org/2000/svg">
@@ -839,10 +848,102 @@ if (analyze_clicked or content_to_analyze) and len(content_to_analyze) > 10:
                         <div style="font-size: 0.70rem; color: #71717a; font-weight: 500;">out of 100</div>
                     </div>
                 </div>
-                {audio_player_html}
             </div>
+
+            <script>
+            (function() {{
+                const summaries = {summaries_json};
+                const audioTracks = {{
+                    en: "{b64_en}" ? "data:audio/mp3;base64,{b64_en}" : "",
+                    hi: "{b64_hi}" ? "data:audio/mp3;base64,{b64_hi}" : "",
+                    bn: "{b64_bn}" ? "data:audio/mp3;base64,{b64_bn}" : ""
+                }};
+                const langNames = {{
+                    en: "English",
+                    hi: "हिन्दी (Hindi)",
+                    bn: "বাংলা (Bengali)"
+                }};
+
+                let currentLang = "en";
+                let isPlaying = false;
+
+                function init() {{
+                    const audio = document.getElementById("sentinel-audio-player");
+                    const btn = document.getElementById("sentinel-speaker-btn");
+                    const summary = document.getElementById("sentinel-summary-text");
+                    const label = document.getElementById("sentinel-lang-label");
+                    const tabs = document.querySelectorAll(".lang-tab");
+
+                    if (!audio || !btn || !summary || !label) {{
+                        setTimeout(init, 50);
+                        return;
+                    }}
+
+                    function stopAudio() {{
+                        audio.pause();
+                        audio.currentTime = 0;
+                        isPlaying = false;
+                        btn.classList.remove("speaking");
+                    }}
+
+                    function startAudio() {{
+                        const track = audioTracks[currentLang];
+                        if (!track) return;
+                        audio.src = track;
+                        audio.currentTime = 0;
+                        audio.play().then(() => {{
+                            isPlaying = true;
+                            btn.classList.add("speaking");
+                        }}).catch(e => {{
+                            console.log("Audio play error:", e);
+                            stopAudio();
+                        }});
+                    }}
+
+                    btn.onclick = function(e) {{
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (isPlaying) {{
+                            stopAudio();
+                        }} else {{
+                            startAudio();
+                        }}
+                    }};
+
+                    audio.onended = function() {{
+                        stopAudio();
+                    }};
+
+                    tabs.forEach(tab => {{
+                        tab.onclick = function(e) {{
+                            e.preventDefault();
+                            e.stopPropagation();
+                            tabs.forEach(t => t.classList.remove("active"));
+                            this.classList.add("active");
+                            const lang = this.getAttribute("data-lang");
+                            currentLang = lang;
+                            summary.textContent = summaries[lang] || "";
+                            label.textContent = "Composite Risk Assessment · " + (langNames[lang] || lang);
+
+                            if (isPlaying) {{
+                                startAudio();
+                            }} else {{
+                                stopAudio();
+                            }}
+                        }};
+                    }});
+                }}
+
+                if (document.readyState === "loading") {{
+                    document.addEventListener("DOMContentLoaded", init);
+                }} else {{
+                    init();
+                }}
+            }})();
+            </script>
             """
-        )
+        ),
+        unsafe_allow_javascript=True,
     )
 
     # 3. Checklist-Oriented Regulatory Invariants
