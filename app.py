@@ -67,6 +67,7 @@ st.markdown(
         color: #18181b !important;
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         -webkit-font-smoothing: antialiased;
+        overflow-x: hidden !important;
     }
 
     /* Remove Streamlit Default Nav, Sidebars, and Headers */
@@ -762,6 +763,65 @@ st.markdown(
         word-break: break-all;
     }
 
+    /* Subtitle in Section Headers */
+    .town-list-subtitle {
+        font-size: 0.8rem;
+        color: #71717a;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 500;
+    }
+
+    /* Sentinel Audit Assessment Box & Editorial Score Panel */
+    .audit-verdict-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 16px 20px;
+        background: #faf9f6;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+    .audit-verdict-content {
+        flex: 1;
+        min-width: 0;
+    }
+    .audit-lang-label {
+        font-size: 0.74rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: #71717a;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+    }
+    .audit-summary-text {
+        font-size: 1.05rem;
+        font-weight: 500;
+        color: #18181b;
+        line-height: 1.6;
+    }
+    .audit-score-panel {
+        text-align: right;
+        flex-shrink: 0;
+        min-width: 85px;
+        padding-left: 20px;
+        border-left: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    .audit-score-number {
+        font-size: 2.3rem;
+        font-weight: 700;
+        font-family: 'Fraunces', Georgia, serif;
+        line-height: 1;
+    }
+    .audit-score-label {
+        font-size: 0.68rem;
+        color: #71717a;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 4px;
+    }
+
     /* Institutional Regulatory Footer */
     .footer-container {
         margin-top: 4.5rem;
@@ -792,6 +852,188 @@ st.markdown(
         font-size: 0.74rem;
         color: #71717a;
         margin-top: 6px;
+    }
+
+    /* =========================================================
+       Mobile Responsive Refinements (Screens <= 640px)
+       ========================================================= */
+    @media (max-width: 640px) {
+        /* Container & Page Paddings */
+        .block-container,
+        [data-testid="block-container"],
+        [data-testid="stMainBlockContainer"],
+        [data-testid="stAppViewBlockContainer"] {
+            padding-top: 3.6rem !important;
+            padding-bottom: 3.5rem !important;
+            padding-left: 0.8rem !important;
+            padding-right: 0.8rem !important;
+        }
+
+        /* Hero Typography */
+        .hero-title {
+            font-size: 2.15rem !important;
+            line-height: 1.18 !important;
+            letter-spacing: -0.6px !important;
+            margin-bottom: 0.85rem !important;
+        }
+        .hero-lead-row {
+            font-size: 0.90rem !important;
+            line-height: 1.55 !important;
+        }
+        .hero-grid {
+            margin-bottom: 1.5rem !important;
+        }
+
+        /* Town Cards & Containers */
+        .town-list-container {
+            padding: 16px 14px !important;
+            margin-top: 1.2rem !important;
+            margin-bottom: 1.4rem !important;
+            border-radius: 12px !important;
+        }
+        .town-prompt-card {
+            padding: 14px 12px !important;
+            border-radius: 12px !important;
+            margin-bottom: 1.2rem !important;
+        }
+
+        /* List Headers Stacking (Except Audit Header) */
+        .town-list-header {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 4px !important;
+            padding-bottom: 12px !important;
+            margin-bottom: 12px !important;
+        }
+        .town-list-header.audit-header {
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+        }
+        .town-list-subtitle {
+            font-size: 0.76rem !important;
+            color: #8b8b93 !important;
+        }
+
+        /* Regulatory Invariants Item Stacking & Badges */
+        .town-list-item {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 8px !important;
+            padding: 12px 0 !important;
+        }
+        .town-item-content {
+            max-width: 100% !important;
+            width: 100% !important;
+        }
+        .town-item-title {
+            font-size: 0.90rem !important;
+        }
+        .town-item-desc {
+            font-size: 0.80rem !important;
+            line-height: 1.4 !important;
+        }
+        .invariant-status {
+            text-align: left !important;
+            align-self: flex-start !important;
+            display: inline-block !important;
+            font-size: 0.78rem !important;
+            padding: 3px 8px !important;
+            border-radius: 4px !important;
+            white-space: normal !important;
+        }
+        .invariant-status.danger {
+            background: rgba(220, 38, 38, 0.12) !important;
+            color: #dc2626 !important;
+        }
+        .invariant-status.safe {
+            background: rgba(5, 150, 105, 0.12) !important;
+            color: #059669 !important;
+        }
+        .invariant-status.warning {
+            background: rgba(217, 119, 6, 0.12) !important;
+            color: #d97706 !important;
+        }
+        .invariant-status.neutral {
+            background: rgba(113, 113, 122, 0.12) !important;
+            color: #71717a !important;
+        }
+
+        /* Audit Verdict Box Stacking (Score on top, full width summary below) */
+        .audit-verdict-box {
+            flex-direction: column-reverse !important;
+            align-items: stretch !important;
+            gap: 14px !important;
+            padding: 14px !important;
+        }
+        .audit-score-panel {
+            text-align: left !important;
+            border-left: none !important;
+            padding-left: 0 !important;
+            padding-bottom: 12px !important;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+            display: flex !important;
+            align-items: baseline !important;
+            gap: 8px !important;
+        }
+        .audit-score-number {
+            font-size: 2.2rem !important;
+            line-height: 1 !important;
+        }
+        .audit-score-label {
+            font-size: 0.74rem !important;
+            margin-top: 0 !important;
+        }
+        .audit-summary-text {
+            font-size: 0.94rem !important;
+            line-height: 1.55 !important;
+        }
+
+        /* Modality Tabs Touch Spacing */
+        .stTabs [data-baseweb="tab-list"] {
+            gap: 14px !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+        }
+        .stTabs [data-baseweb="tab"] {
+            font-size: 0.82rem !important;
+            padding: 6px 2px 10px 2px !important;
+            white-space: nowrap !important;
+        }
+
+        /* Scenario Pills & Action Buttons */
+        div[class*="st-key-chip_btn_"] button,
+        div[data-testid="stButton"] button[key*="chip_btn_"] {
+            padding: 0.4rem 0.6rem !important;
+            font-size: 0.76rem !important;
+        }
+        .stDownloadButton button,
+        div[data-testid="stDownloadButton"] button {
+            font-size: 0.80rem !important;
+            padding: 0.6rem 0.75rem !important;
+            white-space: normal !important;
+            height: auto !important;
+            line-height: 1.35 !important;
+        }
+
+        /* 1930 SMS Dispatch Pre Tag */
+        .sms-dispatch-pre {
+            font-size: 0.75rem !important;
+            word-break: break-word !important;
+            overflow-wrap: anywhere !important;
+        }
+
+        /* Footer */
+        .footer-container {
+            margin-top: 3rem !important;
+            padding-bottom: 2.5rem !important;
+        }
+        .footer-content {
+            font-size: 0.78rem !important;
+        }
+        .footer-sub {
+            font-size: 0.70rem !important;
+        }
     }
     </style>
     """,
@@ -1179,7 +1421,7 @@ if st.session_state.audit_executed and len(content_to_analyze) >= 2:
         textwrap.dedent(
             f"""
             <div class="town-list-container" style="margin-top: 10px;">
-                <div class="town-list-header">
+                <div class="town-list-header audit-header">
                     <div style="display: flex; align-items: center; gap: 10px;">
                         <span class="town-list-title">Sentinel Audit Report</span>
                         <div class="lang-switcher">
@@ -1194,14 +1436,14 @@ if st.session_state.audit_executed and len(content_to_analyze) >= 2:
                 </div>
 
                 <!-- Assessment Text & Editorial Score -->
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 16px 18px; background: #faf9f6; border-radius: 12px; border: 1px solid rgba(0,0,0,0.04);">
-                    <div style="flex: 1;">
-                        <div id="sentinel-lang-label" style="font-size: 0.74rem; font-weight: 600; text-transform: uppercase; color: #71717a; letter-spacing: 0.5px; margin-bottom: 6px;">Composite Risk Assessment · English</div>
-                        <div id="sentinel-summary-text" style="font-size: 1.05rem; font-weight: 500; color: #18181b; line-height: 1.6;">{en_text}</div>
+                <div class="audit-verdict-box">
+                    <div class="audit-verdict-content">
+                        <div id="sentinel-lang-label" class="audit-lang-label">Composite Risk Assessment · English</div>
+                        <div id="sentinel-summary-text" class="audit-summary-text">{en_text}</div>
                     </div>
-                    <div style="text-align: right; flex-shrink: 0; min-width: 85px; padding-left: 18px; border-left: 1px solid rgba(0,0,0,0.06);">
-                        <div style="font-size: 2.2rem; font-weight: 700; color: {gauge_color}; font-family: 'Fraunces', Georgia, serif; line-height: 1;">{score}</div>
-                        <div style="font-size: 0.68rem; color: #71717a; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">out of 100</div>
+                    <div class="audit-score-panel">
+                        <div class="audit-score-number" style="color: {gauge_color};">{score}</div>
+                        <div class="audit-score-label">out of 100</div>
                     </div>
                 </div>
             </div>
@@ -1325,7 +1567,7 @@ if st.session_state.audit_executed and len(content_to_analyze) >= 2:
             <div class="town-list-container">
                 <div class="town-list-header">
                     <span class="town-list-title">Deterministic Regulatory Invariants</span>
-                    <span style="font-size: 0.8rem; color: #71717a; font-family: 'Plus Jakarta Sans', sans-serif;">5 verified benchmarks</span>
+                    <span class="town-list-subtitle">5 verified benchmarks</span>
                 </div>
 
                 <!-- Item 1: SEBI Registry -->
@@ -1384,7 +1626,7 @@ if st.session_state.audit_executed and len(content_to_analyze) >= 2:
             <div class="town-list-container">
                 <div class="town-list-header">
                     <span class="town-list-title">Institutional Grievance Routing</span>
-                    <span style="font-size: 0.8rem; color: #71717a; font-family: 'Plus Jakarta Sans', sans-serif;">{route.portal_name}</span>
+                    <span class="town-list-subtitle">{route.portal_name}</span>
                 </div>
                 <div style="font-size: 0.92rem; color: #18181b; line-height: 1.5; margin-bottom: 6px;">
                     <b>Statutory Basis:</b> {route.statutory_basis}
@@ -1409,7 +1651,7 @@ if st.session_state.audit_executed and len(content_to_analyze) >= 2:
                 <div class="town-list-container" style="margin-bottom: 12px;">
                     <div class="town-list-header">
                         <span class="town-list-title">Evidentiary Dossier & Regulatory Dispatch</span>
-                        <span style="font-size: 0.8rem; color: #71717a; font-family: 'Plus Jakarta Sans', sans-serif;">Sec 65B Indian Evidence Act compliant</span>
+                        <span class="town-list-subtitle">Sec 65B Indian Evidence Act compliant</span>
                     </div>
                     <div style="font-size: 0.85rem; color: #52525b; line-height: 1.55;">
                         Generate court-ready cryptographically hashed records for official submission to <b>SEBI SCORES 2.0</b>, <b>NCRP 1930 Portal</b>, or jurisdictional Cyber Police records.
@@ -1460,7 +1702,7 @@ if st.session_state.audit_executed and len(content_to_analyze) >= 2:
                 <div class="town-list-container" style="margin-bottom: 12px; background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.08);">
                     <div class="town-list-header">
                         <span class="town-list-title" style="color: #18181b; font-weight: 600;">Verified Invariants / No Action Required</span>
-                        <span style="font-size: 0.74rem; font-weight: 600; color: #059669; background: #f0fdf4; border: 1px solid #dcfce7; padding: 2px 10px; border-radius: 9999px; letter-spacing: 0.02em;">SEBI & IT Act Invariants Cleared</span>
+                        <span class="town-list-subtitle" style="font-size: 0.74rem; font-weight: 600; color: #059669; background: #f0fdf4; border: 1px solid #dcfce7; padding: 2px 10px; border-radius: 9999px; letter-spacing: 0.02em;">SEBI & IT Act Invariants Cleared</span>
                     </div>
                     <div style="font-size: 0.86rem; color: #52525b; line-height: 1.6;">
                         No illegal promises of guaranteed return, unofficial APK downloads, or personal payment collections were detected. No complaint filing or regulatory escalation is required.
